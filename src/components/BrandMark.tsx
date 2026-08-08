@@ -38,7 +38,7 @@ export function BrandMark({
           >
             <span>Space</span>
             <span
-              className="relative inline-block text-[15px] font-bold text-accent"
+              className="relative inline-block translate-y-[-0.5px] text-base font-bold text-accent"
               style={{ fontFamily: "var(--font-brand-x)" }}
             >
               X
