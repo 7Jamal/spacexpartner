@@ -189,7 +189,7 @@ export function DocumentThumb({ doc }: { doc: EmployeeDocument }) {
   }
 
   return (
-    <div className="grid size-12 shrink-0 place-items-center glass-inset grid-cols-1">
+    <div className="grid size-12 shrink-0 place-items-center glass-inset">
       <FileText className="size-5 text-muted-foreground" />
     </div>
   );
