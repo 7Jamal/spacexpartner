@@ -12,12 +12,14 @@ import { PaymentSummary } from "@/components/employee/PaymentSummary";
 import { ProfileCard } from "@/components/employee/ProfileCard";
 import { useNotifications } from "@/components/notifications/NotificationCenter";
 import { useAuth } from "@/hooks/useAuth";
+import { useTheme } from "@/lib/theme";
 import {
   useAnnouncements,
   useBankDetails,
   usePayments,
   useProfile,
 } from "@/hooks/useProfile";
+
 
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
@@ -41,6 +43,8 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
 
 function DashboardPage() {
   const { user } = useAuth();
+  const { theme } = useTheme();
+  const logoTone = theme === "dark" ? "onDark" : "default";
   const userId = user?.id;
   const { data: profile, isLoading } = useProfile(userId);
   const { data: bankDetails } = useBankDetails(userId);
@@ -72,7 +76,7 @@ function DashboardPage() {
           <BrandMark
             size="lg"
             layout="stacked"
-            tone="onDark"
+            tone={logoTone}
             className="items-start text-left"
             textClassName="justify-start"
           />

@@ -7,7 +7,9 @@ import { NotificationCenter } from "@/components/notifications/NotificationCente
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
+import { useTheme } from "@/lib/theme";
 import { cn } from "@/lib/utils";
+
 
 export function AppShell({
   children,
@@ -17,14 +19,16 @@ export function AppShell({
   subtitle?: string;
 }) {
   const { user, isAdmin, signOut } = useAuth();
+  const { theme } = useTheme();
   const { pathname } = useLocation();
+  const logoTone = theme === "dark" ? "onDark" : "default";
 
   return (
     <div className="min-h-screen">
       <header className="sticky top-0 z-40 glass-bar glass-refract glass-sheen border-b">
         <div className="mx-auto flex h-16 w-full max-w-7xl items-center gap-3 px-4 sm:px-6">
           <Link to={isAdmin ? "/admin" : "/dashboard"} className="shrink-0">
-            <BrandMark size="sm" layout="inline" textClassName="hidden sm:flex" />
+            <BrandMark size="sm" layout="inline" tone={logoTone} textClassName="hidden sm:flex" />
           </Link>
 
 
@@ -76,7 +80,7 @@ export function AppShell({
 
       <footer className="glass-bar glass-refract mt-8 border-t py-6">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6">
-          <BrandMark size="sm" layout="inline" textClassName="hidden sm:flex" />
+          <BrandMark size="sm" layout="inline" tone={logoTone} textClassName="hidden sm:flex" />
           <p className="text-xs text-muted-foreground">Secure employee payment management</p>
 
         </div>
