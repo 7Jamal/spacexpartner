@@ -20,7 +20,12 @@ const logoFilter = {
   default:
     "drop-shadow(0 1px 3px rgba(15,23,42,0.2)) drop-shadow(0 0 24px rgba(212,168,83,0.35))",
   onDark:
-    "drop-shadow(0 1px 3px rgba(0,0,0,0.5)) drop-shadow(0 0 24px rgba(255,255,255,0.45))",
+    "drop-shadow(0 1px 4px rgba(0,0,0,0.65)) drop-shadow(0 0 28px rgba(255,255,255,0.55))",
+};
+
+const textShadow = {
+  default: "0 1px 3px color-mix(in oklab, var(--foreground) 18%, transparent)",
+  onDark: "0 1px 4px color-mix(in oklab, #000 55%, transparent), 0 0 22px color-mix(in oklab, #fff 35%, transparent)",
 };
 
 export function BrandMark({
