@@ -16,13 +16,11 @@ export function ProfileCard({ profile }: { profile: Profile }) {
   const t = useT();
   const [fullName, setFullName] = useState(profile.full_name);
   const [phone, setPhone] = useState(profile.phone ?? "");
-  const [jobTitle, setJobTitle] = useState(profile.job_title ?? "");
 
   useEffect(() => {
     setFullName(profile.full_name);
     setPhone(profile.phone ?? "");
-    setJobTitle(profile.job_title ?? "");
-  }, [profile.full_name, profile.phone, profile.job_title]);
+  }, [profile.full_name, profile.phone]);
 
   const save = useMutation({
     mutationFn: async () => {
@@ -32,7 +30,6 @@ export function ProfileCard({ profile }: { profile: Profile }) {
         .update({
           full_name: fullName.trim(),
           phone: phone.trim() || null,
-          job_title: jobTitle.trim() || null,
         })
         .eq("id", profile.id);
       if (error) throw error;
@@ -80,14 +77,6 @@ export function ProfileCard({ profile }: { profile: Profile }) {
         <div className="space-y-2">
           <Label htmlFor="phone">{t("profile.phone")}</Label>
           <Input id="phone" value={phone} onChange={(event) => setPhone(event.target.value)} />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="job_title">{t("profile.jobTitle")}</Label>
-          <Input
-            id="job_title"
-            value={jobTitle}
-            onChange={(event) => setJobTitle(event.target.value)}
-          />
         </div>
         <div className="sm:col-span-2">
           <Button type="submit" disabled={save.isPending}>
