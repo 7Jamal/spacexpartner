@@ -271,6 +271,57 @@ export type Database = {
         }
         Relationships: []
       }
+      security_answer_attempts: {
+        Row: {
+          failed_attempts: number
+          last_used_at: string | null
+          locked_until: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          failed_attempts?: number
+          last_used_at?: string | null
+          locked_until?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          failed_attempts?: number
+          last_used_at?: string | null
+          locked_until?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      security_answers: {
+        Row: {
+          answer_hash: string
+          created_at: string
+          question_key: string
+          slot: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          answer_hash: string
+          created_at?: string
+          question_key: string
+          slot: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          answer_hash?: string
+          created_at?: string
+          question_key?: string
+          slot?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
