@@ -80,7 +80,7 @@ export function AppShell({
 
       <footer className="glass-bar glass-refract mt-8 border-t py-6">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6">
-          <BrandMark size="sm" layout="inline" textClassName="hidden sm:flex" />
+          <BrandMark size="sm" layout="inline" tone={logoTone} textClassName="hidden sm:flex" />
           <p className="text-xs text-muted-foreground">Secure employee payment management</p>
 
         </div>
