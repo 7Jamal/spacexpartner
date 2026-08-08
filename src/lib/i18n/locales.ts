@@ -13,10 +13,8 @@ export const LOCALES: LocaleMeta[] = [
   { code: "es", native: "Español", english: "Spanish", dir: "ltr" },
   { code: "fr", native: "Français", english: "French", dir: "ltr" },
   { code: "hi", native: "हिन्दी", english: "Hindi", dir: "ltr" },
+  { code: "hr", native: "Hrvatski", english: "Croatian", dir: "ltr" },
   { code: "id", native: "Bahasa Indonesia", english: "Indonesian", dir: "ltr" },
-  { code: "it", native: "Italiano", english: "Italian", dir: "ltr" },
-
-
   { code: "it", native: "Italiano", english: "Italian", dir: "ltr" },
   { code: "ja", native: "日本語", english: "Japanese", dir: "ltr" },
   { code: "ko", native: "한국어", english: "Korean", dir: "ltr" },
