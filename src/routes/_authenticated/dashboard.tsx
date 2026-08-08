@@ -31,7 +31,7 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
         content:
           "Your weekly salary, next payment date, payment status, notices and secure documents in one place.",
       },
-      { property: "og:title", content: "Employee dashboard | SpaceX Partnership Portal" },
+      { property: "og:title", content: "Partner dashboard | SpaceX Partnership Portal" },
       {
         property: "og:description",
         content: "Track weekly payments, notices and documents securely.",
@@ -81,7 +81,7 @@ function DashboardPage() {
             textClassName="justify-start"
           />
           <p className="text-xs font-semibold tracking-[0.18em] uppercase text-muted-foreground">
-            Employee dashboard
+            Partner dashboard
           </p>
           <h1 className="font-display text-3xl font-semibold">
             Welcome back, {firstName}.
