@@ -22,13 +22,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { useT } from "@/lib/i18n";
 import { formatMoney, WEEKLY_SALARY } from "@/lib/payroll";
-import { SecurityQuestionsForm } from "@/components/security/SecurityQuestionsForm";
-import {
-  resetPasswordWithSecurityAnswers,
-  startPasswordRecovery,
-} from "@/lib/recovery.functions";
-import { questionLabelKey } from "@/lib/security-questions";
-import { useServerFn } from "@tanstack/react-start";
+import { isValidPin, onlyDigits, PIN_LENGTH, pinToPassword } from "@/lib/pin";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -55,33 +49,29 @@ function AuthPage() {
   const t = useT();
   const [busy, setBusy] = useState(false);
   const [forgotOpen, setForgotOpen] = useState(false);
-  const [resetEmail, setResetEmail] = useState("");
-  const [resetQuestions, setResetQuestions] = useState<
-    { slot: number; questionId: string }[] | null
-  >(null);
-  const [resetAnswers, setResetAnswers] = useState<Record<number, string>>({});
-  const [resetPassword, setResetPassword] = useState("");
-  const [setupOpen, setSetupOpen] = useState(false);
-  const startRecovery = useServerFn(startPasswordRecovery);
-  const finishRecovery = useServerFn(resetPasswordWithSecurityAnswers);
+  const [loginPin, setLoginPin] = useState("");
+  const [registerPin, setRegisterPin] = useState("");
+  const [confirmPin, setConfirmPin] = useState("");
 
   useEffect(() => {
-    if (!loading && session && !setupOpen) {
+    if (!loading && session) {
       navigate({ to: "/dashboard", replace: true });
     }
-  }, [loading, session, navigate, setupOpen]);
+  }, [loading, session, navigate]);
 
   async function handleLogin(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
     const email = String(form.get("email") ?? "").trim();
-    const password = String(form.get("password") ?? "");
-    if (!email || !password) {
+    if (!email || !isValidPin(loginPin)) {
       toast.error(t("auth.errorCredentials"));
       return;
     }
     setBusy(true);
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password: pinToPassword(loginPin),
+    });
     if (error) {
       setBusy(false);
       toast.error(error.message);
@@ -102,19 +92,22 @@ function AuthPage() {
     const form = new FormData(event.currentTarget);
     const fullName = String(form.get("full_name") ?? "").trim();
     const email = String(form.get("email") ?? "").trim();
-    const password = String(form.get("password") ?? "");
     if (fullName.length < 2) {
       toast.error(t("auth.errorFullName"));
       return;
     }
-    if (password.length < 8) {
-      toast.error(t("auth.errorPassword"));
+    if (!isValidPin(registerPin)) {
+      toast.error(t("auth.errorPin"));
+      return;
+    }
+    if (registerPin !== confirmPin) {
+      toast.error(t("auth.errorPinMismatch"));
       return;
     }
     setBusy(true);
-    const { data: signUpData, error } = await supabase.auth.signUp({
+    const { error } = await supabase.auth.signUp({
       email,
-      password,
+      password: pinToPassword(registerPin),
       options: { data: { full_name: fullName } },
     });
     if (error) {
@@ -124,59 +117,7 @@ function AuthPage() {
     }
     toast.success(t("auth.accountCreated"));
     setBusy(false);
-    if (signUpData.session) {
-      setSetupOpen(true);
-      return;
-    }
     navigate({ to: "/dashboard", replace: true });
-  }
-
-  async function loadQuestions() {
-    if (!resetEmail.trim()) {
-      toast.error(t("auth.errorResetEmail"));
-      return;
-    }
-    setBusy(true);
-    try {
-      const { questions } = await startRecovery({ data: { email: resetEmail.trim() } });
-      setResetQuestions(questions);
-      setResetAnswers({});
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : String(error));
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  async function handleReset() {
-    if (!resetQuestions) return;
-    if (resetPassword.length < 8) {
-      toast.error(t("auth.errorPassword"));
-      return;
-    }
-    const answers = resetQuestions.map((question) => ({
-      slot: question.slot,
-      answer: (resetAnswers[question.slot] ?? "").trim(),
-    }));
-    if (answers.filter((item) => item.answer.length > 0).length < 2) {
-      toast.error(t("sq.errorAnswers"));
-      return;
-    }
-    setBusy(true);
-    try {
-      await finishRecovery({
-        data: { email: resetEmail.trim(), answers, password: resetPassword },
-      });
-      setForgotOpen(false);
-      setResetQuestions(null);
-      setResetAnswers({});
-      setResetPassword("");
-      toast.success(t("auth.resetDone"));
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : String(error));
-    } finally {
-      setBusy(false);
-    }
   }
 
   return (
@@ -254,14 +195,18 @@ function AuthPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="login-password">{t("auth.password")}</Label>
+                  <Label htmlFor="login-pin">{t("auth.pin")}</Label>
                   <Input
-                    id="login-password"
-                    name="password"
+                    id="login-pin"
+                    inputMode="numeric"
+                    autoComplete="off"
                     type="password"
-                    autoComplete="current-password"
                     required
-                    placeholder="••••••••"
+                    maxLength={PIN_LENGTH}
+                    value={loginPin}
+                    onChange={(event) => setLoginPin(onlyDigits(event.target.value))}
+                    className="text-center text-lg tracking-[0.6em]"
+                    placeholder="••••"
                   />
                 </div>
                 <button
@@ -269,7 +214,7 @@ function AuthPage() {
                   onClick={() => setForgotOpen(true)}
                   className="text-xs font-medium text-primary underline-offset-4 hover:underline"
                 >
-                  {t("auth.forgot")}
+                  {t("auth.forgotPin")}
                 </button>
                 <Button type="submit" className="w-full" disabled={busy}>
                   {busy ? <Loader2 className="size-4 animate-spin" /> : <Lock className="size-4" />}
@@ -301,15 +246,34 @@ function AuthPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="reg-password">{t("auth.password")}</Label>
+                  <Label htmlFor="reg-pin">{t("auth.pin")}</Label>
                   <Input
-                    id="reg-password"
-                    name="password"
+                    id="reg-pin"
+                    inputMode="numeric"
                     type="password"
-                    autoComplete="new-password"
+                    autoComplete="off"
                     required
-                    minLength={8}
-                    placeholder={t("auth.passwordPlaceholder")}
+                    maxLength={PIN_LENGTH}
+                    value={registerPin}
+                    onChange={(event) => setRegisterPin(onlyDigits(event.target.value))}
+                    className="text-center text-lg tracking-[0.6em]"
+                    placeholder="••••"
+                  />
+                  <p className="text-xs text-muted-foreground">{t("auth.pinHint")}</p>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="reg-pin-confirm">{t("auth.confirmPin")}</Label>
+                  <Input
+                    id="reg-pin-confirm"
+                    inputMode="numeric"
+                    type="password"
+                    autoComplete="off"
+                    required
+                    maxLength={PIN_LENGTH}
+                    value={confirmPin}
+                    onChange={(event) => setConfirmPin(onlyDigits(event.target.value))}
+                    className="text-center text-lg tracking-[0.6em]"
+                    placeholder="••••"
                   />
                 </div>
                 <Button type="submit" className="w-full" disabled={busy}>
@@ -325,102 +289,15 @@ function AuthPage() {
         </div>
       </section>
 
-      <Dialog
-        open={forgotOpen}
-        onOpenChange={(open) => {
-          setForgotOpen(open);
-          if (!open) {
-            setResetQuestions(null);
-            setResetAnswers({});
-            setResetPassword("");
-          }
-        }}
-      >
-        <DialogContent className="max-h-[85vh] overflow-y-auto">
+      <Dialog open={forgotOpen} onOpenChange={setForgotOpen}>
+        <DialogContent>
           <DialogHeader>
-            <DialogTitle>{t("auth.resetTitle")}</DialogTitle>
-            <DialogDescription>{t("auth.resetBody")}</DialogDescription>
+            <DialogTitle>{t("auth.forgotTitle")}</DialogTitle>
+            <DialogDescription>{t("auth.forgotBody")}</DialogDescription>
           </DialogHeader>
-
-          <div className="space-y-2">
-            <Label htmlFor="reset-email">{t("auth.email")}</Label>
-            <Input
-              id="reset-email"
-              type="email"
-              value={resetEmail}
-              disabled={Boolean(resetQuestions)}
-              onChange={(event) => setResetEmail(event.target.value)}
-              placeholder={t("auth.emailPlaceholder")}
-            />
-          </div>
-
-          {resetQuestions ? (
-            <div className="space-y-4">
-              {resetQuestions.map((question) => (
-                <div key={question.slot} className="space-y-2">
-                  <Label htmlFor={`answer-${question.slot}`}>
-                    {t(questionLabelKey(question.questionId))}
-                  </Label>
-                  <Input
-                    id={`answer-${question.slot}`}
-                    autoComplete="off"
-                    value={resetAnswers[question.slot] ?? ""}
-                    onChange={(event) =>
-                      setResetAnswers((current) => ({
-                        ...current,
-                        [question.slot]: event.target.value,
-                      }))
-                    }
-                    placeholder={t("sq.answerPlaceholder")}
-                  />
-                </div>
-              ))}
-              <div className="space-y-2">
-                <Label htmlFor="reset-new-password">{t("auth.newPassword")}</Label>
-                <Input
-                  id="reset-new-password"
-                  type="password"
-                  minLength={8}
-                  value={resetPassword}
-                  onChange={(event) => setResetPassword(event.target.value)}
-                  placeholder={t("auth.passwordPlaceholder")}
-                />
-              </div>
-              <p className="text-xs text-muted-foreground">{t("sq.resetRule")}</p>
-            </div>
-          ) : null}
-
           <DialogFooter>
-            <Button variant="outline" onClick={() => setForgotOpen(false)}>
-              {t("common.cancel")}
-            </Button>
-            {resetQuestions ? (
-              <Button onClick={handleReset} disabled={busy}>
-                {busy ? <Loader2 className="size-4 animate-spin" /> : null}
-                {t("auth.resetSubmit")}
-              </Button>
-            ) : (
-              <Button onClick={loadQuestions} disabled={busy}>
-                {busy ? <Loader2 className="size-4 animate-spin" /> : null}
-                {t("sq.continue")}
-              </Button>
-            )}
+            <Button onClick={() => setForgotOpen(false)}>{t("common.close")}</Button>
           </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      <Dialog open={setupOpen} onOpenChange={() => undefined}>
-        <DialogContent className="max-h-[85vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>{t("sq.setupTitle")}</DialogTitle>
-            <DialogDescription>{t("sq.setupBody")}</DialogDescription>
-          </DialogHeader>
-          <SecurityQuestionsForm
-            onSaved={() => {
-              setSetupOpen(false);
-              navigate({ to: "/dashboard", replace: true });
-            }}
-          />
         </DialogContent>
       </Dialog>
 
