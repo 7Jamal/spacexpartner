@@ -24,16 +24,16 @@ import { formatMoney, WEEKLY_SALARY } from "@/lib/payroll";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Sign in | SpacX Partnership Portal" },
+      { title: "Sign in | SpaceX Partnership Portal" },
       {
         name: "description",
         content:
-          "Sign in or register for the SpacX Partnership Portal to track your weekly $5,000 salary, payment status and company notices.",
+          "Sign in or register for the SpaceX Partnership Portal to track your weekly $5,000 salary, payment status and company notices.",
       },
-      { property: "og:title", content: "SpacX Partnership Portal — Employee Sign In" },
+      { property: "og:title", content: "SpaceX Partnership Portal — Employee Sign In" },
       {
         property: "og:description",
-        content: "Secure weekly payment management for SpacX Partnership employees.",
+        content: "Secure weekly payment management for SpaceX Partnership employees.",
       },
     ],
   }),

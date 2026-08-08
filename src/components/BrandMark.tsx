@@ -36,7 +36,7 @@ export function BrandMark({
               tone === "onDark" ? "text-primary-foreground" : "text-foreground",
             )}
           >
-            SpacX Partnership
+            SpaceX Partnership
           </p>
           <p className="text-[11px] font-medium tracking-[0.22em] uppercase text-muted-foreground">
             Portal
