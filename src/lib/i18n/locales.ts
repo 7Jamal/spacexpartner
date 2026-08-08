@@ -12,9 +12,10 @@ export const LOCALES: LocaleMeta[] = [
   { code: "de", native: "Deutsch", english: "German", dir: "ltr" },
   { code: "es", native: "Español", english: "Spanish", dir: "ltr" },
   { code: "fr", native: "Français", english: "French", dir: "ltr" },
-  
   { code: "hi", native: "हिन्दी", english: "Hindi", dir: "ltr" },
   { code: "id", native: "Bahasa Indonesia", english: "Indonesian", dir: "ltr" },
+  { code: "it", native: "Italiano", english: "Italian", dir: "ltr" },
+
 
   { code: "it", native: "Italiano", english: "Italian", dir: "ltr" },
   { code: "ja", native: "日本語", english: "Japanese", dir: "ltr" },
@@ -24,8 +25,8 @@ export const LOCALES: LocaleMeta[] = [
   { code: "ru", native: "Русский", english: "Russian", dir: "ltr" },
   { code: "sw", native: "Kiswahili", english: "Swahili", dir: "ltr" },
   { code: "tr", native: "Türkçe", english: "Turkish", dir: "ltr" },
-
   { code: "zh", native: "中文", english: "Chinese (Simplified)", dir: "ltr" },
+
 ];
 
 export const LOCALE_CODES = LOCALES.map((locale) => locale.code);
