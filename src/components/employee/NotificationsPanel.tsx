@@ -8,6 +8,7 @@ import {
 } from "@/components/notifications/NotificationDetailDialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { supabase } from "@/integrations/supabase/client";
+import { useT } from "@/lib/i18n";
 import { formatDateTime } from "@/lib/payroll";
 import { cn } from "@/lib/utils";
 
@@ -19,6 +20,7 @@ export function NotificationsPanel({
   userId: string | undefined;
 }) {
   const queryClient = useQueryClient();
+  const t = useT();
   const [selected, setSelected] = useState<AppNotification | null>(null);
 
   const markRead = useMutation({
@@ -33,14 +35,14 @@ export function NotificationsPanel({
     <section className="glass-panel flex h-full flex-col p-6">
       <div className="flex items-center gap-2">
         <BellRing className="size-4 text-accent" />
-        <h2 className="font-display text-base font-semibold">Notifications</h2>
+        <h2 className="font-display text-base font-semibold">{t("notif.title")}</h2>
       </div>
       <p className="mt-1 text-xs text-muted-foreground">
-        Tap a notification to read the full message.
+        {t("notif.subtitle")}
       </p>
 
       {notifications.length === 0 ? (
-        <p className="mt-6 text-sm text-muted-foreground">Nothing new right now.</p>
+        <p className="mt-6 text-sm text-muted-foreground">{t("notif.empty")}</p>
       ) : (
         <ScrollArea className="mt-4 max-h-96 pr-3">
           <ul className="space-y-2">
