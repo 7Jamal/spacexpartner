@@ -12,15 +12,15 @@ export const Route = createFileRoute("/reset-password")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Choose a new password | Space Partnership Portal" },
+      { title: "Choose a new password | SpaceX Partnership Portal" },
       {
         name: "description",
-        content: "Set a new password for your Space Partnership Portal employee account.",
+        content: "Set a new password for your SpaceX Partnership Portal employee account.",
       },
-      { property: "og:title", content: "Reset password | Space Partnership Portal" },
+      { property: "og:title", content: "Reset password | SpaceX Partnership Portal" },
       {
         property: "og:description",
-        content: "Set a new password for your Space Partnership Portal account.",
+        content: "Set a new password for your SpaceX Partnership Portal account.",
       },
     ],
   }),

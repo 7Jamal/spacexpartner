@@ -75,7 +75,7 @@ export function AppShell({
 
       <footer className="border-t py-6">
         <p className="mx-auto max-w-7xl px-4 text-xs text-muted-foreground sm:px-6">
-          Space Partnership Portal · Secure employee payment management
+          SpaceX Partnership Portal · Secure employee payment management
         </p>
       </footer>
     </div>

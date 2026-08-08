@@ -15,13 +15,13 @@ import { useAnnouncements } from "@/hooks/useProfile";
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
     meta: [
-      { title: "Admin console | Space Partnership Portal" },
+      { title: "Admin console | SpaceX Partnership Portal" },
       {
         name: "description",
         content:
           "Super administrator console for managing employees, weekly payments, notices and secure documents.",
       },
-      { property: "og:title", content: "Admin console | Space Partnership Portal" },
+      { property: "og:title", content: "Admin console | SpaceX Partnership Portal" },
       {
         property: "og:description",
         content: "Manage employees, payment statuses and company announcements.",
