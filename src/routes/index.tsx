@@ -163,7 +163,8 @@ function AuthPage() {
 
       <section className="glass-bar flex flex-col px-5 py-8 sm:px-10">
         <div className="flex items-center justify-between">
-          <BrandMark size="sm" className="lg:hidden" />
+          <BrandMark size="md" className="lg:hidden" />
+
           <div className="ml-auto">
             <ThemeToggle />
           </div>
