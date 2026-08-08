@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Loader2, Landmark } from "lucide-react";
 
 import { AppShell } from "@/components/AppShell";
+import { BrandMark } from "@/components/BrandMark";
 import { BankDetailsCard } from "@/components/employee/BankDetailsCard";
 import { DocumentsCard } from "@/components/employee/DocumentsCard";
 import { NoticeBoard } from "@/components/employee/NoticeBoard";
@@ -17,6 +18,7 @@ import {
   usePayments,
   useProfile,
 } from "@/hooks/useProfile";
+
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
@@ -66,14 +68,21 @@ function DashboardPage() {
   return (
     <AppShell>
       <div className="space-y-6">
-        <header className="animate-rise">
+        <header className="animate-rise space-y-4">
+          <BrandMark
+            size="lg"
+            layout="stacked"
+            tone="onDark"
+            className="items-start text-left"
+            textClassName="justify-start"
+          />
           <p className="text-xs font-semibold tracking-[0.18em] uppercase text-muted-foreground">
             Employee dashboard
           </p>
-          <h1 className="mt-2 font-display text-3xl font-semibold">
+          <h1 className="font-display text-3xl font-semibold">
             Welcome back, {firstName}.
           </h1>
-          <p className="mt-1 text-sm text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             Here is everything about your weekly payments and company updates.
           </p>
         </header>
