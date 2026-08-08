@@ -6,9 +6,11 @@ function parseColor(value: string): { rgb: Rgb; a: number } | null {
   if (!value) return null;
   const m = value.match(/rgba?\(([^)]+)\)/);
   if (!m) return null;
-  const parts = m[1].split(/[\s,/]+/).filter(Boolean).map(Number);
-  if (parts.length < 3 || parts.slice(0, 3).some(Number.isNaN)) return null;
-  return { rgb: { r: parts[0], g: parts[1], b: parts[2] }, a: parts[3] ?? 1 };
+  const parts = (m[1] ?? "").split(/[\s,/]+/).filter(Boolean).map(Number);
+  const [r, g, b, a] = parts;
+  if (r === undefined || g === undefined || b === undefined) return null;
+  if ([r, g, b].some(Number.isNaN)) return null;
+  return { rgb: { r, g, b }, a: a === undefined || Number.isNaN(a) ? 1 : a };
 }
 
 function blend(fg: Rgb, fgA: number, bg: Rgb): Rgb {
