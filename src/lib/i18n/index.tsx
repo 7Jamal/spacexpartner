@@ -123,3 +123,9 @@ export function useI18n() {
 export function useT() {
   return useI18n().t;
 }
+
+/** Safe message key for an announcement/notification category value. */
+export function categoryKey(value: string): MessageKey {
+  const key = `category.${value}` as MessageKey;
+  return key in en ? key : "category.default";
+}
