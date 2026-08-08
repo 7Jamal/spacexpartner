@@ -68,14 +68,21 @@ function DashboardPage() {
   return (
     <AppShell>
       <div className="space-y-6">
-        <header className="animate-rise">
+        <header className="animate-rise space-y-4">
+          <BrandMark
+            size="lg"
+            layout="stacked"
+            tone="onDark"
+            className="items-start text-left"
+            textClassName="justify-start"
+          />
           <p className="text-xs font-semibold tracking-[0.18em] uppercase text-muted-foreground">
             Employee dashboard
           </p>
-          <h1 className="mt-2 font-display text-3xl font-semibold">
+          <h1 className="font-display text-3xl font-semibold">
             Welcome back, {firstName}.
           </h1>
-          <p className="mt-1 text-sm text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             Here is everything about your weekly payments and company updates.
           </p>
         </header>
