@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { FileText, Loader2, Trash2, UploadCloud } from "lucide-react";
+import { FileText, Loader2, Lock, UploadCloud } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
@@ -74,19 +74,6 @@ export function DocumentsCard({ userId }: { userId: string }) {
     },
   });
 
-  const remove = useMutation({
-    mutationFn: async (doc: EmployeeDocument) => {
-      await supabase.storage.from(BUCKET).remove([doc.storage_path]);
-      const { error } = await supabase.from("employee_documents").delete().eq("id", doc.id);
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      toast.success("Document deleted.");
-      queryClient.invalidateQueries({ queryKey: ["documents", userId] });
-    },
-    onError: (error: Error) => toast.error(error.message),
-  });
-
   return (
     <section className="surface-card p-6">
       <div className="flex items-center gap-2">
@@ -95,7 +82,8 @@ export function DocumentsCard({ userId }: { userId: string }) {
       </div>
       <p className="mt-1 text-xs text-muted-foreground">
         Identification, banking or employment documents. JPG, JPEG, PNG or PDF up to 20 MB. Only you
-        and the Super Administrator can see these files.
+        and the Super Administrator can see these files. Once uploaded, a document can only be
+        removed by the Super Administrator.
       </p>
 
       <div
@@ -160,24 +148,10 @@ export function DocumentsCard({ userId }: { userId: string }) {
                   {formatBytes(Number(doc.file_size))} · {formatDateTime(doc.created_at)}
                 </p>
               </div>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => {
-                  inputRef.current?.click();
-                }}
-              >
-                Replace
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                aria-label={`Delete ${doc.file_name}`}
-                onClick={() => remove.mutate(doc)}
-                className="text-muted-foreground hover:text-destructive"
-              >
-                <Trash2 className="size-4" />
-              </Button>
+              <span className="flex shrink-0 items-center gap-1 text-[11px] text-muted-foreground">
+                <Lock className="size-3" />
+                Locked
+              </span>
             </li>
           ))
         )}
