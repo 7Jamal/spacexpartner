@@ -1,11 +1,12 @@
 import logoAsset from "@/assets/spacex-logo.png.asset.json";
+import logoLightAsset from "@/assets/spacex-logo-light.png.asset.json";
 import { cn } from "@/lib/utils";
 
 const sizeClasses = {
-  sm: "h-7 sm:h-8",
-  md: "h-8 sm:h-10",
-  lg: "h-10 sm:h-12",
-  xl: "h-12 sm:h-16",
+  sm: "h-8 sm:h-9",
+  md: "h-9 sm:h-11",
+  lg: "h-11 sm:h-14",
+  xl: "h-14 sm:h-20",
 };
 
 export function BrandMark({
@@ -19,18 +20,18 @@ export function BrandMark({
   showText?: boolean;
   tone?: "default" | "onDark";
 }) {
+  const src = tone === "onDark" ? logoLightAsset.url : logoAsset.url;
+
   return (
     <div className={cn("flex items-center gap-3", className)}>
       <div
         className={cn(
-          "relative flex shrink-0 items-center justify-center overflow-hidden rounded-lg",
-          tone === "onDark"
-            ? "bg-primary-foreground/95 p-1.5 shadow-sm"
-            : "bg-background/50 p-1",
+          "relative flex shrink-0 items-center justify-center overflow-hidden",
+          tone === "onDark" && "drop-shadow-[0_0_12px_rgba(255,255,255,0.12)]",
         )}
       >
         <img
-          src={logoAsset.url}
+          src={src}
           alt="SpaceX Partnership Portal"
           className={cn("w-auto object-contain", sizeClasses[size])}
         />
