@@ -25,9 +25,9 @@ import {
 import type { Payment } from "@/hooks/useProfile";
 import { supabase } from "@/integrations/supabase/client";
 import { deleteEmployee } from "@/lib/admin.functions";
+import { useT } from "@/lib/i18n";
 import {
   PAYMENT_STATUSES,
-  STATUS_META,
   formatDate,
   formatDateTime,
   formatMoney,
@@ -47,6 +47,7 @@ export function EmployeeDetailSheet({
   onOpenChange: (open: boolean) => void;
 }) {
   const queryClient = useQueryClient();
+  const t = useT();
   const removeEmployee = useServerFn(deleteEmployee);
   const { data: documents = [] } = useEmployeeDocuments(employee?.id);
   const { data: messages = [] } = useEmployeeNotifications(employee?.id);
@@ -70,7 +71,7 @@ export function EmployeeDetailSheet({
   const saveDetails = useMutation({
     mutationFn: async () => {
       if (!employee) return;
-      if (fullName.trim().length < 2) throw new Error("Enter the partner's full name.");
+      if (fullName.trim().length < 2) throw new Error(t("sheet.errorName"));
       const { error } = await supabase
         .from("profiles")
         .update({
@@ -82,7 +83,7 @@ export function EmployeeDetailSheet({
       if (error) throw error;
     },
     onSuccess: () => {
-      toast.success("Partner details updated.");
+      toast.success(t("sheet.detailsUpdated"));
       invalidate();
     },
     onError: (error: Error) => toast.error(error.message),
@@ -113,16 +114,16 @@ export function EmployeeDetailSheet({
 
       await supabase.from("notifications").insert({
         user_id: employee.id,
-        title: `Payment status updated: ${STATUS_META[status].label}`,
+        title: `Payment status updated: ${t(`status.${status}.label`)}`,
         message: `Your payment of ${formatMoney(Number(employee.weekly_salary))} scheduled for ${formatDate(
           parseDateOnly(employee.next_payment_date),
-        )} is now marked as "${STATUS_META[status].label}". ${STATUS_META[status].description}`,
+        )} is now marked as "${t(`status.${status}.label`)}". ${t(`status.${status}.description`)}`,
         type: "payment_processing",
         sender_name: "Super Administrator",
       });
     },
     onSuccess: () => {
-      toast.success("Payment status updated and the partner has been notified.");
+      toast.success(t("sheet.statusUpdated"));
       invalidate();
     },
     onError: (error: Error) => toast.error(error.message),
@@ -149,7 +150,7 @@ export function EmployeeDetailSheet({
       });
     },
     onSuccess: () => {
-      toast.success("Account status updated.");
+      toast.success(t("sheet.accountUpdated"));
       invalidate();
     },
     onError: (error: Error) => toast.error(error.message),
@@ -161,7 +162,7 @@ export function EmployeeDetailSheet({
       await removeEmployee({ data: { userId: employee.id } });
     },
     onSuccess: () => {
-      toast.success("Partner deleted.");
+      toast.success(t("sheet.deleted"));
       onOpenChange(false);
       invalidate();
     },
@@ -175,7 +176,7 @@ export function EmployeeDetailSheet({
       if (error) throw error;
     },
     onSuccess: () => {
-      toast.success("Document deleted.");
+      toast.success(t("allDocs.deleted"));
       queryClient.invalidateQueries({ queryKey: ["admin", "documents"] });
     },
     onError: (error: Error) => toast.error(error.message),
@@ -186,7 +187,7 @@ export function EmployeeDetailSheet({
       .from(BUCKET)
       .createSignedUrl(path, 3600, download ? { download: true } : undefined);
     if (error || !data) {
-      toast.error(error?.message ?? "Could not open the document.");
+      toast.error(error?.message ?? t("allDocs.openError"));
       return;
     }
     window.open(data.signedUrl, "_blank", "noopener,noreferrer");
@@ -202,7 +203,10 @@ export function EmployeeDetailSheet({
             <SheetHeader>
               <SheetTitle className="text-left">{employee.full_name}</SheetTitle>
               <SheetDescription className="text-left">
-                {employee.email} · registered {formatDate(employee.created_at)}
+                {t("sheet.registered", {
+                  email: employee.email,
+                  date: formatDate(employee.created_at),
+                })}
               </SheetDescription>
             </SheetHeader>
 
@@ -216,43 +220,60 @@ export function EmployeeDetailSheet({
                       : "rounded-full border border-status-failed/35 bg-status-failed/10 px-2.5 py-1 text-xs font-semibold text-status-failed"
                   }
                 >
-                  {employee.account_status === "active" ? "Active" : "Suspended"}
+                  {employee.account_status === "active"
+                    ? t("common.active")
+                    : t("common.suspended")}
                 </span>
                 <span className="text-xs text-muted-foreground">
-                  Last login {formatDateTime(employee.last_login_at)}
+                  {t("sheet.lastLogin", { date: formatDateTime(employee.last_login_at) })}
                 </span>
               </div>
 
               <section className="space-y-2">
-                <h3 className="font-display text-sm font-semibold">Submitted profile information</h3>
+                <h3 className="font-display text-sm font-semibold">{t("sheet.profileInfo")}</h3>
                 <dl className="grid gap-2 rounded-xl border glass-inset p-4 text-sm sm:grid-cols-2">
-                  <Row label="Full name" value={employee.full_name || "—"} />
-                  <Row label="Email" value={employee.email || "—"} />
-                  <Row label="Phone" value={employee.phone || "—"} />
-                  <Row label="Job title" value={employee.job_title || "—"} />
-                  <Row label="Account status" value={employee.account_status} />
-                  <Row label="Payment status" value={STATUS_META[employee.payment_status].label} />
-                  <Row label="Weekly salary" value={formatMoney(Number(employee.weekly_salary))} />
+                  <Row label={t("profile.fullName")} value={employee.full_name || t("common.none")} />
+                  <Row label={t("profile.email")} value={employee.email || t("common.none")} />
+                  <Row label={t("sheet.rowPhone")} value={employee.phone || t("common.none")} />
+                  <Row label={t("sheet.rowJobTitle")} value={employee.job_title || t("common.none")} />
                   <Row
-                    label="Next payment"
+                    label={t("sheet.rowAccountStatus")}
+                    value={
+                      employee.account_status === "active"
+                        ? t("common.active")
+                        : t("common.suspended")
+                    }
+                  />
+                  <Row
+                    label={t("sheet.paymentStatus")}
+                    value={t(`status.${employee.payment_status}.label`)}
+                  />
+                  <Row
+                    label={t("table.weeklySalary")}
+                    value={formatMoney(Number(employee.weekly_salary))}
+                  />
+                  <Row
+                    label={t("table.nextPayment")}
                     value={formatDate(parseDateOnly(employee.next_payment_date))}
                   />
-                  <Row label="Registered" value={formatDateTime(employee.created_at)} />
-                  <Row label="Last updated" value={formatDateTime(employee.updated_at)} />
-                  <Row label="Last login" value={formatDateTime(employee.last_login_at)} />
-                  <Row label="Partner ID" value={employee.id} />
-                  <Row label="Documents submitted" value={String(documents.length)} />
+                  <Row label={t("sheet.rowRegistered")} value={formatDateTime(employee.created_at)} />
                   <Row
-                    label="Bank details"
-                    value={employee.bank ? "Submitted" : "Not submitted"}
+                    label={t("sheet.rowLastUpdated")}
+                    value={formatDateTime(employee.updated_at)}
+                  />
+                  <Row label={t("sheet.rowPartnerId")} value={employee.id} />
+                  <Row label={t("sheet.rowDocumentCount")} value={String(documents.length)} />
+                  <Row
+                    label={t("sheet.bankDetails")}
+                    value={employee.bank ? t("common.submitted") : t("common.notSubmitted")}
                   />
                 </dl>
               </section>
 
               <section className="space-y-3">
-                <h3 className="font-display text-sm font-semibold">Payment controls</h3>
+                <h3 className="font-display text-sm font-semibold">{t("sheet.paymentControls")}</h3>
                 <div className="space-y-2">
-                  <Label>Payment status</Label>
+                  <Label>{t("sheet.paymentStatus")}</Label>
                   <Select
                     value={employee.payment_status}
                     onValueChange={(value) => setStatus.mutate(value as PaymentStatus)}
@@ -263,7 +284,7 @@ export function EmployeeDetailSheet({
                     <SelectContent>
                       {PAYMENT_STATUSES.map((status) => (
                         <SelectItem key={status} value={status}>
-                          {STATUS_META[status].label}
+                          {t(`status.${status}.label`)}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -271,7 +292,7 @@ export function EmployeeDetailSheet({
                 </div>
                 <div className="grid gap-3 sm:grid-cols-2">
                   <div className="space-y-2">
-                    <Label htmlFor="emp-next-date">Next payment date</Label>
+                    <Label htmlFor="emp-next-date">{t("sheet.nextPaymentDate")}</Label>
                     <Input
                       id="emp-next-date"
                       type="date"
@@ -280,7 +301,7 @@ export function EmployeeDetailSheet({
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="emp-salary">Weekly salary (USD)</Label>
+                    <Label htmlFor="emp-salary">{t("sheet.weeklySalaryUsd")}</Label>
                     <Input
                       id="emp-salary"
                       type="number"
@@ -291,7 +312,7 @@ export function EmployeeDetailSheet({
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="emp-name">Full name</Label>
+                  <Label htmlFor="emp-name">{t("profile.fullName")}</Label>
                   <Input
                     id="emp-name"
                     value={fullName}
@@ -300,38 +321,45 @@ export function EmployeeDetailSheet({
                 </div>
                 <Button onClick={() => saveDetails.mutate()} disabled={saveDetails.isPending}>
                   {saveDetails.isPending ? <Loader2 className="size-4 animate-spin" /> : null}
-                  Save changes
+                  {t("common.save")}
                 </Button>
               </section>
 
               <section className="space-y-2">
-                <h3 className="font-display text-sm font-semibold">Bank details</h3>
+                <h3 className="font-display text-sm font-semibold">{t("sheet.bankDetails")}</h3>
                 {employee.bank ? (
                   <dl className="grid gap-2 rounded-xl border glass-inset p-4 text-sm sm:grid-cols-2">
-                    <Row label="Account name" value={employee.bank.account_name} />
-                    <Row label="Bank name" value={employee.bank.bank_name} />
-                    <Row label="Account number" value={employee.bank.account_number} />
-                    <Row label="Swift code" value={employee.bank.swift_code ?? "—"} />
-                    <Row label="Country" value={employee.bank.country} />
-                    <Row label="Currency" value={employee.bank.currency} />
+                    <Row label={t("bank.accountName")} value={employee.bank.account_name} />
+                    <Row label={t("bank.bankName")} value={employee.bank.bank_name} />
+                    <Row label={t("bank.accountNumber")} value={employee.bank.account_number} />
+                    <Row
+                      label={t("sheet.rowSwift")}
+                      value={employee.bank.swift_code ?? t("common.none")}
+                    />
+                    <Row label={t("bank.country")} value={employee.bank.country} />
+                    <Row label={t("bank.currency")} value={employee.bank.currency} />
                     <div className="sm:col-span-2">
                       <dt className="text-[11px] tracking-wide uppercase text-muted-foreground">
-                        Instructions
+                        {t("sheet.rowInstructions")}
                       </dt>
-                      <dd className="whitespace-pre-wrap">{employee.bank.instructions ?? "—"}</dd>
+                      <dd className="whitespace-pre-wrap">
+                        {employee.bank.instructions ?? t("common.none")}
+                      </dd>
                     </div>
                   </dl>
                 ) : (
                   <p className="text-sm text-muted-foreground">
-                    This partner has not submitted bank details yet.
+                    {t("sheet.noBankDetails")}
                   </p>
                 )}
               </section>
 
               <section className="space-y-2">
-                <h3 className="font-display text-sm font-semibold">Uploaded documents</h3>
+                <h3 className="font-display text-sm font-semibold">
+                  {t("sheet.uploadedDocuments")}
+                </h3>
                 {documents.length === 0 ? (
-                  <p className="text-sm text-muted-foreground">No documents uploaded.</p>
+                  <p className="text-sm text-muted-foreground">{t("sheet.noDocuments")}</p>
                 ) : (
                   <ul className="space-y-2">
                     {documents.map((doc) => (
@@ -355,7 +383,7 @@ export function EmployeeDetailSheet({
                         <Button
                           variant="outline"
                           size="icon"
-                          aria-label="Download document"
+                          aria-label={t("common.download")}
                           onClick={() => openDocument(doc.storage_path, true)}
                         >
                           <Download className="size-4" />
@@ -363,7 +391,7 @@ export function EmployeeDetailSheet({
                         <Button
                           variant="ghost"
                           size="icon"
-                          aria-label="Delete document"
+                          aria-label={t("common.delete")}
                           className="text-muted-foreground hover:text-destructive"
                           onClick={() => deleteDocument.mutate(doc)}
                         >
@@ -376,9 +404,9 @@ export function EmployeeDetailSheet({
               </section>
 
               <section className="space-y-2">
-                <h3 className="font-display text-sm font-semibold">Payment history</h3>
+                <h3 className="font-display text-sm font-semibold">{t("sheet.paymentHistory")}</h3>
                 {employeePayments.length === 0 ? (
-                  <p className="text-sm text-muted-foreground">No payment records yet.</p>
+                  <p className="text-sm text-muted-foreground">{t("sheet.noPayments")}</p>
                 ) : (
                   <ul className="divide-y rounded-xl border">
                     {employeePayments.map((payment) => (
@@ -397,9 +425,9 @@ export function EmployeeDetailSheet({
 
               <section className="flex flex-wrap gap-2 border-t pt-5">
                 <div className="w-full space-y-2 pb-4">
-                  <h3 className="font-display text-sm font-semibold">Message history</h3>
+                  <h3 className="font-display text-sm font-semibold">{t("sheet.messageHistory")}</h3>
                   {messages.length === 0 ? (
-                    <p className="text-sm text-muted-foreground">No messages sent yet.</p>
+                    <p className="text-sm text-muted-foreground">{t("sheet.noMessages")}</p>
                   ) : (
                     <ul className="max-h-72 space-y-2 overflow-y-auto rounded-xl border p-2">
                       {messages.map((message) => (
@@ -410,7 +438,7 @@ export function EmployeeDetailSheet({
                           </p>
                           <p className="mt-2 text-[11px] text-muted-foreground">
                             {message.sender_name} · {formatDateTime(message.created_at)} ·{" "}
-                            {message.is_read ? "Read" : "Unread"}
+                            {message.is_read ? t("common.read") : t("common.unread")}
                           </p>
                         </li>
                       ))}
@@ -418,23 +446,21 @@ export function EmployeeDetailSheet({
                   )}
                 </div>
                 <Button variant="outline" onClick={() => toggleSuspend.mutate()}>
-                  {employee.account_status === "active" ? "Suspend partner" : "Reactivate partner"}
+                  {employee.account_status === "active"
+                    ? t("sheet.suspend")
+                    : t("sheet.reactivate")}
                 </Button>
                 <Button
                   variant="destructive"
                   onClick={() => {
-                    if (
-                      window.confirm(
-                        `Permanently delete ${employee.full_name}? This removes their login, payments and documents.`,
-                      )
-                    ) {
+                    if (window.confirm(t("sheet.deleteConfirm", { name: employee.full_name }))) {
                       destroy.mutate();
                     }
                   }}
                   disabled={destroy.isPending}
                 >
                   {destroy.isPending ? <Loader2 className="size-4 animate-spin" /> : null}
-                  Delete partner
+                  {t("sheet.deletePartner")}
                 </Button>
               </section>
             </div>
