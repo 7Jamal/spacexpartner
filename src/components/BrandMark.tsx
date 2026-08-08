@@ -36,7 +36,14 @@ export function BrandMark({
               tone === "onDark" ? "text-primary-foreground" : "text-foreground",
             )}
           >
-            SpaceX Partnership
+            <span>Space</span>
+            <span
+              className="relative inline-block text-[15px] font-bold text-accent"
+              style={{ fontFamily: "var(--font-brand-x)" }}
+            >
+              X
+            </span>
+            <span> Partnership</span>
           </p>
           <p className="text-[11px] font-medium tracking-[0.22em] uppercase text-muted-foreground">
             Portal
