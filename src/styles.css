@@ -219,6 +219,14 @@
   );
   --glass-shadow: 0 1px 0 oklch(1 0 0 / 0.1) inset, 0 22px 52px -24px oklch(0 0 0 / 0.75);
   --glass-blur: 24px;
+  --specular-rim: linear-gradient(
+    140deg,
+    oklch(1 0 0 / 0.55) 0%,
+    oklch(1 0 0 / 0.06) 30%,
+    oklch(0.68 0.14 250 / 0.4) 55%,
+    oklch(1 0 0 / 0.08) 74%,
+    oklch(1 0 0 / 0.45) 100%
+  );
   --ambient-aurora:
     radial-gradient(60% 45% at 10% 4%, oklch(0.5 0.14 262 / 0.55) 0%, transparent 62%),
     radial-gradient(55% 40% at 92% 2%, oklch(0.6 0.13 82 / 0.28) 0%, transparent 62%),
