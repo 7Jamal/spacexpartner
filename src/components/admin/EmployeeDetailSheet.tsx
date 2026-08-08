@@ -225,7 +225,7 @@ export function EmployeeDetailSheet({
 
               <section className="space-y-2">
                 <h3 className="font-display text-sm font-semibold">Submitted profile information</h3>
-                <dl className="grid gap-2 rounded-xl border bg-surface-muted p-4 text-sm sm:grid-cols-2">
+                <dl className="grid gap-2 rounded-xl border glass-inset p-4 text-sm sm:grid-cols-2">
                   <Row label="Full name" value={employee.full_name || "—"} />
                   <Row label="Email" value={employee.email || "—"} />
                   <Row label="Phone" value={employee.phone || "—"} />
@@ -307,7 +307,7 @@ export function EmployeeDetailSheet({
               <section className="space-y-2">
                 <h3 className="font-display text-sm font-semibold">Bank details</h3>
                 {employee.bank ? (
-                  <dl className="grid gap-2 rounded-xl border bg-surface-muted p-4 text-sm sm:grid-cols-2">
+                  <dl className="grid gap-2 rounded-xl border glass-inset p-4 text-sm sm:grid-cols-2">
                     <Row label="Account name" value={employee.bank.account_name} />
                     <Row label="Bank name" value={employee.bank.bank_name} />
                     <Row label="Account number" value={employee.bank.account_number} />
@@ -337,7 +337,7 @@ export function EmployeeDetailSheet({
                     {documents.map((doc) => (
                       <li
                         key={doc.id}
-                        className="flex items-center gap-3 rounded-xl border bg-surface-muted p-3"
+                        className="flex items-center gap-3 rounded-xl border glass-inset p-3"
                       >
                         <DocumentThumb doc={doc} />
                         <div className="min-w-0 flex-1">
@@ -403,7 +403,7 @@ export function EmployeeDetailSheet({
                   ) : (
                     <ul className="max-h-72 space-y-2 overflow-y-auto rounded-xl border p-2">
                       {messages.map((message) => (
-                        <li key={message.id} className="rounded-lg bg-surface-muted p-3">
+                        <li key={message.id} className="rounded-lg glass-inset p-3">
                           <p className="text-sm font-semibold">{message.title}</p>
                           <p className="mt-1 text-sm whitespace-pre-wrap text-muted-foreground">
                             {message.message}

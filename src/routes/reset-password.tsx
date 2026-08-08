@@ -53,7 +53,7 @@ function ResetPasswordPage() {
     <main className="grid min-h-screen place-items-center bg-background px-5 py-12">
       <div className="w-full max-w-md">
         <BrandMark className="mb-8 justify-center" />
-        <form onSubmit={handleSubmit} className="surface-card space-y-5 p-7">
+        <form onSubmit={handleSubmit} className="glass-panel space-y-5 p-7">
           <div>
             <h1 className="font-display text-xl font-semibold">Choose a new password</h1>
             <p className="mt-1 text-sm text-muted-foreground">

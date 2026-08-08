@@ -16,7 +16,7 @@ export function PaymentSummary({ profile }: { profile: Profile }) {
 
   return (
     <div className="grid gap-4 md:grid-cols-3">
-      <div className="surface-card relative overflow-hidden bg-gradient-brand p-6 text-primary-foreground md:col-span-1">
+      <div className="glass-panel relative overflow-hidden bg-gradient-brand p-6 text-primary-foreground md:col-span-1">
         <div
           className="pointer-events-none absolute -top-16 -right-10 size-40 rounded-full opacity-25 blur-2xl"
           style={{ background: "var(--gradient-gold)" }}
@@ -30,7 +30,7 @@ export function PaymentSummary({ profile }: { profile: Profile }) {
         <p className="mt-2 text-xs text-primary-foreground/70">Paid every week, every partner.</p>
       </div>
 
-      <div className="surface-card p-6">
+      <div className="glass-panel p-6">
         <p className="flex items-center gap-2 text-xs font-semibold tracking-wide uppercase text-muted-foreground">
           <CalendarDays className="size-3.5" /> Next payment date
         </p>
@@ -50,7 +50,7 @@ export function PaymentSummary({ profile }: { profile: Profile }) {
         </div>
       </div>
 
-      <div className="surface-card p-6">
+      <div className="glass-panel p-6">
         <p className="flex items-center gap-2 text-xs font-semibold tracking-wide uppercase text-muted-foreground">
           <Clock className="size-3.5" /> Countdown
         </p>
@@ -63,7 +63,7 @@ export function PaymentSummary({ profile }: { profile: Profile }) {
           ].map((unit) => (
             <div
               key={unit.label}
-              className="rounded-xl border bg-surface-muted px-2 py-3 text-center"
+              className="rounded-xl border glass-inset px-2 py-3 text-center"
             >
               <p className="font-display text-xl font-semibold tabular-nums">
                 {`${unit.value}`.padStart(2, "0")}

@@ -30,7 +30,7 @@ export function NotificationsPanel({
   });
 
   return (
-    <section className="surface-card flex h-full flex-col p-6">
+    <section className="glass-panel flex h-full flex-col p-6">
       <div className="flex items-center gap-2">
         <BellRing className="size-4 text-accent" />
         <h2 className="font-display text-base font-semibold">Notifications</h2>
@@ -53,7 +53,7 @@ export function NotificationsPanel({
                     if (!notification.is_read) markRead.mutate(notification.id);
                   }}
                   className={cn(
-                    "flex w-full items-center gap-3 rounded-xl border bg-surface-muted p-3 text-left transition hover:shadow-soft",
+                    "flex w-full items-center gap-3 rounded-xl border glass-inset p-3 text-left transition hover:shadow-soft",
                     !notification.is_read && "border-accent/40 bg-accent/5",
                   )}
                 >

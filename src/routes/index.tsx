@@ -184,7 +184,7 @@ function AuthPage() {
             </TabsList>
 
             <TabsContent value="login">
-              <form onSubmit={handleLogin} className="surface-card mt-4 space-y-4 p-6">
+              <form onSubmit={handleLogin} className="glass-panel mt-4 space-y-4 p-6">
                 <div className="space-y-2">
                   <Label htmlFor="login-email">Email address</Label>
                   <Input
@@ -222,7 +222,7 @@ function AuthPage() {
             </TabsContent>
 
             <TabsContent value="register">
-              <form onSubmit={handleRegister} className="surface-card mt-4 space-y-4 p-6">
+              <form onSubmit={handleRegister} className="glass-panel mt-4 space-y-4 p-6">
                 <div className="space-y-2">
                   <Label htmlFor="reg-name">Full name</Label>
                   <Input id="reg-name" name="full_name" required placeholder="Jane Doe" />
