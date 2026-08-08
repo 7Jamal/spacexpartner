@@ -194,6 +194,18 @@
   --shadow-soft: 0 1px 2px oklch(0 0 0 / 0.4), 0 10px 30px -14px oklch(0 0 0 / 0.6);
   --shadow-lift: 0 2px 6px oklch(0 0 0 / 0.45), 0 28px 56px -22px oklch(0 0 0 / 0.7);
 
+  --glass-fill: oklch(0.28 0.045 264 / 0.5);
+  --glass-fill-soft: oklch(0.3 0.045 264 / 0.32);
+  --glass-border: oklch(1 0 0 / 0.16);
+  --glass-highlight: linear-gradient(
+    145deg,
+    oklch(1 0 0 / 0.14) 0%,
+    oklch(1 0 0 / 0.04) 40%,
+    oklch(0.68 0.14 250 / 0.12) 100%
+  );
+  --glass-shadow: 0 1px 0 oklch(1 0 0 / 0.1) inset, 0 22px 52px -24px oklch(0 0 0 / 0.75);
+  --glass-blur: 24px;
+
   --chart-1: oklch(0.72 0.13 250);
   --chart-2: oklch(0.74 0.15 155);
   --chart-3: oklch(0.82 0.14 85);
