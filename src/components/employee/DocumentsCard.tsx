@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { FileText, Loader2, Lock, UploadCloud } from "lucide-react";
+import { FileText, Loader2, UploadCloud } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
@@ -148,10 +148,6 @@ export function DocumentsCard({ userId }: { userId: string }) {
                   {formatBytes(Number(doc.file_size))} · {formatDateTime(doc.created_at)}
                 </p>
               </div>
-              <span className="flex shrink-0 items-center gap-1 text-[11px] text-muted-foreground">
-                <Lock className="size-3" />
-                Locked
-              </span>
             </li>
           ))
         )}
