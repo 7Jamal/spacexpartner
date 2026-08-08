@@ -76,7 +76,7 @@ function DashboardPage() {
           <BrandMark
             size="lg"
             layout="stacked"
-            tone="onDark"
+            tone={logoTone}
             className="items-start text-left"
             textClassName="justify-start"
           />
