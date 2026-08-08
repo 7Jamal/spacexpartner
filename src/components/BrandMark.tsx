@@ -1,5 +1,6 @@
 import logoAsset from "@/assets/spacex-logo.png.asset.json";
 import logoLightAsset from "@/assets/spacex-logo-light.png.asset.json";
+import { useBackdropContrast } from "@/hooks/useBackdropContrast";
 import { cn } from "@/lib/utils";
 
 const sizeStyles = {
@@ -34,19 +35,22 @@ export function BrandMark({
   showText = true,
   layout = "stacked",
   textClassName,
-  tone = "default",
+  tone = "auto",
 }: {
   className?: string;
   size?: keyof typeof sizeStyles;
   showText?: boolean;
   layout?: "stacked" | "inline";
   textClassName?: string;
-  tone?: "default" | "onDark";
+  tone?: "default" | "onDark" | "auto";
 }) {
-  const src = tone === "onDark" ? logoLightAsset.url : logoAsset.url;
+  const { ref, tone: measuredTone, needsScrim } = useBackdropContrast(tone === "auto");
+  const resolvedTone = tone === "auto" ? measuredTone : tone;
+  const src = resolvedTone === "onDark" ? logoLightAsset.url : logoAsset.url;
 
   return (
     <div
+      ref={ref as React.RefObject<HTMLDivElement>}
       className={cn(
         "flex min-w-0 max-w-full",
         layout === "stacked"
@@ -54,29 +58,57 @@ export function BrandMark({
           : "flex-row items-center gap-3",
         className,
       )}
+      data-contrast-tone={resolvedTone}
+      data-contrast-scrim={needsScrim ? "on" : "off"}
     >
       <div className="relative flex min-w-0 max-w-full items-center justify-center">
+        {needsScrim ? (
+          <span
+            aria-hidden
+            className="pointer-events-none absolute -inset-x-3 -inset-y-2 rounded-full blur-md"
+            style={{
+              background:
+                resolvedTone === "onDark"
+                  ? "radial-gradient(60% 70% at 50% 50%, color-mix(in oklab, #000 42%, transparent), transparent 75%)"
+                  : "radial-gradient(60% 70% at 50% 50%, color-mix(in oklab, #fff 62%, transparent), transparent 75%)",
+            }}
+          />
+        ) : null}
         <img
           src={src}
           alt="SpaceX Partnership Portal"
-          className="block h-auto w-auto max-w-full object-contain"
-          style={{ ...sizeStyles[size], filter: logoFilter[tone] }}
+          className="relative block h-auto w-auto max-w-full object-contain"
+          style={{ ...sizeStyles[size], filter: logoFilter[resolvedTone] }}
         />
       </div>
       {showText ? (
         <p
           className={cn(
-            "flex min-w-0 max-w-full items-baseline justify-center gap-[0.12em] font-display font-semibold tracking-[0.16em] uppercase whitespace-nowrap",
+            "relative flex min-w-0 max-w-full items-baseline justify-center gap-[0.12em] font-display font-semibold tracking-[0.16em] uppercase whitespace-nowrap",
             wordmarkSize[size],
             textClassName,
-            tone === "onDark" ? "text-primary-foreground" : "text-foreground",
+            resolvedTone === "onDark" ? "text-primary-foreground" : "text-foreground",
           )}
-          style={{ textShadow: textShadow[tone] }}
+          style={{
+            textShadow: needsScrim
+              ? `${textShadow[resolvedTone]}, ${
+                  resolvedTone === "onDark"
+                    ? "0 0 10px color-mix(in oklab, #000 75%, transparent)"
+                    : "0 0 10px color-mix(in oklab, #fff 85%, transparent)"
+                }`
+              : textShadow[resolvedTone],
+          }}
         >
           <span>Space</span>
           <span
             className="font-[family-name:'Space_Grotesk',var(--font-display)] text-[1.55em] leading-[0.8] font-bold text-accent"
-            style={{ textShadow: "0 0 18px color-mix(in oklab, var(--accent) 55%, transparent)" }}
+            style={{
+              textShadow: `0 0 18px color-mix(in oklab, var(--accent) 55%, transparent)${
+                resolvedTone === "onDark"
+                  ? ", 0 1px 3px color-mix(in oklab, #000 70%, transparent)"
+                  : ", 0 1px 2px color-mix(in oklab, #3b2a06 55%, transparent)"
+              }`,
+            }}
           >
             X
           </span>
