@@ -11,6 +11,7 @@ import type { LucideIcon } from "lucide-react";
 
 import type { EmployeeRecord } from "@/hooks/useAdmin";
 import type { Payment } from "@/hooks/useProfile";
+import { useT } from "@/lib/i18n";
 
 export function AdminStats({
   employees,
@@ -19,43 +20,44 @@ export function AdminStats({
   employees: EmployeeRecord[];
   payments: Payment[];
 }) {
+  const t = useT();
   const countStatus = (status: Payment["status"]) =>
     payments.filter((p) => p.status === status).length;
 
   const cards: Array<{ label: string; value: number; icon: LucideIcon; tone: string }> = [
-    { label: "Total partners", value: employees.length, icon: Users, tone: "text-primary" },
+    { label: t("admin.statTotal"), value: employees.length, icon: Users, tone: "text-primary" },
     {
-      label: "Active partners",
+      label: t("admin.statActive"),
       value: employees.filter((e) => e.account_status === "active").length,
       icon: UserCheck,
       tone: "text-status-successful",
     },
     {
-      label: "Suspended",
+      label: t("admin.statSuspended"),
       value: employees.filter((e) => e.account_status === "suspended").length,
       icon: UserMinus,
       tone: "text-status-failed",
     },
     {
-      label: "Successful payments",
+      label: t("admin.statSuccessful"),
       value: countStatus("successful"),
       icon: CheckCircle2,
       tone: "text-status-successful",
     },
     {
-      label: "Pending payments",
+      label: t("admin.statPending"),
       value: countStatus("pending") + countStatus("processing"),
       icon: Clock,
       tone: "text-status-pending",
     },
     {
-      label: "Failed payments",
+      label: t("admin.statFailed"),
       value: countStatus("failed"),
       icon: AlertTriangle,
       tone: "text-status-failed",
     },
     {
-      label: "Upcoming payments",
+      label: t("admin.statUpcoming"),
       value: countStatus("upcoming"),
       icon: CalendarClock,
       tone: "text-status-upcoming",
