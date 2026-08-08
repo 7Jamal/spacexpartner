@@ -70,7 +70,7 @@ export function EmployeeDetailSheet({
   const saveDetails = useMutation({
     mutationFn: async () => {
       if (!employee) return;
-      if (fullName.trim().length < 2) throw new Error("Enter the employee's full name.");
+      if (fullName.trim().length < 2) throw new Error("Enter the partner's full name.");
       const { error } = await supabase
         .from("profiles")
         .update({
@@ -82,7 +82,7 @@ export function EmployeeDetailSheet({
       if (error) throw error;
     },
     onSuccess: () => {
-      toast.success("Employee details updated.");
+      toast.success("Partner details updated.");
       invalidate();
     },
     onError: (error: Error) => toast.error(error.message),
@@ -122,7 +122,7 @@ export function EmployeeDetailSheet({
       });
     },
     onSuccess: () => {
-      toast.success("Payment status updated and the employee has been notified.");
+      toast.success("Payment status updated and the partner has been notified.");
       invalidate();
     },
     onError: (error: Error) => toast.error(error.message),
@@ -142,8 +142,8 @@ export function EmployeeDetailSheet({
         title: next === "suspended" ? "Account suspended" : "Account reactivated",
         message:
           next === "suspended"
-            ? "Your employee account has been suspended by the administrator. Payments are paused until your account is reactivated. Please contact the administrator for details."
-            : "Your employee account has been reactivated. Weekly payments will resume on your normal schedule.",
+            ? "Your partner account has been suspended by the administrator. Payments are paused until your account is reactivated. Please contact the administrator for details."
+            : "Your partner account has been reactivated. Weekly payments will resume on your normal schedule.",
         type: "policy",
         sender_name: "Super Administrator",
       });
@@ -161,7 +161,7 @@ export function EmployeeDetailSheet({
       await removeEmployee({ data: { userId: employee.id } });
     },
     onSuccess: () => {
-      toast.success("Employee deleted.");
+      toast.success("Partner deleted.");
       onOpenChange(false);
       invalidate();
     },
@@ -240,7 +240,7 @@ export function EmployeeDetailSheet({
                   <Row label="Registered" value={formatDateTime(employee.created_at)} />
                   <Row label="Last updated" value={formatDateTime(employee.updated_at)} />
                   <Row label="Last login" value={formatDateTime(employee.last_login_at)} />
-                  <Row label="Employee ID" value={employee.id} />
+                  <Row label="Partner ID" value={employee.id} />
                   <Row label="Documents submitted" value={String(documents.length)} />
                   <Row
                     label="Bank details"
@@ -323,7 +323,7 @@ export function EmployeeDetailSheet({
                   </dl>
                 ) : (
                   <p className="text-sm text-muted-foreground">
-                    This employee has not submitted bank details yet.
+                    This partner has not submitted bank details yet.
                   </p>
                 )}
               </section>
@@ -418,7 +418,7 @@ export function EmployeeDetailSheet({
                   )}
                 </div>
                 <Button variant="outline" onClick={() => toggleSuspend.mutate()}>
-                  {employee.account_status === "active" ? "Suspend employee" : "Reactivate employee"}
+                  {employee.account_status === "active" ? "Suspend partner" : "Reactivate partner"}
                 </Button>
                 <Button
                   variant="destructive"
@@ -434,7 +434,7 @@ export function EmployeeDetailSheet({
                   disabled={destroy.isPending}
                 >
                   {destroy.isPending ? <Loader2 className="size-4 animate-spin" /> : null}
-                  Delete employee
+                  Delete partner
                 </Button>
               </section>
             </div>
