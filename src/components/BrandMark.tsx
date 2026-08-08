@@ -3,10 +3,17 @@ import logoLightAsset from "@/assets/spacex-logo-light.png.asset.json";
 import { cn } from "@/lib/utils";
 
 const sizeClasses = {
-  sm: "h-8 sm:h-9",
-  md: "h-9 sm:h-11",
-  lg: "h-11 sm:h-14",
-  xl: "h-14 sm:h-20",
+  sm: "h-10 sm:h-12",
+  md: "h-12 sm:h-16",
+  lg: "h-16 sm:h-20",
+  xl: "h-20 sm:h-28",
+};
+
+const logoFilter = {
+  default:
+    "drop-shadow(0 1px 3px rgba(15,23,42,0.2)) drop-shadow(0 0 24px rgba(212,168,83,0.35))",
+  onDark:
+    "drop-shadow(0 1px 3px rgba(0,0,0,0.5)) drop-shadow(0 0 24px rgba(255,255,255,0.45))",
 };
 
 export function BrandMark({
@@ -24,16 +31,12 @@ export function BrandMark({
 
   return (
     <div className={cn("flex items-center gap-3", className)}>
-      <div
-        className={cn(
-          "relative flex shrink-0 items-center justify-center overflow-hidden",
-          tone === "onDark" && "drop-shadow-[0_0_12px_rgba(255,255,255,0.12)]",
-        )}
-      >
+      <div className="relative flex max-w-full shrink-0 items-center justify-center">
         <img
           src={src}
           alt="SpaceX Partnership Portal"
-          className={cn("w-auto object-contain", sizeClasses[size])}
+          className={cn("w-auto max-w-full object-contain", sizeClasses[size])}
+          style={{ filter: logoFilter[tone] }}
         />
       </div>
       {showText ? (
@@ -54,3 +57,5 @@ export function BrandMark({
     </div>
   );
 }
+
+

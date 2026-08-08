@@ -24,8 +24,9 @@ export function AppShell({
       <header className="sticky top-0 z-40 glass-bar glass-refract glass-sheen border-b">
         <div className="mx-auto flex h-16 w-full max-w-7xl items-center gap-3 px-4 sm:px-6">
           <Link to={isAdmin ? "/admin" : "/dashboard"} className="shrink-0">
-            <BrandMark size="sm" />
+            <BrandMark size="md" />
           </Link>
+
 
           {isAdmin ? (
             <nav className="ml-4 hidden items-center gap-1 md:flex">
@@ -75,8 +76,9 @@ export function AppShell({
 
       <footer className="glass-bar glass-refract mt-8 border-t py-6">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6">
-          <BrandMark size="sm" />
+          <BrandMark size="md" />
           <p className="text-xs text-muted-foreground">Secure employee payment management</p>
+
         </div>
       </footer>
     </div>
