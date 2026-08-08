@@ -241,36 +241,6 @@ export type Database = {
         }
         Relationships: []
       }
-      recovery_codes: {
-        Row: {
-          code_hash: string
-          created_at: string
-          failed_attempts: number
-          last_used_at: string | null
-          locked_until: string | null
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          code_hash: string
-          created_at?: string
-          failed_attempts?: number
-          last_used_at?: string | null
-          locked_until?: string | null
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          code_hash?: string
-          created_at?: string
-          failed_attempts?: number
-          last_used_at?: string | null
-          locked_until?: string | null
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
       security_answer_attempts: {
         Row: {
           failed_attempts: number
