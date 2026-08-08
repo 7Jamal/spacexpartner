@@ -32,35 +32,33 @@ export function EmployeeTable({
     <section className="glass-panel overflow-hidden">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b p-5">
         <div>
-          <h2 className="font-display text-base font-semibold">{t("admin.partnersTitle")}</h2>
-          <p className="text-xs text-muted-foreground">
-            {t("admin.partnersSubtitle")}
-          </p>
+          <h2 className="font-display text-base font-semibold">{t("table.title")}</h2>
+          <p className="text-xs text-muted-foreground">{t("table.subtitle")}</p>
         </div>
         <div className="relative w-full sm:w-64">
           <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder={t("admin.searchPlaceholder")}
+            placeholder={t("table.searchPlaceholder")}
             className="pl-9"
-            aria-label={t("admin.searchAria")}
+            aria-label={t("table.searchLabel")}
           />
         </div>
       </div>
 
       {filtered.length === 0 ? (
-        <p className="p-6 text-sm text-muted-foreground">{t("admin.noMatches")}</p>
+        <p className="p-6 text-sm text-muted-foreground">{t("table.noMatch")}</p>
       ) : (
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead className="glass-inset text-left text-[11px] tracking-wide uppercase text-muted-foreground">
               <tr>
-                <th className="px-5 py-3 font-semibold">{t("admin.colPartner")}</th>
-                <th className="px-5 py-3 font-semibold">{t("admin.colSalary")}</th>
-                <th className="px-5 py-3 font-semibold">{t("admin.colNextPayment")}</th>
-                <th className="px-5 py-3 font-semibold">{t("admin.colStatus")}</th>
-                <th className="px-5 py-3 font-semibold">{t("admin.colAccount")}</th>
+                <th className="px-5 py-3 font-semibold">{t("table.partner")}</th>
+                <th className="px-5 py-3 font-semibold">{t("table.weeklySalary")}</th>
+                <th className="px-5 py-3 font-semibold">{t("table.nextPayment")}</th>
+                <th className="px-5 py-3 font-semibold">{t("table.status")}</th>
+                <th className="px-5 py-3 font-semibold">{t("table.account")}</th>
               </tr>
             </thead>
             <tbody className="divide-y">
@@ -92,8 +90,8 @@ export function EmployeeTable({
                       }
                     >
                       {employee.account_status === "active"
-                        ? t("status.accountActive")
-                        : t("status.accountSuspended")}
+                        ? t("common.active")
+                        : t("common.suspended")}
                     </span>
                   </td>
                 </tr>
