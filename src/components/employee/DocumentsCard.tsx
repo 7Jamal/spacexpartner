@@ -8,7 +8,6 @@ import { Progress } from "@/components/ui/progress";
 import type { EmployeeDocument } from "@/hooks/useProfile";
 import { useDocuments } from "@/hooks/useProfile";
 import { supabase } from "@/integrations/supabase/client";
-import { getActiveLocale } from "@/lib/i18n/active";
 import { useT } from "@/lib/i18n";
 import { formatDateTime } from "@/lib/payroll";
 import { cn } from "@/lib/utils";
@@ -160,6 +159,7 @@ export function DocumentsCard({ userId }: { userId: string }) {
 }
 
 export function DocumentThumb({ doc }: { doc: EmployeeDocument }) {
+  const t = useT();
   const [url, setUrl] = useState<string | null>(null);
   const isImage = doc.mime_type.startsWith("image/");
 
@@ -181,7 +181,7 @@ export function DocumentThumb({ doc }: { doc: EmployeeDocument }) {
     return (
       <img
         src={url}
-        alt={`${getActiveLocale() === "en" ? "Preview of" : ""} ${doc.file_name}`.trim()}
+        alt={t("docs.previewAlt", { name: doc.file_name })}
         className="size-12 shrink-0 rounded-lg border object-cover"
       />
     );
