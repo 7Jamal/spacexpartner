@@ -31,11 +31,11 @@ export function BrandMark({
 
   return (
     <div className={cn("flex items-center gap-3", className)}>
-      <div className="relative flex shrink-0 items-center justify-center overflow-hidden">
+      <div className="relative flex max-w-full shrink-0 items-center justify-center">
         <img
           src={src}
           alt="SpaceX Partnership Portal"
-          className={cn("w-auto object-contain", sizeClasses[size])}
+          className={cn("w-auto max-w-full object-contain", sizeClasses[size])}
           style={{ filter: logoFilter[tone] }}
         />
       </div>
