@@ -20,12 +20,12 @@ export const Route = createFileRoute("/_authenticated/admin")({
       {
         name: "description",
         content:
-          "Super administrator console for managing employees, weekly payments, notices and secure documents.",
+          "Super administrator console for managing partners, weekly payments, notices and secure documents.",
       },
       { property: "og:title", content: "Admin console | SpaceX Partnership Portal" },
       {
         property: "og:description",
-        content: "Manage employees, payment statuses and company announcements.",
+        content: "Manage partners, payment statuses and company announcements.",
       },
     ],
   }),
@@ -69,7 +69,7 @@ function AdminPage() {
           </p>
           <h1 className="mt-2 font-display text-3xl font-semibold">Admin console</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Full control over employees, weekly payments, notices and supporting documents.
+            Full control over partners, weekly payments, notices and supporting documents.
           </p>
         </header>
 

@@ -84,13 +84,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "Secure employee payment portal for SpaceX Partnership: weekly salary tracking, payment status and company notices.",
+          "Secure partner payment portal for SpaceX Partnership: weekly salary tracking, payment status and company notices.",
       },
       { name: "author", content: "SpaceX Partnership" },
       { property: "og:title", content: "SpaceX Partnership Portal" },
       {
         property: "og:description",
-        content: "Secure weekly payment management for SpaceX Partnership employees.",
+        content: "Secure weekly payment management for SpaceX Partnership partners.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

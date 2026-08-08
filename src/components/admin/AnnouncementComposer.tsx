@@ -40,7 +40,7 @@ export function AnnouncementComposer({
 
       if (target === "all") {
         // Announcement row keeps the full message; a database trigger delivers the
-        // complete title AND message to every employee as a notification.
+        // complete title AND message to every partner as a notification.
         const { error } = await supabase.from("announcements").insert({
           title: cleanTitle,
           message: cleanMessage,
@@ -63,7 +63,7 @@ export function AnnouncementComposer({
     },
     onSuccess: () => {
       toast.success(
-        target === "all" ? "Announcement published to every employee." : "Notification sent.",
+        target === "all" ? "Announcement published to every partner." : "Notification sent.",
       );
       setTitle("");
       setMessage("");
@@ -80,7 +80,7 @@ export function AnnouncementComposer({
         <h2 className="font-display text-base font-semibold">Post an announcement</h2>
       </div>
       <p className="mt-1 text-xs text-muted-foreground">
-        The complete message is stored and delivered to employees, who can open it in full.
+        The complete message is stored and delivered to partners, who can open it in full.
       </p>
 
       <form
@@ -125,7 +125,7 @@ export function AnnouncementComposer({
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All employees (notice board + notification)</SelectItem>
+              <SelectItem value="all">All partners (notice board + notification)</SelectItem>
               {employees.map((employee) => (
                 <SelectItem key={employee.id} value={employee.id}>
                   {employee.full_name} · {employee.email}
@@ -142,7 +142,7 @@ export function AnnouncementComposer({
             value={message}
             onChange={(event) => setMessage(event.target.value)}
             rows={7}
-            placeholder="Write the complete message here. Multiple paragraphs are supported and will be shown to employees in full."
+            placeholder="Write the complete message here. Multiple paragraphs are supported and will be shown to partners in full."
             required
           />
           <p className="text-[11px] text-muted-foreground">{message.trim().length} characters</p>

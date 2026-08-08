@@ -81,7 +81,7 @@ export function DocumentsCard({ userId }: { userId: string }) {
         <h2 className="font-display text-base font-semibold">Supporting documents</h2>
       </div>
       <p className="mt-1 text-xs text-muted-foreground">
-        Identification, banking or employment documents. JPG, JPEG, PNG or PDF up to 20 MB. Only you
+        Identification, banking or partnership documents. JPG, JPEG, PNG or PDF up to 20 MB. Only you
         and the Super Administrator can see these files. Once uploaded, a document can only be
         removed by the Super Administrator.
       </p>

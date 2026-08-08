@@ -32,7 +32,7 @@ export function EmployeeTable({
         <div>
           <h2 className="font-display text-base font-semibold">Employees</h2>
           <p className="text-xs text-muted-foreground">
-            Select an employee to manage payments, bank details and documents.
+            Select a partner to manage payments, bank details and documents.
           </p>
         </div>
         <div className="relative w-full sm:w-64">
@@ -42,13 +42,13 @@ export function EmployeeTable({
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Search name or email"
             className="pl-9"
-            aria-label="Search employees"
+            aria-label="Search partners"
           />
         </div>
       </div>
 
       {filtered.length === 0 ? (
-        <p className="p-6 text-sm text-muted-foreground">No employees match your search.</p>
+        <p className="p-6 text-sm text-muted-foreground">No partners match your search.</p>
       ) : (
         <div className="overflow-x-auto">
           <table className="w-full text-sm">

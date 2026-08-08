@@ -6,7 +6,7 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 const deleteInput = z.object({ userId: z.string().uuid() });
 
 /**
- * Permanently removes an employee account (login + all related records).
+ * Permanently removes an partner account (login + all related records).
  * Only callable by the Super Administrator.
  */
 export const deleteEmployee = createServerFn({ method: "POST" })

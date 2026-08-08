@@ -30,10 +30,10 @@ export const Route = createFileRoute("/")({
         content:
           "Sign in or register for the SpaceX Partnership Portal to track your weekly $5,000 salary, payment status and company notices.",
       },
-      { property: "og:title", content: "SpaceX Partnership Portal — Employee Sign In" },
+      { property: "og:title", content: "SpaceX Partnership Portal — Partner Sign In" },
       {
         property: "og:description",
-        content: "Secure weekly payment management for SpaceX Partnership employees.",
+        content: "Secure weekly payment management for SpaceX Partnership partners.",
       },
     ],
   }),
@@ -172,7 +172,7 @@ function AuthPage() {
 
         <div className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center py-10">
           <div className="animate-rise">
-            <h2 className="font-display text-2xl font-semibold">Employee access</h2>
+            <h2 className="font-display text-2xl font-semibold">Partner access</h2>
             <p className="mt-1 text-sm text-muted-foreground">
               Sign in to your dashboard, or create an account in under a minute.
             </p>

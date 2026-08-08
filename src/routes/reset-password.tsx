@@ -15,7 +15,7 @@ export const Route = createFileRoute("/reset-password")({
       { title: "Choose a new password | SpaceX Partnership Portal" },
       {
         name: "description",
-        content: "Set a new password for your SpaceX Partnership Portal employee account.",
+        content: "Set a new password for your SpaceX Partnership Portal partner account.",
       },
       { property: "og:title", content: "Reset password | SpaceX Partnership Portal" },
       {
