@@ -19,14 +19,16 @@ export function AppShell({
   subtitle?: string;
 }) {
   const { user, isAdmin, signOut } = useAuth();
+  const { theme } = useTheme();
   const { pathname } = useLocation();
+  const logoTone = theme === "dark" ? "onDark" : "default";
 
   return (
     <div className="min-h-screen">
       <header className="sticky top-0 z-40 glass-bar glass-refract glass-sheen border-b">
         <div className="mx-auto flex h-16 w-full max-w-7xl items-center gap-3 px-4 sm:px-6">
           <Link to={isAdmin ? "/admin" : "/dashboard"} className="shrink-0">
-            <BrandMark size="sm" layout="inline" textClassName="hidden sm:flex" />
+            <BrandMark size="sm" layout="inline" tone={logoTone} textClassName="hidden sm:flex" />
           </Link>
 
 
