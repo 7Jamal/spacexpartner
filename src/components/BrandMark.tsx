@@ -71,11 +71,12 @@ export function BrandMark({
             textClassName,
             tone === "onDark" ? "text-primary-foreground" : "text-foreground",
           )}
+          style={{ textShadow: textShadow[tone] }}
         >
           <span>Space</span>
           <span
             className="font-[family-name:'Space_Grotesk',var(--font-display)] text-[1.55em] leading-[0.8] font-bold text-accent"
-            style={{ textShadow: "0 0 18px color-mix(in oklab, var(--accent) 45%, transparent)" }}
+            style={{ textShadow: "0 0 18px color-mix(in oklab, var(--accent) 55%, transparent)" }}
           >
             X
           </span>
