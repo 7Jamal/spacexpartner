@@ -43,6 +43,8 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
 
 function DashboardPage() {
   const { user } = useAuth();
+  const { theme } = useTheme();
+  const logoTone = theme === "dark" ? "onDark" : "default";
   const userId = user?.id;
   const { data: profile, isLoading } = useProfile(userId);
   const { data: bankDetails } = useBankDetails(userId);
