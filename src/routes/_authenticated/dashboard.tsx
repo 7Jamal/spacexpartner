@@ -12,12 +12,14 @@ import { PaymentSummary } from "@/components/employee/PaymentSummary";
 import { ProfileCard } from "@/components/employee/ProfileCard";
 import { useNotifications } from "@/components/notifications/NotificationCenter";
 import { useAuth } from "@/hooks/useAuth";
+import { useTheme } from "@/lib/theme";
 import {
   useAnnouncements,
   useBankDetails,
   usePayments,
   useProfile,
 } from "@/hooks/useProfile";
+
 
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
