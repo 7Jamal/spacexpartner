@@ -8,10 +8,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { Profile } from "@/hooks/useProfile";
 import { supabase } from "@/integrations/supabase/client";
+import { useT } from "@/lib/i18n";
 import { formatDate, formatDateTime } from "@/lib/payroll";
 
 export function ProfileCard({ profile }: { profile: Profile }) {
   const queryClient = useQueryClient();
+  const t = useT();
   const [fullName, setFullName] = useState(profile.full_name);
   const [phone, setPhone] = useState(profile.phone ?? "");
   const [jobTitle, setJobTitle] = useState(profile.job_title ?? "");
@@ -24,7 +26,7 @@ export function ProfileCard({ profile }: { profile: Profile }) {
 
   const save = useMutation({
     mutationFn: async () => {
-      if (fullName.trim().length < 2) throw new Error("Please enter your full name.");
+      if (fullName.trim().length < 2) throw new Error(t("profile.errorName"));
       const { error } = await supabase
         .from("profiles")
         .update({
@@ -36,7 +38,7 @@ export function ProfileCard({ profile }: { profile: Profile }) {
       if (error) throw error;
     },
     onSuccess: () => {
-      toast.success("Profile updated.");
+      toast.success(t("profile.updated"));
       queryClient.invalidateQueries({ queryKey: ["profile", profile.id] });
     },
     onError: (error: Error) => toast.error(error.message),
@@ -46,11 +48,13 @@ export function ProfileCard({ profile }: { profile: Profile }) {
     <section className="glass-panel p-6">
       <div className="flex items-center gap-2">
         <UserRound className="size-4 text-accent" />
-        <h2 className="font-display text-base font-semibold">Profile settings</h2>
+        <h2 className="font-display text-base font-semibold">{t("profile.title")}</h2>
       </div>
       <p className="mt-1 text-xs text-muted-foreground">
-        Registered {formatDate(profile.created_at)} · Last login{" "}
-        {formatDateTime(profile.last_login_at)}
+        {t("profile.meta", {
+          registered: formatDate(profile.created_at),
+          lastLogin: formatDateTime(profile.last_login_at),
+        })}
       </p>
 
       <form
@@ -61,7 +65,7 @@ export function ProfileCard({ profile }: { profile: Profile }) {
         }}
       >
         <div className="space-y-2">
-          <Label htmlFor="full_name">Full name</Label>
+          <Label htmlFor="full_name">{t("profile.fullName")}</Label>
           <Input
             id="full_name"
             value={fullName}
@@ -70,15 +74,15 @@ export function ProfileCard({ profile }: { profile: Profile }) {
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="email">Email address</Label>
+          <Label htmlFor="email">{t("profile.email")}</Label>
           <Input id="email" value={profile.email} readOnly disabled />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="phone">Phone (optional)</Label>
+          <Label htmlFor="phone">{t("profile.phone")}</Label>
           <Input id="phone" value={phone} onChange={(event) => setPhone(event.target.value)} />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="job_title">Role / job title (optional)</Label>
+          <Label htmlFor="job_title">{t("profile.jobTitle")}</Label>
           <Input
             id="job_title"
             value={jobTitle}
@@ -88,7 +92,7 @@ export function ProfileCard({ profile }: { profile: Profile }) {
         <div className="sm:col-span-2">
           <Button type="submit" disabled={save.isPending}>
             {save.isPending ? <Loader2 className="size-4 animate-spin" /> : null}
-            Save changes
+            {t("common.save")}
           </Button>
         </div>
       </form>
