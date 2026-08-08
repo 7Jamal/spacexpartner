@@ -231,6 +231,16 @@
     color: var(--color-foreground);
     font-family: var(--font-body);
     -webkit-font-smoothing: antialiased;
+    background-image: var(--ambient-aurora);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  input,
+  textarea,
+  select {
+    backdrop-filter: blur(10px) saturate(150%);
   }
 
   h1, h2, h3, h4, .font-display {
@@ -276,6 +286,28 @@
   background-color: var(--glass-fill-soft);
   background-image: var(--glass-highlight);
   backdrop-filter: blur(14px) saturate(160%);
+}
+
+@utility glass-bar {
+  border-color: var(--glass-border);
+  background-color: var(--glass-fill-soft);
+  background-image: var(--glass-highlight);
+  backdrop-filter: blur(26px) saturate(180%);
+}
+
+@utility glass-field {
+  border-color: var(--glass-border);
+  background-color: var(--glass-fill-soft);
+  backdrop-filter: blur(12px) saturate(160%);
+  box-shadow: 0 1px 0 oklch(1 0 0 / 0.35) inset;
+}
+
+@utility glass-overlay {
+  border-color: var(--glass-border);
+  background-color: var(--glass-fill);
+  background-image: var(--glass-highlight);
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(28px) saturate(190%);
 }
 
 @utility bg-gradient-brand {
