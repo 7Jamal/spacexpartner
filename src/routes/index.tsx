@@ -22,6 +22,9 @@ import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { useT } from "@/lib/i18n";
 import { formatMoney, WEEKLY_SALARY } from "@/lib/payroll";
+import { RecoveryCodeDialog } from "@/components/RecoveryCodeDialog";
+import { issueMyRecoveryCode, resetPasswordWithRecoveryCode } from "@/lib/recovery.functions";
+import { useServerFn } from "@tanstack/react-start";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -49,10 +52,18 @@ function AuthPage() {
   const [busy, setBusy] = useState(false);
   const [forgotOpen, setForgotOpen] = useState(false);
   const [resetEmail, setResetEmail] = useState("");
+  const [resetCode, setResetCode] = useState("");
+  const [resetPassword, setResetPassword] = useState("");
+  const [issuedCode, setIssuedCode] = useState<string | null>(null);
+  const [pendingRedirect, setPendingRedirect] = useState(false);
+  const issueCode = useServerFn(issueMyRecoveryCode);
+  const resetWithCode = useServerFn(resetPasswordWithRecoveryCode);
 
   useEffect(() => {
-    if (!loading && session) navigate({ to: "/dashboard", replace: true });
-  }, [loading, session, navigate]);
+    if (!loading && session && !issuedCode && !pendingRedirect) {
+      navigate({ to: "/dashboard", replace: true });
+    }
+  }, [loading, session, navigate, issuedCode, pendingRedirect]);
 
   async function handleLogin(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -95,7 +106,7 @@ function AuthPage() {
       return;
     }
     setBusy(true);
-    const { error } = await supabase.auth.signUp({
+    const { data: signUpData, error } = await supabase.auth.signUp({
       email,
       password,
       options: { data: { full_name: fullName } },
@@ -106,6 +117,18 @@ function AuthPage() {
       return;
     }
     toast.success(t("auth.accountCreated"));
+    if (signUpData.session) {
+      setPendingRedirect(true);
+      try {
+        const { code } = await issueCode({});
+        setIssuedCode(code);
+        setBusy(false);
+        return;
+      } catch {
+        setPendingRedirect(false);
+      }
+    }
+    setBusy(false);
     navigate({ to: "/dashboard", replace: true });
   }
 
@@ -114,15 +137,29 @@ function AuthPage() {
       toast.error(t("auth.errorResetEmail"));
       return;
     }
-    const { error } = await supabase.auth.resetPasswordForEmail(resetEmail.trim(), {
-      redirectTo: `${window.location.origin}/reset-password`,
-    });
-    if (error) {
-      toast.error(error.message);
+    if (resetCode.trim().length < 8) {
+      toast.error(t("auth.errorRecoveryCode"));
       return;
     }
-    setForgotOpen(false);
-    toast.success(t("auth.resetSent"));
+    if (resetPassword.length < 8) {
+      toast.error(t("auth.errorPassword"));
+      return;
+    }
+    setBusy(true);
+    try {
+      const { code } = await resetWithCode({
+        data: { email: resetEmail.trim(), code: resetCode.trim(), password: resetPassword },
+      });
+      setForgotOpen(false);
+      setResetCode("");
+      setResetPassword("");
+      toast.success(t("auth.resetDone"));
+      setIssuedCode(code);
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : String(error));
+    } finally {
+      setBusy(false);
+    }
   }
 
   return (
@@ -289,14 +326,47 @@ function AuthPage() {
               placeholder={t("auth.emailPlaceholder")}
             />
           </div>
+          <div className="space-y-2">
+            <Label htmlFor="reset-code">{t("auth.recoveryCode")}</Label>
+            <Input
+              id="reset-code"
+              value={resetCode}
+              onChange={(event) => setResetCode(event.target.value)}
+              placeholder={t("auth.recoveryCodePlaceholder")}
+              className="font-mono tracking-widest"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="reset-new-password">{t("auth.newPassword")}</Label>
+            <Input
+              id="reset-new-password"
+              type="password"
+              minLength={8}
+              value={resetPassword}
+              onChange={(event) => setResetPassword(event.target.value)}
+              placeholder={t("auth.passwordPlaceholder")}
+            />
+          </div>
+          <p className="text-xs text-muted-foreground">{t("auth.lostCode")}</p>
           <DialogFooter>
             <Button variant="outline" onClick={() => setForgotOpen(false)}>
               {t("common.cancel")}
             </Button>
-            <Button onClick={handleReset}>{t("auth.sendResetLink")}</Button>
+            <Button onClick={handleReset} disabled={busy}>
+              {busy ? <Loader2 className="size-4 animate-spin" /> : null}
+              {t("auth.resetSubmit")}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <RecoveryCodeDialog
+        code={issuedCode}
+        onClose={() => {
+          setIssuedCode(null);
+          setPendingRedirect(false);
+        }}
+      />
     </main>
   );
 }

@@ -10,6 +10,7 @@ import { NotificationsPanel } from "@/components/employee/NotificationsPanel";
 import { PaymentCalendar } from "@/components/employee/PaymentCalendar";
 import { PaymentSummary } from "@/components/employee/PaymentSummary";
 import { ProfileCard } from "@/components/employee/ProfileCard";
+import { RecoveryCodeCard } from "@/components/employee/RecoveryCodeCard";
 import { useNotifications } from "@/components/notifications/NotificationCenter";
 import { useAuth } from "@/hooks/useAuth";
 import { useT } from "@/lib/i18n";
@@ -121,6 +122,8 @@ function DashboardPage() {
         <DocumentsCard userId={userId} />
 
         <ProfileCard profile={profile} />
+
+        <RecoveryCodeCard userId={userId} />
       </div>
     </AppShell>
   );

@@ -5,6 +5,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 import { DocumentThumb } from "@/components/employee/DocumentsCard";
+import { PartnerPasswordHelp } from "@/components/admin/PartnerPasswordHelp";
 import { StatusBadge } from "@/components/StatusBadge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -324,6 +325,8 @@ export function EmployeeDetailSheet({
                   {t("common.save")}
                 </Button>
               </section>
+
+              <PartnerPasswordHelp userId={employee.id} />
 
               <section className="space-y-2">
                 <h3 className="font-display text-sm font-semibold">{t("sheet.bankDetails")}</h3>
