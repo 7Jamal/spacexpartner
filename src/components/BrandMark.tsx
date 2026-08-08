@@ -1,32 +1,39 @@
+import logoAsset from "@/assets/spacex-logo.png.asset.json";
 import { cn } from "@/lib/utils";
+
+const sizeClasses = {
+  sm: "h-7 sm:h-8",
+  md: "h-8 sm:h-10",
+  lg: "h-10 sm:h-12",
+  xl: "h-12 sm:h-16",
+};
 
 export function BrandMark({
   className,
-  showText = true,
+  size = "md",
+  showText = false,
   tone = "default",
 }: {
   className?: string;
+  size?: keyof typeof sizeClasses;
   showText?: boolean;
   tone?: "default" | "onDark";
 }) {
   return (
     <div className={cn("flex items-center gap-3", className)}>
-      <div className="relative grid size-10 shrink-0 place-items-center rounded-xl bg-gradient-brand shadow-soft">
-        <span className="absolute inset-0 rounded-xl ring-1 ring-inset ring-accent/30" />
-        <svg viewBox="0 0 24 24" className="size-5" aria-hidden="true">
-          <circle cx="12" cy="12" r="4.2" fill="currentColor" className="text-accent" />
-          <ellipse
-            cx="12"
-            cy="12"
-            rx="10"
-            ry="4"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.4"
-            className="text-accent/70"
-            transform="rotate(-24 12 12)"
-          />
-        </svg>
+      <div
+        className={cn(
+          "relative flex shrink-0 items-center justify-center overflow-hidden rounded-lg",
+          tone === "onDark"
+            ? "bg-primary-foreground/95 p-1.5 shadow-sm"
+            : "bg-background/50 p-1",
+        )}
+      >
+        <img
+          src={logoAsset.url}
+          alt="SpaceX Partnership Portal"
+          className={cn("w-auto object-contain", sizeClasses[size])}
+        />
       </div>
       {showText ? (
         <div className="leading-tight">
@@ -36,14 +43,7 @@ export function BrandMark({
               tone === "onDark" ? "text-primary-foreground" : "text-foreground",
             )}
           >
-            <span>Space</span>
-            <span
-              className="relative inline-block translate-y-[-0.5px] text-base font-bold text-accent"
-              style={{ fontFamily: "var(--font-brand-x)" }}
-            >
-              X
-            </span>
-            <span> Partnership</span>
+            SpaceX Partnership
           </p>
           <p className="text-[11px] font-medium tracking-[0.22em] uppercase text-muted-foreground">
             Portal
