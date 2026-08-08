@@ -145,7 +145,7 @@ export function countdownTo(target: Date, now: Date = new Date()): Countdown {
   };
 }
 
-/** Upcoming weekly payment dates following the employee's schedule. */
+/** Upcoming weekly payment dates following the partner's schedule. */
 export function upcomingPaymentDates(nextPaymentDate: string, count = 5) {
   const start = parseDateOnly(nextPaymentDate);
   return Array.from({ length: count }, (_, i) => addDays(start, i * 7));
