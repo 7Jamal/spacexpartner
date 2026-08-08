@@ -9,6 +9,7 @@ export const en = {
 
   "common.save": "Save changes",
   "common.cancel": "Cancel",
+  "common.close": "Close",
   "common.view": "View",
   "common.download": "Download document",
   "common.delete": "Delete",
@@ -56,6 +57,15 @@ export const en = {
   "auth.password": "Password",
   "auth.fullName": "Full name",
   "auth.forgot": "Forgot password?",
+  "auth.forgotPin": "Forgot your PIN?",
+  "auth.forgotTitle": "Forgot your PIN?",
+  "auth.forgotBody":
+    "For your security, PINs cannot be recovered here. Please contact the management or the support team directly and they will set a new PIN for you.",
+  "auth.pin": "4-digit PIN",
+  "auth.confirmPin": "Confirm your PIN",
+  "auth.pinHint": "Choose 4 numbers you will remember. This replaces a password.",
+  "auth.errorPin": "Your PIN must be exactly 4 numbers.",
+  "auth.errorPinMismatch": "The two PINs do not match.",
   "auth.signIn": "Sign in",
   "auth.createAccount": "Create my account",
   "auth.noVerification": "No email verification needed — you can sign in straight away.",
