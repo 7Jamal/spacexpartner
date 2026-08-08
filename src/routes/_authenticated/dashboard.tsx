@@ -50,7 +50,6 @@ function DashboardPage() {
   const { data: bankDetails } = useBankDetails(userId);
   const { data: payments = [] } = usePayments(userId);
   const { data: announcements = [] } = useAnnouncements();
-  const { data: notifications = [] } = useNotifications(userId);
 
   if (isLoading || !profile || !userId) {
     return (
@@ -107,9 +106,8 @@ function DashboardPage() {
           </section>
         )}
 
-        <div className="grid gap-4 lg:grid-cols-2">
+        <div className="grid gap-4">
           <NoticeBoard announcements={announcements} />
-          <NotificationsPanel notifications={notifications} userId={userId} />
         </div>
 
         {hasBankDetails ? <PaymentCalendar profile={profile} payments={payments} /> : null}
