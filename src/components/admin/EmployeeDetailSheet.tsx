@@ -5,6 +5,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 import { DocumentThumb } from "@/components/employee/DocumentsCard";
+import { PartnerPasswordHelp } from "@/components/admin/PartnerPasswordHelp";
 import { StatusBadge } from "@/components/StatusBadge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -327,6 +328,7 @@ export function EmployeeDetailSheet({
 
               <section className="space-y-2">
                 <h3 className="font-display text-sm font-semibold">{t("sheet.bankDetails")}</h3>
+                {null}
                 {employee.bank ? (
                   <dl className="grid gap-2 rounded-xl border glass-inset p-4 text-sm sm:grid-cols-2">
                     <Row label={t("bank.accountName")} value={employee.bank.account_name} />
