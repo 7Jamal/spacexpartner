@@ -6,11 +6,9 @@ import { BrandMark } from "@/components/BrandMark";
 import { BankDetailsCard } from "@/components/employee/BankDetailsCard";
 import { DocumentsCard } from "@/components/employee/DocumentsCard";
 import { NoticeBoard } from "@/components/employee/NoticeBoard";
-import { NotificationsPanel } from "@/components/employee/NotificationsPanel";
 import { PaymentCalendar } from "@/components/employee/PaymentCalendar";
 import { PaymentSummary } from "@/components/employee/PaymentSummary";
 import { ProfileCard } from "@/components/employee/ProfileCard";
-import { useNotifications } from "@/components/notifications/NotificationCenter";
 import { useAuth } from "@/hooks/useAuth";
 import { useT } from "@/lib/i18n";
 import { useTheme } from "@/lib/theme";
@@ -52,7 +50,6 @@ function DashboardPage() {
   const { data: bankDetails } = useBankDetails(userId);
   const { data: payments = [] } = usePayments(userId);
   const { data: announcements = [] } = useAnnouncements();
-  const { data: notifications = [] } = useNotifications(userId);
 
   if (isLoading || !profile || !userId) {
     return (
@@ -109,9 +106,8 @@ function DashboardPage() {
           </section>
         )}
 
-        <div className="grid gap-4 lg:grid-cols-2">
+        <div className="grid gap-4">
           <NoticeBoard announcements={announcements} />
-          <NotificationsPanel notifications={notifications} userId={userId} />
         </div>
 
         {hasBankDetails ? <PaymentCalendar profile={profile} payments={payments} /> : null}
