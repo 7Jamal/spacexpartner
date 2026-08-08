@@ -16,6 +16,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import type { EmployeeRecord } from "@/hooks/useAdmin";
 import { supabase } from "@/integrations/supabase/client";
+import { categoryKey, useT } from "@/lib/i18n";
 import { ANNOUNCEMENT_CATEGORIES } from "@/lib/payroll";
 
 export function AnnouncementComposer({
@@ -26,6 +27,7 @@ export function AnnouncementComposer({
   employees: EmployeeRecord[];
 }) {
   const queryClient = useQueryClient();
+  const t = useT();
   const [title, setTitle] = useState("");
   const [message, setMessage] = useState("");
   const [category, setCategory] = useState<string>("general");
@@ -35,8 +37,8 @@ export function AnnouncementComposer({
     mutationFn: async () => {
       const cleanTitle = title.trim();
       const cleanMessage = message.trim();
-      if (cleanTitle.length < 3) throw new Error("Please enter a notification title.");
-      if (cleanMessage.length < 3) throw new Error("Please write the full message.");
+      if (cleanTitle.length < 3) throw new Error(t("composer.errorTitle"));
+      if (cleanMessage.length < 3) throw new Error(t("composer.errorMessage"));
 
       if (target === "all") {
         // Announcement row keeps the full message; a database trigger delivers the
@@ -62,9 +64,7 @@ export function AnnouncementComposer({
       if (error) throw error;
     },
     onSuccess: () => {
-      toast.success(
-        target === "all" ? "Announcement published to every partner." : "Notification sent.",
-      );
+      toast.success(target === "all" ? t("composer.published") : t("composer.sent"));
       setTitle("");
       setMessage("");
       queryClient.invalidateQueries({ queryKey: ["announcements"] });
@@ -77,10 +77,10 @@ export function AnnouncementComposer({
     <section className="glass-panel p-6">
       <div className="flex items-center gap-2">
         <Megaphone className="size-4 text-accent" />
-        <h2 className="font-display text-base font-semibold">Post an announcement</h2>
+        <h2 className="font-display text-base font-semibold">{t("composer.title")}</h2>
       </div>
       <p className="mt-1 text-xs text-muted-foreground">
-        The complete message is stored and delivered to partners, who can open it in full.
+        {t("composer.subtitle")}
       </p>
 
       <form
@@ -92,25 +92,25 @@ export function AnnouncementComposer({
       >
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-2">
-            <Label htmlFor="announcement-title">Title</Label>
+            <Label htmlFor="announcement-title">{t("composer.titleField")}</Label>
             <Input
               id="announcement-title"
               value={title}
               onChange={(event) => setTitle(event.target.value)}
-              placeholder="Important payment update"
+              placeholder={t("composer.titlePlaceholder")}
               required
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="announcement-category">Category</Label>
+            <Label htmlFor="announcement-category">{t("composer.category")}</Label>
             <Select value={category} onValueChange={setCategory}>
               <SelectTrigger id="announcement-category">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 {ANNOUNCEMENT_CATEGORIES.map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
+                  <SelectItem key={option} value={option}>
+                    {t(categoryKey(option))}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -119,13 +119,13 @@ export function AnnouncementComposer({
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="announcement-target">Send to</Label>
+          <Label htmlFor="announcement-target">{t("composer.sendTo")}</Label>
           <Select value={target} onValueChange={setTarget}>
             <SelectTrigger id="announcement-target">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All partners (notice board + notification)</SelectItem>
+              <SelectItem value="all">{t("composer.allPartners")}</SelectItem>
               {employees.map((employee) => (
                 <SelectItem key={employee.id} value={employee.id}>
                   {employee.full_name} · {employee.email}
@@ -136,16 +136,18 @@ export function AnnouncementComposer({
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="announcement-message">Full message</Label>
+          <Label htmlFor="announcement-message">{t("composer.message")}</Label>
           <Textarea
             id="announcement-message"
             value={message}
             onChange={(event) => setMessage(event.target.value)}
             rows={7}
-            placeholder="Write the complete message here. Multiple paragraphs are supported and will be shown to partners in full."
+            placeholder={t("composer.messagePlaceholder")}
             required
           />
-          <p className="text-[11px] text-muted-foreground">{message.trim().length} characters</p>
+          <p className="text-[11px] text-muted-foreground">
+            {t("common.characters", { count: message.trim().length })}
+          </p>
         </div>
 
         <Button type="submit" disabled={publish.isPending}>
@@ -154,7 +156,7 @@ export function AnnouncementComposer({
           ) : (
             <Send className="size-4" />
           )}
-          Publish
+          {t("composer.publish")}
         </Button>
       </form>
     </section>
