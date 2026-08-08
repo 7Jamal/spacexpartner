@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import type { EmployeeDocument } from "@/hooks/useProfile";
+import { useDocuments } from "@/hooks/useProfile";
 import { supabase } from "@/integrations/supabase/client";
 import { formatDateTime } from "@/lib/payroll";
 import { cn } from "@/lib/utils";
@@ -26,7 +27,7 @@ export function DocumentsCard({ userId }: { userId: string }) {
   const [dragging, setDragging] = useState(false);
   const [progress, setProgress] = useState<number | null>(null);
 
-  const { data: documents = [] } = useDocumentsQuery(userId);
+  const { data: documents = [] } = useDocuments(userId);
 
   const upload = useMutation({
     mutationFn: async (file: File) => {
@@ -219,11 +220,3 @@ export function DocumentThumb({ doc }: { doc: EmployeeDocument }) {
     </div>
   );
 }
-
-function useDocumentsQuery(userId: string) {
-  const queryClient = useQueryClient();
-  void queryClient;
-  return useDocumentsInner(userId);
-}
-
-import { useDocuments as useDocumentsInner } from "@/hooks/useProfile";
