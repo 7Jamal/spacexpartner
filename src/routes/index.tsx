@@ -410,7 +410,7 @@ function AuthPage() {
       </Dialog>
 
       <Dialog open={setupOpen} onOpenChange={() => undefined}>
-        <DialogContent className="max-h-[85vh] overflow-y-auto" showCloseButton={false}>
+        <DialogContent className="max-h-[85vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>{t("sq.setupTitle")}</DialogTitle>
             <DialogDescription>{t("sq.setupBody")}</DialogDescription>
