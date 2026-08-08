@@ -1,3 +1,4 @@
+import { useT } from "@/lib/i18n";
 import { STATUS_META, type PaymentStatus } from "@/lib/payroll";
 import { cn } from "@/lib/utils";
 
@@ -11,6 +12,7 @@ export function StatusBadge({
   size?: "sm" | "md";
 }) {
   const meta = STATUS_META[status];
+  const t = useT();
   return (
     <span
       className={cn(
@@ -21,7 +23,7 @@ export function StatusBadge({
       )}
     >
       <span className={cn("size-1.5 rounded-full", meta.dot)} />
-      {meta.label}
+      {t(`status.${status}.label`)}
     </span>
   );
 }
