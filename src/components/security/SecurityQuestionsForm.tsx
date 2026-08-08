@@ -24,8 +24,8 @@ export function SecurityQuestionsForm({
   initialQuestionIds,
   onSaved,
 }: {
-  initialQuestionIds?: string[];
-  onSaved?: () => void;
+  initialQuestionIds?: string[] | undefined;
+  onSaved?: (() => void) | undefined;
 }) {
   const t = useT();
   const save = useServerFn(saveMySecurityAnswers);
