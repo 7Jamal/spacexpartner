@@ -2,12 +2,19 @@ import logoAsset from "@/assets/spacex-logo.png.asset.json";
 import logoLightAsset from "@/assets/spacex-logo-light.png.asset.json";
 import { cn } from "@/lib/utils";
 
-const sizeClasses = {
-  sm: "h-10 sm:h-12",
-  md: "h-12 sm:h-16",
-  lg: "h-16 sm:h-20",
-  xl: "h-20 sm:h-28",
-};
+const sizeStyles = {
+  sm: { height: "clamp(1.85rem, 6.5vw, 2.5rem)" },
+  md: { height: "clamp(2.25rem, 8vw, 3.25rem)" },
+  lg: { height: "clamp(2.75rem, 11vw, 4.5rem)" },
+  xl: { height: "clamp(3.25rem, 14vw, 6rem)" },
+} as const;
+
+const wordmarkSize = {
+  sm: "text-[0.62rem] sm:text-[0.7rem]",
+  md: "text-[0.7rem] sm:text-[0.8rem]",
+  lg: "text-xs sm:text-sm",
+  xl: "text-sm sm:text-base",
+} as const;
 
 const logoFilter = {
   default:
@@ -19,40 +26,53 @@ const logoFilter = {
 export function BrandMark({
   className,
   size = "md",
-  showText = false,
+  showText = true,
+  layout = "stacked",
   tone = "default",
 }: {
   className?: string;
-  size?: keyof typeof sizeClasses;
+  size?: keyof typeof sizeStyles;
   showText?: boolean;
+  layout?: "stacked" | "inline";
   tone?: "default" | "onDark";
 }) {
   const src = tone === "onDark" ? logoLightAsset.url : logoAsset.url;
 
   return (
-    <div className={cn("flex items-center gap-3", className)}>
-      <div className="relative flex max-w-full shrink-0 items-center justify-center">
+    <div
+      className={cn(
+        "flex min-w-0 max-w-full",
+        layout === "stacked"
+          ? "flex-col items-center gap-1.5 text-center"
+          : "flex-row items-center gap-3",
+        className,
+      )}
+    >
+      <div className="relative flex min-w-0 max-w-full items-center justify-center">
         <img
           src={src}
           alt="SpaceX Partnership Portal"
-          className={cn("w-auto max-w-full object-contain", sizeClasses[size])}
-          style={{ filter: logoFilter[tone] }}
+          className="block h-auto w-auto max-w-full object-contain"
+          style={{ ...sizeStyles[size], filter: logoFilter[tone] }}
         />
       </div>
       {showText ? (
-        <div className="leading-tight">
-          <p
-            className={cn(
-              "font-display text-sm font-semibold tracking-wide uppercase",
-              tone === "onDark" ? "text-primary-foreground" : "text-foreground",
-            )}
+        <p
+          className={cn(
+            "flex min-w-0 max-w-full items-baseline justify-center gap-[0.12em] font-display font-semibold tracking-[0.16em] uppercase whitespace-nowrap",
+            wordmarkSize[size],
+            tone === "onDark" ? "text-primary-foreground" : "text-foreground",
+          )}
+        >
+          <span>Space</span>
+          <span
+            className="font-[family-name:'Space_Grotesk',var(--font-display)] text-[1.55em] leading-[0.8] font-bold text-accent"
+            style={{ textShadow: "0 0 18px color-mix(in oklab, var(--accent) 45%, transparent)" }}
           >
-            SpaceX Partnership
-          </p>
-          <p className="text-[11px] font-medium tracking-[0.22em] uppercase text-muted-foreground">
-            Portal
-          </p>
-        </div>
+            X
+          </span>
+          <span className="ml-[0.25em]">Partnership Portal</span>
+        </p>
       ) : null}
     </div>
   );
