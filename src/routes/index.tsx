@@ -22,8 +22,12 @@ import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { useT } from "@/lib/i18n";
 import { formatMoney, WEEKLY_SALARY } from "@/lib/payroll";
-import { RecoveryCodeDialog } from "@/components/RecoveryCodeDialog";
-import { issueMyRecoveryCode, resetPasswordWithRecoveryCode } from "@/lib/recovery.functions";
+import { SecurityQuestionsForm } from "@/components/security/SecurityQuestionsForm";
+import {
+  resetPasswordWithSecurityAnswers,
+  startPasswordRecovery,
+} from "@/lib/recovery.functions";
+import { questionLabelKey } from "@/lib/security-questions";
 import { useServerFn } from "@tanstack/react-start";
 
 export const Route = createFileRoute("/")({
@@ -52,18 +56,20 @@ function AuthPage() {
   const [busy, setBusy] = useState(false);
   const [forgotOpen, setForgotOpen] = useState(false);
   const [resetEmail, setResetEmail] = useState("");
-  const [resetCode, setResetCode] = useState("");
+  const [resetQuestions, setResetQuestions] = useState<
+    { slot: number; questionId: string }[] | null
+  >(null);
+  const [resetAnswers, setResetAnswers] = useState<Record<number, string>>({});
   const [resetPassword, setResetPassword] = useState("");
-  const [issuedCode, setIssuedCode] = useState<string | null>(null);
-  const [pendingRedirect, setPendingRedirect] = useState(false);
-  const issueCode = useServerFn(issueMyRecoveryCode);
-  const resetWithCode = useServerFn(resetPasswordWithRecoveryCode);
+  const [setupOpen, setSetupOpen] = useState(false);
+  const startRecovery = useServerFn(startPasswordRecovery);
+  const finishRecovery = useServerFn(resetPasswordWithSecurityAnswers);
 
   useEffect(() => {
-    if (!loading && session && !issuedCode && !pendingRedirect) {
+    if (!loading && session && !setupOpen) {
       navigate({ to: "/dashboard", replace: true });
     }
-  }, [loading, session, navigate, issuedCode, pendingRedirect]);
+  }, [loading, session, navigate, setupOpen]);
 
   async function handleLogin(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -117,44 +123,55 @@ function AuthPage() {
       return;
     }
     toast.success(t("auth.accountCreated"));
-    if (signUpData.session) {
-      setPendingRedirect(true);
-      try {
-        const { code } = await issueCode({});
-        setIssuedCode(code);
-        setBusy(false);
-        return;
-      } catch {
-        setPendingRedirect(false);
-      }
-    }
     setBusy(false);
+    if (signUpData.session) {
+      setSetupOpen(true);
+      return;
+    }
     navigate({ to: "/dashboard", replace: true });
   }
 
-  async function handleReset() {
+  async function loadQuestions() {
     if (!resetEmail.trim()) {
       toast.error(t("auth.errorResetEmail"));
       return;
     }
-    if (resetCode.trim().length < 8) {
-      toast.error(t("auth.errorRecoveryCode"));
-      return;
+    setBusy(true);
+    try {
+      const { questions } = await startRecovery({ data: { email: resetEmail.trim() } });
+      setResetQuestions(questions);
+      setResetAnswers({});
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : String(error));
+    } finally {
+      setBusy(false);
     }
+  }
+
+  async function handleReset() {
+    if (!resetQuestions) return;
     if (resetPassword.length < 8) {
       toast.error(t("auth.errorPassword"));
       return;
     }
+    const answers = resetQuestions.map((question) => ({
+      slot: question.slot,
+      answer: (resetAnswers[question.slot] ?? "").trim(),
+    }));
+    if (answers.filter((item) => item.answer.length > 0).length < 2) {
+      toast.error(t("sq.errorAnswers"));
+      return;
+    }
     setBusy(true);
     try {
-      const { code } = await resetWithCode({
-        data: { email: resetEmail.trim(), code: resetCode.trim(), password: resetPassword },
+      await finishRecovery({
+        data: { email: resetEmail.trim(), answers, password: resetPassword },
       });
       setForgotOpen(false);
-      setResetCode("");
+      setResetQuestions(null);
+      setResetAnswers({});
       setResetPassword("");
       toast.success(t("auth.resetDone"));
-      setIssuedCode(code);
     } catch (error) {
       toast.error(error instanceof Error ? error.message : String(error));
     } finally {
@@ -308,65 +325,105 @@ function AuthPage() {
         </div>
       </section>
 
-      <Dialog open={forgotOpen} onOpenChange={setForgotOpen}>
-        <DialogContent>
+      <Dialog
+        open={forgotOpen}
+        onOpenChange={(open) => {
+          setForgotOpen(open);
+          if (!open) {
+            setResetQuestions(null);
+            setResetAnswers({});
+            setResetPassword("");
+          }
+        }}
+      >
+        <DialogContent className="max-h-[85vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>{t("auth.resetTitle")}</DialogTitle>
-            <DialogDescription>
-              {t("auth.resetBody")}
-            </DialogDescription>
+            <DialogDescription>{t("auth.resetBody")}</DialogDescription>
           </DialogHeader>
+
           <div className="space-y-2">
             <Label htmlFor="reset-email">{t("auth.email")}</Label>
             <Input
               id="reset-email"
               type="email"
               value={resetEmail}
+              disabled={Boolean(resetQuestions)}
               onChange={(event) => setResetEmail(event.target.value)}
               placeholder={t("auth.emailPlaceholder")}
             />
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="reset-code">{t("auth.recoveryCode")}</Label>
-            <Input
-              id="reset-code"
-              value={resetCode}
-              onChange={(event) => setResetCode(event.target.value)}
-              placeholder={t("auth.recoveryCodePlaceholder")}
-              className="font-mono tracking-widest"
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="reset-new-password">{t("auth.newPassword")}</Label>
-            <Input
-              id="reset-new-password"
-              type="password"
-              minLength={8}
-              value={resetPassword}
-              onChange={(event) => setResetPassword(event.target.value)}
-              placeholder={t("auth.passwordPlaceholder")}
-            />
-          </div>
-          <p className="text-xs text-muted-foreground">{t("auth.lostCode")}</p>
+
+          {resetQuestions ? (
+            <div className="space-y-4">
+              {resetQuestions.map((question) => (
+                <div key={question.slot} className="space-y-2">
+                  <Label htmlFor={`answer-${question.slot}`}>
+                    {t(questionLabelKey(question.questionId))}
+                  </Label>
+                  <Input
+                    id={`answer-${question.slot}`}
+                    autoComplete="off"
+                    value={resetAnswers[question.slot] ?? ""}
+                    onChange={(event) =>
+                      setResetAnswers((current) => ({
+                        ...current,
+                        [question.slot]: event.target.value,
+                      }))
+                    }
+                    placeholder={t("sq.answerPlaceholder")}
+                  />
+                </div>
+              ))}
+              <div className="space-y-2">
+                <Label htmlFor="reset-new-password">{t("auth.newPassword")}</Label>
+                <Input
+                  id="reset-new-password"
+                  type="password"
+                  minLength={8}
+                  value={resetPassword}
+                  onChange={(event) => setResetPassword(event.target.value)}
+                  placeholder={t("auth.passwordPlaceholder")}
+                />
+              </div>
+              <p className="text-xs text-muted-foreground">{t("sq.resetRule")}</p>
+            </div>
+          ) : null}
+
           <DialogFooter>
             <Button variant="outline" onClick={() => setForgotOpen(false)}>
               {t("common.cancel")}
             </Button>
-            <Button onClick={handleReset} disabled={busy}>
-              {busy ? <Loader2 className="size-4 animate-spin" /> : null}
-              {t("auth.resetSubmit")}
-            </Button>
+            {resetQuestions ? (
+              <Button onClick={handleReset} disabled={busy}>
+                {busy ? <Loader2 className="size-4 animate-spin" /> : null}
+                {t("auth.resetSubmit")}
+              </Button>
+            ) : (
+              <Button onClick={loadQuestions} disabled={busy}>
+                {busy ? <Loader2 className="size-4 animate-spin" /> : null}
+                {t("sq.continue")}
+              </Button>
+            )}
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
-      <RecoveryCodeDialog
-        code={issuedCode}
-        onClose={() => {
-          setIssuedCode(null);
-          setPendingRedirect(false);
-        }}
-      />
+      <Dialog open={setupOpen} onOpenChange={() => undefined}>
+        <DialogContent className="max-h-[85vh] overflow-y-auto" showCloseButton={false}>
+          <DialogHeader>
+            <DialogTitle>{t("sq.setupTitle")}</DialogTitle>
+            <DialogDescription>{t("sq.setupBody")}</DialogDescription>
+          </DialogHeader>
+          <SecurityQuestionsForm
+            onSaved={() => {
+              setSetupOpen(false);
+              navigate({ to: "/dashboard", replace: true });
+            }}
+          />
+        </DialogContent>
+      </Dialog>
+
     </main>
   );
 }
