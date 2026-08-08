@@ -23,9 +23,9 @@ export function AdminStats({
     payments.filter((p) => p.status === status).length;
 
   const cards: Array<{ label: string; value: number; icon: LucideIcon; tone: string }> = [
-    { label: "Total employees", value: employees.length, icon: Users, tone: "text-primary" },
+    { label: "Total partners", value: employees.length, icon: Users, tone: "text-primary" },
     {
-      label: "Active employees",
+      label: "Active partners",
       value: employees.filter((e) => e.account_status === "active").length,
       icon: UserCheck,
       tone: "text-status-successful",

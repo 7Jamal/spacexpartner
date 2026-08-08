@@ -36,7 +36,7 @@ export function AllDocumentsPanel({ employees }: { employees: EmployeeRecord[] }
   const remove = useMutation({
     mutationFn: async (doc: { id: string; storage_path: string }) => {
       await supabase.storage.from(BUCKET).remove([doc.storage_path]);
-      const { error } = await supabase.from("employee_documents").delete().eq("id", doc.id);
+      const { error } = await supabase.from("partner_documents").delete().eq("id", doc.id);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -72,7 +72,7 @@ export function AllDocumentsPanel({ employees }: { employees: EmployeeRecord[] }
           <Input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Search by file, employee or email"
+            placeholder="Search by file, partner or email"
             className="pl-9"
           />
         </div>
@@ -95,7 +95,7 @@ export function AllDocumentsPanel({ employees }: { employees: EmployeeRecord[] }
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-semibold">{doc.file_name}</p>
                   <p className="truncate text-[11px] text-muted-foreground">
-                    {owner?.full_name ?? "Unknown employee"}
+                    {owner?.full_name ?? "Unknown partner"}
                     {owner?.email ? ` · ${owner.email}` : ""}
                   </p>
                   <p className="text-[11px] text-muted-foreground">
