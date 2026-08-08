@@ -50,7 +50,7 @@ function ResetPasswordPage() {
   }
 
   return (
-    <main className="grid min-h-screen place-items-center bg-background px-5 py-12">
+    <main className="grid min-h-screen place-items-center px-5 py-12">
       <div className="w-full max-w-md">
         <BrandMark className="mb-8 justify-center" />
         <form onSubmit={handleSubmit} className="glass-panel space-y-5 p-7">
