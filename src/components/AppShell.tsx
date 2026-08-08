@@ -21,7 +21,7 @@ export function AppShell({
 
   return (
     <div className="min-h-screen">
-      <header className="sticky top-0 z-40 glass-bar border-b">
+      <header className="sticky top-0 z-40 glass-bar glass-refract glass-sheen border-b">
         <div className="mx-auto flex h-16 w-full max-w-7xl items-center gap-3 px-4 sm:px-6">
           <Link to={isAdmin ? "/admin" : "/dashboard"} className="shrink-0">
             <BrandMark />
