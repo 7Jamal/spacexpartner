@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { StatusBadge } from "@/components/StatusBadge";
 import { Input } from "@/components/ui/input";
 import type { EmployeeRecord } from "@/hooks/useAdmin";
+import { useT } from "@/lib/i18n";
 import { formatDate, formatMoney, parseDateOnly } from "@/lib/payroll";
 
 export function EmployeeTable({
@@ -13,6 +14,7 @@ export function EmployeeTable({
   employees: EmployeeRecord[];
   onSelect: (employee: EmployeeRecord) => void;
 }) {
+  const t = useT();
   const [query, setQuery] = useState("");
 
   const filtered = useMemo(() => {
@@ -30,9 +32,9 @@ export function EmployeeTable({
     <section className="glass-panel overflow-hidden">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b p-5">
         <div>
-          <h2 className="font-display text-base font-semibold">Employees</h2>
+          <h2 className="font-display text-base font-semibold">{t("admin.partnersTitle")}</h2>
           <p className="text-xs text-muted-foreground">
-            Select a partner to manage payments, bank details and documents.
+            {t("admin.partnersSubtitle")}
           </p>
         </div>
         <div className="relative w-full sm:w-64">
@@ -40,25 +42,25 @@ export function EmployeeTable({
           <Input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Search name or email"
+            placeholder={t("admin.searchPlaceholder")}
             className="pl-9"
-            aria-label="Search partners"
+            aria-label={t("admin.searchAria")}
           />
         </div>
       </div>
 
       {filtered.length === 0 ? (
-        <p className="p-6 text-sm text-muted-foreground">No partners match your search.</p>
+        <p className="p-6 text-sm text-muted-foreground">{t("admin.noMatches")}</p>
       ) : (
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead className="glass-inset text-left text-[11px] tracking-wide uppercase text-muted-foreground">
               <tr>
-                <th className="px-5 py-3 font-semibold">Employee</th>
-                <th className="px-5 py-3 font-semibold">Weekly salary</th>
-                <th className="px-5 py-3 font-semibold">Next payment</th>
-                <th className="px-5 py-3 font-semibold">Status</th>
-                <th className="px-5 py-3 font-semibold">Account</th>
+                <th className="px-5 py-3 font-semibold">{t("admin.colPartner")}</th>
+                <th className="px-5 py-3 font-semibold">{t("admin.colSalary")}</th>
+                <th className="px-5 py-3 font-semibold">{t("admin.colNextPayment")}</th>
+                <th className="px-5 py-3 font-semibold">{t("admin.colStatus")}</th>
+                <th className="px-5 py-3 font-semibold">{t("admin.colAccount")}</th>
               </tr>
             </thead>
             <tbody className="divide-y">
@@ -89,7 +91,9 @@ export function EmployeeTable({
                           : "text-xs font-semibold text-status-failed"
                       }
                     >
-                      {employee.account_status === "active" ? "Active" : "Suspended"}
+                      {employee.account_status === "active"
+                        ? t("status.accountActive")
+                        : t("status.accountSuspended")}
                     </span>
                   </td>
                 </tr>
