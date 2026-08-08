@@ -8,6 +8,7 @@ import { Progress } from "@/components/ui/progress";
 import type { EmployeeDocument } from "@/hooks/useProfile";
 import { useDocuments } from "@/hooks/useProfile";
 import { supabase } from "@/integrations/supabase/client";
+import { useT } from "@/lib/i18n";
 import { formatDateTime } from "@/lib/payroll";
 import { cn } from "@/lib/utils";
 
@@ -23,6 +24,7 @@ export function formatBytes(bytes: number) {
 
 export function DocumentsCard({ userId }: { userId: string }) {
   const queryClient = useQueryClient();
+  const t = useT();
   const inputRef = useRef<HTMLInputElement>(null);
   const [dragging, setDragging] = useState(false);
   const [progress, setProgress] = useState<number | null>(null);
@@ -32,9 +34,9 @@ export function DocumentsCard({ userId }: { userId: string }) {
   const upload = useMutation({
     mutationFn: async (file: File) => {
       if (!ACCEPTED_TYPES.includes(file.type)) {
-        throw new Error("Only JPG, JPEG, PNG and PDF files are accepted.");
+        throw new Error(t("docs.errorType"));
       }
-      if (file.size > MAX_SIZE) throw new Error("Files must be 20 MB or smaller.");
+      if (file.size > MAX_SIZE) throw new Error(t("docs.errorSize"));
 
       setProgress(12);
       const timer = window.setInterval(
@@ -64,7 +66,7 @@ export function DocumentsCard({ userId }: { userId: string }) {
       }
     },
     onSuccess: () => {
-      toast.success("Document uploaded.");
+      toast.success(t("docs.uploaded"));
       queryClient.invalidateQueries({ queryKey: ["documents", userId] });
       window.setTimeout(() => setProgress(null), 600);
     },
@@ -78,12 +80,10 @@ export function DocumentsCard({ userId }: { userId: string }) {
     <section className="glass-panel p-6">
       <div className="flex items-center gap-2">
         <FileText className="size-4 text-accent" />
-        <h2 className="font-display text-base font-semibold">Supporting documents</h2>
+        <h2 className="font-display text-base font-semibold">{t("docs.title")}</h2>
       </div>
       <p className="mt-1 text-xs text-muted-foreground">
-        Identification, banking or partnership documents. JPG, JPEG, PNG or PDF up to 20 MB. Only you
-        and the Super Administrator can see these files. Once uploaded, a document can only be
-        removed by the Super Administrator.
+        {t("docs.subtitle")}
       </p>
 
       <div
@@ -104,8 +104,8 @@ export function DocumentsCard({ userId }: { userId: string }) {
         )}
       >
         <UploadCloud className="mx-auto size-7 text-muted-foreground" />
-        <p className="mt-3 text-sm font-medium">Drag and drop a file here</p>
-        <p className="text-xs text-muted-foreground">or choose a file from your device</p>
+        <p className="mt-3 text-sm font-medium">{t("docs.dragDrop")}</p>
+        <p className="text-xs text-muted-foreground">{t("docs.chooseFile")}</p>
         <input
           ref={inputRef}
           type="file"
@@ -125,19 +125,21 @@ export function DocumentsCard({ userId }: { userId: string }) {
           disabled={upload.isPending}
         >
           {upload.isPending ? <Loader2 className="size-4 animate-spin" /> : null}
-          Upload document
+          {t("docs.upload")}
         </Button>
         {progress !== null ? (
           <div className="mt-4">
             <Progress value={progress} />
-            <p className="mt-2 text-xs text-muted-foreground">Uploading… {progress}%</p>
+            <p className="mt-2 text-xs text-muted-foreground">
+              {t("docs.uploading", { percent: progress })}
+            </p>
           </div>
         ) : null}
       </div>
 
       <ul className="mt-5 space-y-3">
         {documents.length === 0 ? (
-          <li className="text-sm text-muted-foreground">No documents uploaded yet.</li>
+          <li className="text-sm text-muted-foreground">{t("docs.empty")}</li>
         ) : (
           documents.map((doc) => (
             <li key={doc.id} className="flex items-center gap-3 rounded-xl border glass-inset p-3">
@@ -157,6 +159,7 @@ export function DocumentsCard({ userId }: { userId: string }) {
 }
 
 export function DocumentThumb({ doc }: { doc: EmployeeDocument }) {
+  const t = useT();
   const [url, setUrl] = useState<string | null>(null);
   const isImage = doc.mime_type.startsWith("image/");
 
@@ -178,7 +181,7 @@ export function DocumentThumb({ doc }: { doc: EmployeeDocument }) {
     return (
       <img
         src={url}
-        alt={`Preview of ${doc.file_name}`}
+        alt={t("docs.previewAlt", { name: doc.file_name })}
         className="size-12 shrink-0 rounded-lg border object-cover"
       />
     );

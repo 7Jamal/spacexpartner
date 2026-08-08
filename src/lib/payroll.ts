@@ -1,4 +1,5 @@
 import type { Database } from "@/integrations/supabase/types";
+import { getActiveLocale } from "@/lib/i18n/active";
 
 export type PaymentStatus = Database["public"]["Enums"]["payment_status"];
 export type AccountStatus = Database["public"]["Enums"]["account_status"];
@@ -18,67 +19,51 @@ export const PAYMENT_STATUSES: PaymentStatus[] = [
 
 export const STATUS_META: Record<
   PaymentStatus,
-  { label: string; className: string; dot: string; description: string }
+  { className: string; dot: string }
 > = {
   upcoming: {
-    label: "Upcoming",
     className: "border-status-upcoming/35 bg-status-upcoming/10 text-status-upcoming",
     dot: "bg-status-upcoming",
-    description: "Scheduled and awaiting the payment date.",
   },
   pending: {
-    label: "Pending",
     className: "border-status-pending/35 bg-status-pending/10 text-status-pending",
     dot: "bg-status-pending",
-    description: "Queued for review by the finance team.",
   },
   processing: {
-    label: "Processing",
     className: "border-status-processing/35 bg-status-processing/10 text-status-processing",
     dot: "bg-status-processing",
-    description: "Funds are being released to your bank.",
   },
   successful: {
-    label: "Successful",
     className: "border-status-successful/35 bg-status-successful/10 text-status-successful",
     dot: "bg-status-successful",
-    description: "Payment completed successfully.",
   },
   failed: {
-    label: "Failed",
     className: "border-status-failed/35 bg-status-failed/10 text-status-failed",
     dot: "bg-status-failed",
-    description: "The transfer did not go through.",
   },
   postponed: {
-    label: "Postponed",
     className: "border-status-postponed/35 bg-status-postponed/10 text-status-postponed",
     dot: "bg-status-postponed",
-    description: "Rescheduled to a later date.",
   },
   cancelled: {
-    label: "Cancelled",
     className: "border-status-cancelled/35 bg-status-cancelled/10 text-status-cancelled",
     dot: "bg-status-cancelled",
-    description: "This payment cycle was cancelled.",
   },
 };
 
 export const ANNOUNCEMENT_CATEGORIES = [
-  { value: "payment_postponed", label: "Payment postponed" },
-  { value: "payment_processing", label: "Payment processing" },
-  { value: "holiday", label: "Company holiday" },
-  { value: "policy", label: "New company policy" },
-  { value: "weekly_update", label: "Weekly update" },
-  { value: "general", label: "General announcement" },
+  "payment_postponed",
+  "payment_processing",
+  "holiday",
+  "policy",
+  "weekly_update",
+  "general",
 ] as const;
 
-export function categoryLabel(value: string) {
-  return ANNOUNCEMENT_CATEGORIES.find((c) => c.value === value)?.label ?? "Announcement";
-}
+export type AnnouncementCategory = (typeof ANNOUNCEMENT_CATEGORIES)[number];
 
 export function formatMoney(amount: number, currency = "USD") {
-  return new Intl.NumberFormat("en-US", {
+  return new Intl.NumberFormat(getActiveLocale(), {
     style: "currency",
     currency,
     maximumFractionDigits: 0,
@@ -89,14 +74,18 @@ export function formatDate(value: string | Date | null | undefined) {
   if (!value) return "—";
   const date = typeof value === "string" ? new Date(value) : value;
   if (Number.isNaN(date.getTime())) return "—";
-  return date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+  return date.toLocaleDateString(getActiveLocale(), {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
 }
 
 export function formatDateTime(value: string | Date | null | undefined) {
   if (!value) return "—";
   const date = typeof value === "string" ? new Date(value) : value;
   if (Number.isNaN(date.getTime())) return "—";
-  return date.toLocaleString("en-US", {
+  return date.toLocaleString(getActiveLocale(), {
     month: "short",
     day: "numeric",
     year: "numeric",

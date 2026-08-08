@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { BrandMark } from "@/components/BrandMark";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,6 +20,7 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
+import { useT } from "@/lib/i18n";
 import { formatMoney, WEEKLY_SALARY } from "@/lib/payroll";
 
 export const Route = createFileRoute("/")({
@@ -43,6 +45,7 @@ export const Route = createFileRoute("/")({
 function AuthPage() {
   const navigate = useNavigate();
   const { session, loading } = useAuth();
+  const t = useT();
   const [busy, setBusy] = useState(false);
   const [forgotOpen, setForgotOpen] = useState(false);
   const [resetEmail, setResetEmail] = useState("");
@@ -57,7 +60,7 @@ function AuthPage() {
     const email = String(form.get("email") ?? "").trim();
     const password = String(form.get("password") ?? "");
     if (!email || !password) {
-      toast.error("Enter your email and password.");
+      toast.error(t("auth.errorCredentials"));
       return;
     }
     setBusy(true);
@@ -73,7 +76,7 @@ function AuthPage() {
         .update({ last_login_at: new Date().toISOString() })
         .eq("id", data.user.id);
     }
-    toast.success("Welcome back.");
+    toast.success(t("auth.welcomeBack"));
     navigate({ to: "/dashboard", replace: true });
   }
 
@@ -84,11 +87,11 @@ function AuthPage() {
     const email = String(form.get("email") ?? "").trim();
     const password = String(form.get("password") ?? "");
     if (fullName.length < 2) {
-      toast.error("Please enter your full name.");
+      toast.error(t("auth.errorFullName"));
       return;
     }
     if (password.length < 8) {
-      toast.error("Password must be at least 8 characters.");
+      toast.error(t("auth.errorPassword"));
       return;
     }
     setBusy(true);
@@ -102,13 +105,13 @@ function AuthPage() {
       toast.error(error.message);
       return;
     }
-    toast.success("Account created. Taking you to your dashboard.");
+    toast.success(t("auth.accountCreated"));
     navigate({ to: "/dashboard", replace: true });
   }
 
   async function handleReset() {
     if (!resetEmail.trim()) {
-      toast.error("Enter the email address on your account.");
+      toast.error(t("auth.errorResetEmail"));
       return;
     }
     const { error } = await supabase.auth.resetPasswordForEmail(resetEmail.trim(), {
@@ -119,7 +122,7 @@ function AuthPage() {
       return;
     }
     setForgotOpen(false);
-    toast.success("Password reset link sent. Please check your inbox.");
+    toast.success(t("auth.resetSent"));
   }
 
   return (
@@ -134,30 +137,28 @@ function AuthPage() {
         </div>
         <div className="relative max-w-lg space-y-6 text-primary-foreground">
           <h1 className="font-display text-4xl leading-tight font-semibold">
-            Payroll clarity for every <span className="text-gradient-gold">partner</span> in the
-            company.
+            {t("auth.heroTitle")}
           </h1>
           <p className="text-sm/relaxed text-primary-foreground/75">
-            Track your weekly salary, follow each payment as it moves through approval, and stay
-            current with every company notice — all in one secure workspace.
+            {t("auth.heroBody")}
           </p>
           <ul className="space-y-3 text-sm text-primary-foreground/85">
             <li className="flex items-center gap-3">
               <Wallet className="size-4 text-accent" />
-              {formatMoney(WEEKLY_SALARY)} paid every week
+              {t("auth.heroPoint1", { amount: formatMoney(WEEKLY_SALARY) })}
             </li>
             <li className="flex items-center gap-3">
               <CalendarClock className="size-4 text-accent" />
-              Live countdown to your next payment
+              {t("auth.heroPoint2")}
             </li>
             <li className="flex items-center gap-3">
               <ShieldCheck className="size-4 text-accent" />
-              Bank details visible only to the administrator
+              {t("auth.heroPoint3")}
             </li>
           </ul>
         </div>
         <p className="relative text-xs text-primary-foreground/55">
-          Encrypted credentials · Protected records · Administrator-only controls
+          {t("auth.heroFooter")}
         </p>
       </section>
 
@@ -165,40 +166,41 @@ function AuthPage() {
         <div className="flex items-center justify-between">
           <BrandMark size="md" layout="stacked" className="lg:hidden items-start text-left" textClassName="justify-start" />
 
-          <div className="ml-auto">
+          <div className="ml-auto flex items-center gap-1">
+            <LanguageSwitcher />
             <ThemeToggle />
           </div>
         </div>
 
         <div className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center py-10">
           <div className="animate-rise">
-            <h2 className="font-display text-2xl font-semibold">Partner access</h2>
+            <h2 className="font-display text-2xl font-semibold">{t("auth.title")}</h2>
             <p className="mt-1 text-sm text-muted-foreground">
-              Sign in to your dashboard, or create an account in under a minute.
+              {t("auth.subtitle")}
             </p>
           </div>
 
           <Tabs defaultValue="login" className="mt-8">
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="login">Sign in</TabsTrigger>
-              <TabsTrigger value="register">Register</TabsTrigger>
+              <TabsTrigger value="login">{t("auth.tabSignIn")}</TabsTrigger>
+              <TabsTrigger value="register">{t("auth.tabRegister")}</TabsTrigger>
             </TabsList>
 
             <TabsContent value="login">
               <form onSubmit={handleLogin} className="glass-panel mt-4 space-y-4 p-6">
                 <div className="space-y-2">
-                  <Label htmlFor="login-email">Email address</Label>
+                  <Label htmlFor="login-email">{t("auth.email")}</Label>
                   <Input
                     id="login-email"
                     name="email"
                     type="email"
                     autoComplete="email"
                     required
-                    placeholder="you@company.com"
+                    placeholder={t("auth.emailPlaceholder")}
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="login-password">Password</Label>
+                  <Label htmlFor="login-password">{t("auth.password")}</Label>
                   <Input
                     id="login-password"
                     name="password"
@@ -213,11 +215,11 @@ function AuthPage() {
                   onClick={() => setForgotOpen(true)}
                   className="text-xs font-medium text-primary underline-offset-4 hover:underline"
                 >
-                  Forgot password?
+                  {t("auth.forgot")}
                 </button>
                 <Button type="submit" className="w-full" disabled={busy}>
                   {busy ? <Loader2 className="size-4 animate-spin" /> : <Lock className="size-4" />}
-                  Sign in
+                  {t("auth.signIn")}
                 </Button>
               </form>
             </TabsContent>
@@ -225,22 +227,27 @@ function AuthPage() {
             <TabsContent value="register">
               <form onSubmit={handleRegister} className="glass-panel mt-4 space-y-4 p-6">
                 <div className="space-y-2">
-                  <Label htmlFor="reg-name">Full name</Label>
-                  <Input id="reg-name" name="full_name" required placeholder="Jane Doe" />
+                  <Label htmlFor="reg-name">{t("auth.fullName")}</Label>
+                  <Input
+                    id="reg-name"
+                    name="full_name"
+                    required
+                    placeholder={t("auth.namePlaceholder")}
+                  />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="reg-email">Email address</Label>
+                  <Label htmlFor="reg-email">{t("auth.email")}</Label>
                   <Input
                     id="reg-email"
                     name="email"
                     type="email"
                     autoComplete="email"
                     required
-                    placeholder="you@company.com"
+                    placeholder={t("auth.emailPlaceholder")}
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="reg-password">Password</Label>
+                  <Label htmlFor="reg-password">{t("auth.password")}</Label>
                   <Input
                     id="reg-password"
                     name="password"
@@ -248,15 +255,15 @@ function AuthPage() {
                     autoComplete="new-password"
                     required
                     minLength={8}
-                    placeholder="At least 8 characters"
+                    placeholder={t("auth.passwordPlaceholder")}
                   />
                 </div>
                 <Button type="submit" className="w-full" disabled={busy}>
                   {busy ? <Loader2 className="size-4 animate-spin" /> : null}
-                  Create my account
+                  {t("auth.createAccount")}
                 </Button>
                 <p className="text-xs text-muted-foreground">
-                  No email verification needed — you can sign in straight away.
+                  {t("auth.noVerification")}
                 </p>
               </form>
             </TabsContent>
@@ -267,26 +274,26 @@ function AuthPage() {
       <Dialog open={forgotOpen} onOpenChange={setForgotOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Reset your password</DialogTitle>
+            <DialogTitle>{t("auth.resetTitle")}</DialogTitle>
             <DialogDescription>
-              We&apos;ll email you a secure link to choose a new password.
+              {t("auth.resetBody")}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-2">
-            <Label htmlFor="reset-email">Email address</Label>
+            <Label htmlFor="reset-email">{t("auth.email")}</Label>
             <Input
               id="reset-email"
               type="email"
               value={resetEmail}
               onChange={(event) => setResetEmail(event.target.value)}
-              placeholder="you@company.com"
+              placeholder={t("auth.emailPlaceholder")}
             />
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setForgotOpen(false)}>
-              Cancel
+              {t("common.cancel")}
             </Button>
-            <Button onClick={handleReset}>Send reset link</Button>
+            <Button onClick={handleReset}>{t("auth.sendResetLink")}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

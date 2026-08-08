@@ -1,4 +1,4 @@
-import { CalendarClock, UserRound } from "lucide-react";
+import { CalendarClock, Languages, UserRound } from "lucide-react";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
@@ -8,7 +8,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { categoryLabel, formatDateTime } from "@/lib/payroll";
+import { useTranslatedTexts } from "@/hooks/useTranslatedTexts";
+import { categoryKey, useT } from "@/lib/i18n";
+import { formatDateTime } from "@/lib/payroll";
 
 export type AppNotification = {
   id: string;
@@ -33,6 +35,14 @@ export function NotificationDetailDialog({
   notification: AppNotification | null;
   onOpenChange: (open: boolean) => void;
 }) {
+  const t = useT();
+  const { texts, isTranslating } = useTranslatedTexts(
+    [notification?.title ?? "", notification?.message ?? ""],
+    Boolean(notification),
+  );
+  const title = texts[0] || notification?.title || "";
+  const body = texts[1] ?? notification?.message ?? "";
+
   return (
     <Dialog open={Boolean(notification)} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-xl">
@@ -40,21 +50,25 @@ export function NotificationDetailDialog({
           <>
             <DialogHeader>
               <span className="w-fit rounded-full border border-accent/40 bg-accent/10 px-2.5 py-0.5 text-[11px] font-semibold tracking-wide text-accent-foreground uppercase dark:text-accent">
-                {categoryLabel(notification.type)}
+                {t(categoryKey(notification.type))}
               </span>
               <DialogTitle className="text-left text-lg leading-snug break-words">
-                {notification.title}
+                {title}
               </DialogTitle>
               <DialogDescription className="sr-only">
-                Full notification message from {notification.sender_name}
+                {t("notif.fullMessageFrom", { sender: notification.sender_name })}
               </DialogDescription>
             </DialogHeader>
 
+            {isTranslating ? (
+              <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                <Languages className="size-3.5" /> {t("common.translating")}
+              </p>
+            ) : null}
+
             <ScrollArea className="max-h-[55vh] pr-3">
               <p className="text-sm/relaxed whitespace-pre-wrap break-words text-foreground">
-                {notification.message?.trim()
-                  ? notification.message
-                  : "No additional message was included with this notification."}
+                {body.trim() ? body : t("notif.noMessage")}
               </p>
             </ScrollArea>
 

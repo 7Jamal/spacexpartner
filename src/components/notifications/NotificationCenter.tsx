@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/popover";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { supabase } from "@/integrations/supabase/client";
+import { useT } from "@/lib/i18n";
 import { formatDateTime } from "@/lib/payroll";
 import { cn } from "@/lib/utils";
 
@@ -58,6 +59,7 @@ export function useNotifications(userId: string | undefined) {
 
 export function NotificationCenter({ userId }: { userId: string | undefined }) {
   const queryClient = useQueryClient();
+  const t = useT();
   const { data: notifications = [] } = useNotifications(userId);
   const [selected, setSelected] = useState<AppNotification | null>(null);
   const [open, setOpen] = useState(false);
@@ -91,7 +93,7 @@ export function NotificationCenter({ userId }: { userId: string | undefined }) {
     <>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
-          <Button variant="ghost" size="icon" className="relative" aria-label="Notifications">
+          <Button variant="ghost" size="icon" className="relative" aria-label={t("notif.title")}>
             <Bell className="size-4" />
             {unread > 0 ? (
               <span className="absolute top-1.5 right-1.5 grid size-4 place-items-center rounded-full bg-accent text-[10px] font-bold text-accent-foreground">
@@ -102,7 +104,7 @@ export function NotificationCenter({ userId }: { userId: string | undefined }) {
         </PopoverTrigger>
         <PopoverContent align="end" className="w-[min(24rem,calc(100vw-2rem))] p-0">
           <div className="flex items-center justify-between border-b px-4 py-3">
-            <p className="font-display text-sm font-semibold">Notifications</p>
+            <p className="font-display text-sm font-semibold">{t("notif.title")}</p>
             {unread > 0 ? (
               <Button
                 variant="ghost"
@@ -111,14 +113,14 @@ export function NotificationCenter({ userId }: { userId: string | undefined }) {
                 onClick={() => markRead.mutate(notifications.filter((n) => !n.is_read).map((n) => n.id))}
               >
                 <CheckCheck className="size-3.5" />
-                Mark all read
+                {t("notif.markAllRead")}
               </Button>
             ) : null}
           </div>
           <ScrollArea className="max-h-80">
             {notifications.length === 0 ? (
               <p className="px-4 py-8 text-center text-sm text-muted-foreground">
-                You have no notifications yet.
+                {t("notif.emptyCenter")}
               </p>
             ) : (
               <ul className="divide-y">
@@ -141,7 +143,7 @@ export function NotificationCenter({ userId }: { userId: string | undefined }) {
                         <div className="min-w-0">
                           <p className="truncate text-sm font-semibold">{notification.title}</p>
                           <p className="mt-0.5 line-clamp-2 text-xs text-muted-foreground">
-                            {notification.message || "Open to read the full message."}
+                            {notification.message || t("notif.openToRead")}
                           </p>
                           <p className="mt-1 text-[11px] text-muted-foreground/80">
                             {formatDateTime(notification.created_at)}
@@ -151,7 +153,7 @@ export function NotificationCenter({ userId }: { userId: string | undefined }) {
                     </button>
                     <button
                       type="button"
-                      aria-label="Delete notification"
+                      aria-label={t("notif.delete")}
                       onClick={() => remove.mutate(notification.id)}
                       className="absolute top-2.5 right-2 rounded-md p-1.5 text-muted-foreground opacity-0 transition hover:bg-destructive/10 hover:text-destructive group-hover:opacity-100"
                     >

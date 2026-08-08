@@ -12,6 +12,7 @@ import { PaymentSummary } from "@/components/employee/PaymentSummary";
 import { ProfileCard } from "@/components/employee/ProfileCard";
 import { useNotifications } from "@/components/notifications/NotificationCenter";
 import { useAuth } from "@/hooks/useAuth";
+import { useT } from "@/lib/i18n";
 import { useTheme } from "@/lib/theme";
 import {
   useAnnouncements,
@@ -43,6 +44,7 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
 
 function DashboardPage() {
   const { user } = useAuth();
+  const t = useT();
   const { theme } = useTheme();
   const logoTone = theme === "dark" ? "onDark" : "default";
   const userId = user?.id;
@@ -62,7 +64,7 @@ function DashboardPage() {
     );
   }
 
-  const firstName = profile.full_name.split(" ")[0] || "there";
+  const firstName = profile.full_name.split(" ")[0] || t("dashboard.welcomeFallback");
   const hasBankDetails = Boolean(
     bankDetails?.account_name?.trim() &&
       bankDetails?.bank_name?.trim() &&
@@ -81,13 +83,13 @@ function DashboardPage() {
             textClassName="justify-start"
           />
           <p className="text-xs font-semibold tracking-[0.18em] uppercase text-muted-foreground">
-            Partner dashboard
+            {t("dashboard.eyebrow")}
           </p>
           <h1 className="font-display text-3xl font-semibold">
-            Welcome back, {firstName}.
+            {t("dashboard.welcome", { name: firstName })}
           </h1>
           <p className="text-sm text-muted-foreground">
-            Here is everything about your weekly payments and company updates.
+            {t("dashboard.subtitle")}
           </p>
         </header>
 
@@ -98,14 +100,11 @@ function DashboardPage() {
             <div className="flex items-center gap-2">
               <Landmark className="size-4 text-accent" />
               <h2 className="font-display text-base font-semibold">
-                Your payment schedule hasn’t started yet
+                {t("dashboard.noScheduleTitle")}
               </h2>
             </div>
             <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-              The weekly payment countdown and calendar only begin once you save your bank
-              details below. Complete the <span className="font-semibold">Bank details</span>{" "}
-              form and your first payment date, countdown and schedule will appear here
-              immediately.
+              {t("dashboard.noScheduleBody")}
             </p>
           </section>
         )}
