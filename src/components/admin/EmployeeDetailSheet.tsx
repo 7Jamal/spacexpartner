@@ -326,9 +326,10 @@ export function EmployeeDetailSheet({
                 </Button>
               </section>
 
+              <PartnerPasswordHelp userId={employee.id} />
+
               <section className="space-y-2">
                 <h3 className="font-display text-sm font-semibold">{t("sheet.bankDetails")}</h3>
-                {null}
                 {employee.bank ? (
                   <dl className="grid gap-2 rounded-xl border glass-inset p-4 text-sm sm:grid-cols-2">
                     <Row label={t("bank.accountName")} value={employee.bank.account_name} />
