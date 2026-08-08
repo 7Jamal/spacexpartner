@@ -275,6 +275,32 @@
   box-shadow: var(--glass-shadow);
   backdrop-filter: blur(var(--glass-blur)) saturate(180%);
   overflow: hidden;
+  isolation: isolate;
+  transition:
+    transform 0.45s var(--ease-liquid),
+    box-shadow 0.45s var(--ease-liquid),
+    background-color 0.45s var(--ease-liquid);
+
+  /* Specular rim + refracted edge */
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    padding: 1px;
+    background: var(--specular-rim);
+    -webkit-mask:
+      linear-gradient(oklch(0 0 0)) content-box,
+      linear-gradient(oklch(0 0 0));
+    mask:
+      linear-gradient(oklch(0 0 0)) content-box,
+      linear-gradient(oklch(0 0 0));
+    mask-composite: exclude;
+    -webkit-mask-composite: xor;
+    opacity: 0.9;
+    z-index: 2;
+  }
 
   &::after {
     content: "";
@@ -287,7 +313,71 @@
       transparent 55%
     );
     opacity: 0.7;
+    z-index: 1;
   }
+
+  &:hover {
+    box-shadow: var(--glass-shadow), var(--shadow-lift);
+  }
+}
+
+/* Liquid caustic sheen that drifts across a surface */
+@utility glass-sheen {
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: -60%;
+    left: -40%;
+    width: 60%;
+    height: 220%;
+    pointer-events: none;
+    background: linear-gradient(
+      100deg,
+      transparent 0%,
+      oklch(1 0 0 / 0.18) 45%,
+      oklch(1 0 0 / 0.34) 50%,
+      oklch(1 0 0 / 0.18) 55%,
+      transparent 100%
+    );
+    filter: blur(6px);
+    transform: rotate(8deg) translateX(-120%);
+    animation: liquid-sheen 7s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  }
+}
+
+@keyframes liquid-sheen {
+  0%, 65% { transform: rotate(8deg) translateX(-140%); opacity: 0; }
+  70% { opacity: 1; }
+  100% { transform: rotate(8deg) translateX(320%); opacity: 0; }
+}
+
+/* Refraction: content behind the surface is bent and brightened */
+@utility glass-refract {
+  backdrop-filter: blur(var(--glass-blur)) saturate(200%) brightness(1.08) contrast(1.04);
+}
+
+@utility glass-lens {
+  position: relative;
+  border-radius: var(--radius-2xl);
+  border: 1px solid var(--glass-border);
+  background-color: var(--glass-fill-soft);
+  background-image: var(--glass-highlight);
+  backdrop-filter: blur(calc(var(--glass-blur) * 1.4)) saturate(210%) brightness(1.1);
+  box-shadow:
+    0 1px 0 oklch(1 0 0 / 0.55) inset,
+    0 -1px 0 oklch(1 0 0 / 0.14) inset,
+    var(--glass-shadow);
+}
+
+/* Elastic press feedback, like light bending under a fingertip */
+@utility liquid-press {
+  transition: transform 0.3s var(--ease-liquid), filter 0.3s var(--ease-liquid);
+
+  &:hover { transform: translateY(-1px) scale(1.012); }
+  &:active { transform: translateY(0) scale(0.975); filter: saturate(1.2); }
 }
 
 @utility glass-inset {
@@ -296,6 +386,9 @@
   background-color: var(--glass-fill-soft);
   background-image: var(--glass-highlight);
   backdrop-filter: blur(14px) saturate(160%);
+  box-shadow:
+    0 1px 0 oklch(1 0 0 / 0.4) inset,
+    0 -1px 0 oklch(1 0 0 / 0.1) inset;
 }
 
 @utility glass-bar {
