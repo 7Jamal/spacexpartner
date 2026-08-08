@@ -132,6 +132,11 @@
   );
   --glass-shadow: 0 1px 0 oklch(1 0 0 / 0.6) inset, 0 18px 44px -22px oklch(0.2 0.04 265 / 0.4);
   --glass-blur: 22px;
+  --ambient-aurora:
+    radial-gradient(60% 45% at 12% 6%, oklch(0.82 0.11 250 / 0.45) 0%, transparent 60%),
+    radial-gradient(55% 40% at 88% 0%, oklch(0.88 0.11 82 / 0.38) 0%, transparent 62%),
+    radial-gradient(70% 55% at 50% 108%, oklch(0.8 0.1 200 / 0.34) 0%, transparent 65%),
+    linear-gradient(180deg, oklch(0.985 0.006 250) 0%, oklch(0.96 0.014 255) 100%);
 
   --font-display: "Sora", ui-sans-serif, system-ui, sans-serif;
   --font-body: "Manrope", ui-sans-serif, system-ui, sans-serif;
@@ -205,6 +210,11 @@
   );
   --glass-shadow: 0 1px 0 oklch(1 0 0 / 0.1) inset, 0 22px 52px -24px oklch(0 0 0 / 0.75);
   --glass-blur: 24px;
+  --ambient-aurora:
+    radial-gradient(60% 45% at 10% 4%, oklch(0.5 0.14 262 / 0.55) 0%, transparent 62%),
+    radial-gradient(55% 40% at 92% 2%, oklch(0.6 0.13 82 / 0.28) 0%, transparent 62%),
+    radial-gradient(70% 55% at 50% 106%, oklch(0.45 0.13 205 / 0.45) 0%, transparent 65%),
+    linear-gradient(180deg, oklch(0.155 0.032 265) 0%, oklch(0.13 0.03 268) 100%);
 
   --chart-1: oklch(0.72 0.13 250);
   --chart-2: oklch(0.74 0.15 155);

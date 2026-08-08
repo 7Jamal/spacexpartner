@@ -20,8 +20,8 @@ export function AppShell({
   const { pathname } = useLocation();
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="sticky top-0 z-40 border-b bg-background/85 backdrop-blur-xl">
+    <div className="min-h-screen">
+      <header className="sticky top-0 z-40 glass-bar border-b">
         <div className="mx-auto flex h-16 w-full max-w-7xl items-center gap-3 px-4 sm:px-6">
           <Link to={isAdmin ? "/admin" : "/dashboard"} className="shrink-0">
             <BrandMark />
@@ -55,7 +55,7 @@ export function AppShell({
           </div>
         </div>
         {isAdmin ? (
-          <nav className="flex items-center gap-1 border-t px-4 py-2 md:hidden">
+          <nav className="flex items-center gap-1 border-t border-[color:var(--glass-border)] px-4 py-2 md:hidden">
             <NavLink to="/admin" active={pathname.startsWith("/admin")}>
               <ShieldCheck className="size-4" />
               Admin
@@ -73,7 +73,7 @@ export function AppShell({
         {children}
       </main>
 
-      <footer className="border-t py-6">
+      <footer className="glass-bar mt-8 border-t py-6">
         <p className="mx-auto max-w-7xl px-4 text-xs text-muted-foreground sm:px-6">
           SpaceX Partnership Portal · Secure employee payment management
         </p>
@@ -96,7 +96,7 @@ function NavLink({
       to={to}
       className={cn(
         "inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors",
-        active ? "bg-secondary text-secondary-foreground" : "text-muted-foreground hover:bg-muted",
+        active ? "glass-field border text-foreground" : "text-muted-foreground hover:glass-field hover:border",
       )}
     >
       {children}
