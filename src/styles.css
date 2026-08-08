@@ -121,6 +121,18 @@
   --shadow-soft: 0 1px 2px oklch(0.2 0.04 265 / 0.05), 0 8px 24px -12px oklch(0.2 0.04 265 / 0.16);
   --shadow-lift: 0 2px 4px oklch(0.2 0.04 265 / 0.06), 0 24px 48px -20px oklch(0.2 0.04 265 / 0.28);
 
+  --glass-fill: oklch(1 0 0 / 0.62);
+  --glass-fill-soft: oklch(1 0 0 / 0.42);
+  --glass-border: oklch(1 0 0 / 0.7);
+  --glass-highlight: linear-gradient(
+    145deg,
+    oklch(1 0 0 / 0.85) 0%,
+    oklch(1 0 0 / 0.28) 38%,
+    oklch(0.62 0.13 250 / 0.1) 100%
+  );
+  --glass-shadow: 0 1px 0 oklch(1 0 0 / 0.6) inset, 0 18px 44px -22px oklch(0.2 0.04 265 / 0.4);
+  --glass-blur: 22px;
+
   --font-display: "Sora", ui-sans-serif, system-ui, sans-serif;
   --font-body: "Manrope", ui-sans-serif, system-ui, sans-serif;
   --font-brand-x: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
