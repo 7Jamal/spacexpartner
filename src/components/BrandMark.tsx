@@ -28,12 +28,14 @@ export function BrandMark({
   size = "md",
   showText = true,
   layout = "stacked",
+  textClassName,
   tone = "default",
 }: {
   className?: string;
   size?: keyof typeof sizeStyles;
   showText?: boolean;
   layout?: "stacked" | "inline";
+  textClassName?: string;
   tone?: "default" | "onDark";
 }) {
   const src = tone === "onDark" ? logoLightAsset.url : logoAsset.url;
@@ -61,6 +63,7 @@ export function BrandMark({
           className={cn(
             "flex min-w-0 max-w-full items-baseline justify-center gap-[0.12em] font-display font-semibold tracking-[0.16em] uppercase whitespace-nowrap",
             wordmarkSize[size],
+            textClassName,
             tone === "onDark" ? "text-primary-foreground" : "text-foreground",
           )}
         >
