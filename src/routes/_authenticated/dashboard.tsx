@@ -10,7 +10,7 @@ import { NotificationsPanel } from "@/components/employee/NotificationsPanel";
 import { PaymentCalendar } from "@/components/employee/PaymentCalendar";
 import { PaymentSummary } from "@/components/employee/PaymentSummary";
 import { ProfileCard } from "@/components/employee/ProfileCard";
-import { RecoveryCodeCard } from "@/components/employee/RecoveryCodeCard";
+import { SecurityQuestionsCard } from "@/components/employee/SecurityQuestionsCard";
 import { useNotifications } from "@/components/notifications/NotificationCenter";
 import { useAuth } from "@/hooks/useAuth";
 import { useT } from "@/lib/i18n";
@@ -123,7 +123,7 @@ function DashboardPage() {
 
         <ProfileCard profile={profile} />
 
-        <RecoveryCodeCard userId={userId} />
+        <SecurityQuestionsCard userId={userId} />
       </div>
     </AppShell>
   );

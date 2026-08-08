@@ -241,10 +241,8 @@ export type Database = {
         }
         Relationships: []
       }
-      recovery_codes: {
+      security_answer_attempts: {
         Row: {
-          code_hash: string
-          created_at: string
           failed_attempts: number
           last_used_at: string | null
           locked_until: string | null
@@ -252,8 +250,6 @@ export type Database = {
           user_id: string
         }
         Insert: {
-          code_hash: string
-          created_at?: string
           failed_attempts?: number
           last_used_at?: string | null
           locked_until?: string | null
@@ -261,11 +257,36 @@ export type Database = {
           user_id: string
         }
         Update: {
-          code_hash?: string
-          created_at?: string
           failed_attempts?: number
           last_used_at?: string | null
           locked_until?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      security_answers: {
+        Row: {
+          answer_hash: string
+          created_at: string
+          question_key: string
+          slot: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          answer_hash: string
+          created_at?: string
+          question_key: string
+          slot: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          answer_hash?: string
+          created_at?: string
+          question_key?: string
+          slot?: number
           updated_at?: string
           user_id?: string
         }
