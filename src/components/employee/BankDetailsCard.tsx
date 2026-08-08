@@ -76,10 +76,23 @@ export function BankDetailsCard({
         { onConflict: "user_id" },
       );
       if (error) throw error;
+
+      // First-time submission starts the payment schedule & countdown.
+      if (!bankDetails) {
+        const start = new Date();
+        start.setDate(start.getDate() + 7);
+        const next = `${start.getFullYear()}-${`${start.getMonth() + 1}`.padStart(2, "0")}-${`${start.getDate()}`.padStart(2, "0")}`;
+        const { error: profileError } = await supabase
+          .from("profiles")
+          .update({ next_payment_date: next })
+          .eq("id", userId);
+        if (profileError) throw profileError;
+      }
     },
     onSuccess: () => {
       toast.success("Bank details saved securely.");
       queryClient.invalidateQueries({ queryKey: ["bank-details", userId] });
+      queryClient.invalidateQueries({ queryKey: ["profile", userId] });
     },
     onError: (error: Error) => toast.error(error.message),
   });
