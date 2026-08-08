@@ -3,6 +3,7 @@ import { Loader2, ShieldCheck } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { AdminStats } from "@/components/admin/AdminStats";
+import { AllDocumentsPanel } from "@/components/admin/AllDocumentsPanel";
 import { AnnouncementComposer } from "@/components/admin/AnnouncementComposer";
 import { EmployeeDetailSheet } from "@/components/admin/EmployeeDetailSheet";
 import { EmployeeTable } from "@/components/admin/EmployeeTable";
@@ -80,6 +81,8 @@ function AdminPage() {
         </div>
 
         <EmployeeTable employees={employees} onSelect={setSelected} />
+
+        <AllDocumentsPanel employees={employees} />
       </div>
 
       <EmployeeDetailSheet

@@ -63,3 +63,17 @@ export function useEmployeeDocuments(userId: string | undefined) {
     },
   });
 }
+
+export function useAllDocuments() {
+  return useQuery({
+    queryKey: ["admin", "documents", "all"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("employee_documents")
+        .select("*")
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return (data ?? []) as EmployeeDocument[];
+    },
+  });
+}
