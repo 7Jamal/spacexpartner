@@ -9,16 +9,14 @@ import {
 } from "react";
 
 import { en, type MessageKey } from "./en";
+import { setActiveLocale } from "./active";
 import { LOCALES, localeMeta, matchLocale } from "./locales";
 
 export { LOCALES, localeMeta } from "./locales";
+export { getActiveLocale } from "./active";
 export type { MessageKey } from "./en";
 
 const STORAGE_KEY = "spacex-portal-locale";
-
-/** Locale used by the standalone formatters in `@/lib/payroll`. */
-let activeLocale = "en";
-export const getActiveLocale = () => activeLocale;
 
 type Vars = Record<string, string | number>;
 
@@ -61,7 +59,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   const [ready, setReady] = useState(false);
 
   const apply = useCallback((code: string) => {
-    activeLocale = code;
+    setActiveLocale(code);
     setLocaleState(code);
     if (typeof document !== "undefined") {
       const meta = localeMeta(code);
