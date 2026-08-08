@@ -130,7 +130,7 @@ function AuthPage() {
           style={{ background: "var(--gradient-gold)" }}
         />
         <div className="relative">
-          <BrandMark size="lg" tone="onDark" />
+          <BrandMark size="xl" tone="onDark" />
         </div>
         <div className="relative max-w-lg space-y-6 text-primary-foreground">
           <h1 className="font-display text-4xl leading-tight font-semibold">
