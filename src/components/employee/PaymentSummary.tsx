@@ -16,7 +16,7 @@ export function PaymentSummary({ profile }: { profile: Profile }) {
 
   return (
     <div className="grid gap-4 md:grid-cols-3">
-      <div className="relative overflow-hidden rounded-xl border border-[color:var(--glass-border)] bg-gradient-brand p-6 text-primary-foreground shadow-lift md:col-span-1">
+      <div className="glass-sheen relative overflow-hidden rounded-xl border border-[color:var(--glass-border)] bg-gradient-brand p-6 text-primary-foreground shadow-lift md:col-span-1">
         <div
           className="pointer-events-none absolute -top-16 -right-10 size-40 rounded-full opacity-25 blur-2xl"
           style={{ background: "var(--gradient-gold)" }}
@@ -30,7 +30,7 @@ export function PaymentSummary({ profile }: { profile: Profile }) {
         <p className="mt-2 text-xs text-primary-foreground/70">Paid every week, every partner.</p>
       </div>
 
-      <div className="glass-panel p-6">
+      <div className="glass-panel glass-refract p-6">
         <p className="flex items-center gap-2 text-xs font-semibold tracking-wide uppercase text-muted-foreground">
           <CalendarDays className="size-3.5" /> Next payment date
         </p>
@@ -50,7 +50,7 @@ export function PaymentSummary({ profile }: { profile: Profile }) {
         </div>
       </div>
 
-      <div className="glass-panel p-6">
+      <div className="glass-panel glass-refract p-6">
         <p className="flex items-center gap-2 text-xs font-semibold tracking-wide uppercase text-muted-foreground">
           <Clock className="size-3.5" /> Countdown
         </p>
