@@ -17,7 +17,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { useEmployeeDocuments, type EmployeeRecord } from "@/hooks/useAdmin";
+import {
+  useEmployeeDocuments,
+  useEmployeeNotifications,
+  type EmployeeRecord,
+} from "@/hooks/useAdmin";
 import type { Payment } from "@/hooks/useProfile";
 import { supabase } from "@/integrations/supabase/client";
 import { deleteEmployee } from "@/lib/admin.functions";
@@ -45,6 +49,7 @@ export function EmployeeDetailSheet({
   const queryClient = useQueryClient();
   const removeEmployee = useServerFn(deleteEmployee);
   const { data: documents = [] } = useEmployeeDocuments(employee?.id);
+  const { data: messages = [] } = useEmployeeNotifications(employee?.id);
   const [fullName, setFullName] = useState("");
   const [nextDate, setNextDate] = useState("");
   const [salary, setSalary] = useState("");
@@ -218,6 +223,32 @@ export function EmployeeDetailSheet({
                 </span>
               </div>
 
+              <section className="space-y-2">
+                <h3 className="font-display text-sm font-semibold">Submitted profile information</h3>
+                <dl className="grid gap-2 rounded-xl border bg-surface-muted p-4 text-sm sm:grid-cols-2">
+                  <Row label="Full name" value={employee.full_name || "—"} />
+                  <Row label="Email" value={employee.email || "—"} />
+                  <Row label="Phone" value={employee.phone || "—"} />
+                  <Row label="Job title" value={employee.job_title || "—"} />
+                  <Row label="Account status" value={employee.account_status} />
+                  <Row label="Payment status" value={STATUS_META[employee.payment_status].label} />
+                  <Row label="Weekly salary" value={formatMoney(Number(employee.weekly_salary))} />
+                  <Row
+                    label="Next payment"
+                    value={formatDate(parseDateOnly(employee.next_payment_date))}
+                  />
+                  <Row label="Registered" value={formatDateTime(employee.created_at)} />
+                  <Row label="Last updated" value={formatDateTime(employee.updated_at)} />
+                  <Row label="Last login" value={formatDateTime(employee.last_login_at)} />
+                  <Row label="Employee ID" value={employee.id} />
+                  <Row label="Documents submitted" value={String(documents.length)} />
+                  <Row
+                    label="Bank details"
+                    value={employee.bank ? "Submitted" : "Not submitted"}
+                  />
+                </dl>
+              </section>
+
               <section className="space-y-3">
                 <h3 className="font-display text-sm font-semibold">Payment controls</h3>
                 <div className="space-y-2">
@@ -365,6 +396,27 @@ export function EmployeeDetailSheet({
               </section>
 
               <section className="flex flex-wrap gap-2 border-t pt-5">
+                <div className="w-full space-y-2 pb-4">
+                  <h3 className="font-display text-sm font-semibold">Message history</h3>
+                  {messages.length === 0 ? (
+                    <p className="text-sm text-muted-foreground">No messages sent yet.</p>
+                  ) : (
+                    <ul className="max-h-72 space-y-2 overflow-y-auto rounded-xl border p-2">
+                      {messages.map((message) => (
+                        <li key={message.id} className="rounded-lg bg-surface-muted p-3">
+                          <p className="text-sm font-semibold">{message.title}</p>
+                          <p className="mt-1 text-sm whitespace-pre-wrap text-muted-foreground">
+                            {message.message}
+                          </p>
+                          <p className="mt-2 text-[11px] text-muted-foreground">
+                            {message.sender_name} · {formatDateTime(message.created_at)} ·{" "}
+                            {message.is_read ? "Read" : "Unread"}
+                          </p>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
                 <Button variant="outline" onClick={() => toggleSuspend.mutate()}>
                   {employee.account_status === "active" ? "Suspend employee" : "Reactivate employee"}
                 </Button>

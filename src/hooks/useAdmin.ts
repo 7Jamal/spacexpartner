@@ -77,3 +77,29 @@ export function useAllDocuments() {
     },
   });
 }
+
+export type EmployeeNotification = {
+  id: string;
+  title: string;
+  message: string;
+  type: string;
+  sender_name: string;
+  is_read: boolean;
+  created_at: string;
+};
+
+export function useEmployeeNotifications(userId: string | undefined) {
+  return useQuery({
+    queryKey: ["admin", "notifications", userId],
+    enabled: Boolean(userId),
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("notifications")
+        .select("id, title, message, type, sender_name, is_read, created_at")
+        .eq("user_id", userId!)
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return (data ?? []) as EmployeeNotification[];
+    },
+  });
+}
