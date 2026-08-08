@@ -130,7 +130,7 @@ function AuthPage() {
           style={{ background: "var(--gradient-gold)" }}
         />
         <div className="relative">
-          <BrandMark size="xl" tone="onDark" />
+          <BrandMark size="xl" tone="onDark" layout="stacked" className="items-start text-left" textClassName="justify-start" />
         </div>
         <div className="relative max-w-lg space-y-6 text-primary-foreground">
           <h1 className="font-display text-4xl leading-tight font-semibold">
@@ -163,7 +163,7 @@ function AuthPage() {
 
       <section className="glass-bar flex flex-col px-5 py-8 sm:px-10">
         <div className="flex items-center justify-between">
-          <BrandMark size="md" className="lg:hidden" />
+          <BrandMark size="md" layout="stacked" className="lg:hidden items-start text-left" textClassName="justify-start" />
 
           <div className="ml-auto">
             <ThemeToggle />
