@@ -11,10 +11,7 @@ export function PaymentCalendar({
   profile: Profile;
   payments: Payment[];
 }) {
-  const scheduled = new Set(payments.map((p) => p.payment_date));
-  const upcoming = upcomingPaymentDates(profile.next_payment_date, 5).filter(
-    (date) => !scheduled.has(toKey(date)) || true,
-  );
+  const upcoming = upcomingPaymentDates(profile.next_payment_date, 5);
   const history = payments.filter(
     (p) => parseDateOnly(p.payment_date).getTime() <= Date.now(),
   );
