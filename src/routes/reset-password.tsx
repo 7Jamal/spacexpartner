@@ -58,7 +58,7 @@ function ResetPasswordPage() {
             <h1 className="font-display text-xl font-semibold">Choose a new password</h1>
             <p className="mt-1 text-sm text-muted-foreground">
               You must already be signed in to change your password here. If you can't sign in,
-              use “Forgot password?” on the sign-in page with your recovery code — no email needed.
+              use “Forgot password?” on the sign-in page and answer your security questions — no email needed.
             </p>
           </div>
           <div className="space-y-2">
