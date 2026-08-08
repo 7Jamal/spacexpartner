@@ -21,13 +21,13 @@ import {
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
     meta: [
-      { title: "My dashboard | Space Partnership Portal" },
+      { title: "My dashboard | SpacX Partnership Portal" },
       {
         name: "description",
         content:
           "Your weekly salary, next payment date, payment status, notices and secure documents in one place.",
       },
-      { property: "og:title", content: "Employee dashboard | Space Partnership Portal" },
+      { property: "og:title", content: "Employee dashboard | SpacX Partnership Portal" },
       {
         property: "og:description",
         content: "Track weekly payments, notices and documents securely.",

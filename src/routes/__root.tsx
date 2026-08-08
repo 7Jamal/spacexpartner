@@ -80,17 +80,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Space Partnership Portal" },
+      { title: "SpacX Partnership Portal" },
       {
         name: "description",
         content:
-          "Secure employee payment portal for Space Partnership: weekly salary tracking, payment status and company notices.",
+          "Secure employee payment portal for SpacX Partnership: weekly salary tracking, payment status and company notices.",
       },
-      { name: "author", content: "Space Partnership" },
-      { property: "og:title", content: "Space Partnership Portal" },
+      { name: "author", content: "SpacX Partnership" },
+      { property: "og:title", content: "SpacX Partnership Portal" },
       {
         property: "og:description",
-        content: "Secure weekly payment management for Space Partnership employees.",
+        content: "Secure weekly payment management for SpacX Partnership employees.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
