@@ -9,6 +9,13 @@ const sizeClasses = {
   xl: "h-18 sm:h-24",
 };
 
+const logoFilter = {
+  default:
+    "drop-shadow(0 1px 2px rgba(15,23,42,0.18)) drop-shadow(0 0 18px rgba(212,168,83,0.22))",
+  onDark:
+    "drop-shadow(0 1px 2px rgba(0,0,0,0.35)) drop-shadow(0 0 16px rgba(255,255,255,0.25))",
+};
+
 export function BrandMark({
   className,
   size = "md",
@@ -24,25 +31,12 @@ export function BrandMark({
 
   return (
     <div className={cn("flex items-center gap-3", className)}>
-      <div
-        className={cn(
-          "relative flex shrink-0 items-center justify-center overflow-hidden",
-          tone === "onDark"
-            ? "drop-shadow-[0_0_14px_rgba(255,255,255,0.25)]"
-            : "drop-shadow-[0_1px_2px_rgba(15,23,42,0.18)] drop-shadow-[0_0_18px_rgba(212,168,83,0.22)]",
-        )}
-      >
-        <div
-          className={cn(
-            "absolute inset-0 -z-10 rounded-full blur-2xl",
-            tone === "onDark" ? "bg-accent/25" : "bg-accent/20",
-          )}
-          aria-hidden="true"
-        />
+      <div className="relative flex shrink-0 items-center justify-center overflow-hidden">
         <img
           src={src}
           alt="SpaceX Partnership Portal"
           className={cn("w-auto object-contain", sizeClasses[size])}
+          style={{ filter: logoFilter[tone] }}
         />
       </div>
       {showText ? (
@@ -63,4 +57,5 @@ export function BrandMark({
     </div>
   );
 }
+
 
