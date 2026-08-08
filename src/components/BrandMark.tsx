@@ -3,10 +3,10 @@ import logoLightAsset from "@/assets/spacex-logo-light.png.asset.json";
 import { cn } from "@/lib/utils";
 
 const sizeClasses = {
-  sm: "h-8 sm:h-9",
-  md: "h-9 sm:h-11",
-  lg: "h-11 sm:h-14",
-  xl: "h-14 sm:h-20",
+  sm: "h-10 sm:h-12",
+  md: "h-12 sm:h-14",
+  lg: "h-14 sm:h-18",
+  xl: "h-18 sm:h-24",
 };
 
 export function BrandMark({
@@ -27,9 +27,18 @@ export function BrandMark({
       <div
         className={cn(
           "relative flex shrink-0 items-center justify-center overflow-hidden",
-          tone === "onDark" && "drop-shadow-[0_0_12px_rgba(255,255,255,0.12)]",
+          tone === "onDark"
+            ? "drop-shadow-[0_0_14px_rgba(255,255,255,0.25)]"
+            : "drop-shadow-[0_1px_2px_rgba(15,23,42,0.18)] drop-shadow-[0_0_18px_rgba(212,168,83,0.22)]",
         )}
       >
+        <div
+          className={cn(
+            "absolute inset-0 -z-10 rounded-full blur-2xl",
+            tone === "onDark" ? "bg-accent/25" : "bg-accent/20",
+          )}
+          aria-hidden="true"
+        />
         <img
           src={src}
           alt="SpaceX Partnership Portal"
@@ -54,3 +63,4 @@ export function BrandMark({
     </div>
   );
 }
+
