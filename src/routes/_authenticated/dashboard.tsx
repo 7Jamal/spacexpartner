@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Loader2 } from "lucide-react";
+import { Loader2, Landmark } from "lucide-react";
 
 import { AppShell } from "@/components/AppShell";
 import { BankDetailsCard } from "@/components/employee/BankDetailsCard";
@@ -57,6 +57,11 @@ function DashboardPage() {
   }
 
   const firstName = profile.full_name.split(" ")[0] || "there";
+  const hasBankDetails = Boolean(
+    bankDetails?.account_name?.trim() &&
+      bankDetails?.bank_name?.trim() &&
+      bankDetails?.account_number?.trim(),
+  );
 
   return (
     <AppShell>
@@ -73,14 +78,31 @@ function DashboardPage() {
           </p>
         </header>
 
-        <PaymentSummary profile={profile} />
+        {hasBankDetails ? (
+          <PaymentSummary profile={profile} />
+        ) : (
+          <section className="glass-panel glass-refract p-6">
+            <div className="flex items-center gap-2">
+              <Landmark className="size-4 text-accent" />
+              <h2 className="font-display text-base font-semibold">
+                Your payment schedule hasn’t started yet
+              </h2>
+            </div>
+            <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
+              The weekly payment countdown and calendar only begin once you save your bank
+              details below. Complete the <span className="font-semibold">Bank details</span>{" "}
+              form and your first payment date, countdown and schedule will appear here
+              immediately.
+            </p>
+          </section>
+        )}
 
         <div className="grid gap-4 lg:grid-cols-2">
           <NoticeBoard announcements={announcements} />
           <NotificationsPanel notifications={notifications} userId={userId} />
         </div>
 
-        <PaymentCalendar profile={profile} payments={payments} />
+        {hasBankDetails ? <PaymentCalendar profile={profile} payments={payments} /> : null}
 
         <BankDetailsCard userId={userId} bankDetails={bankDetails ?? null} />
 
