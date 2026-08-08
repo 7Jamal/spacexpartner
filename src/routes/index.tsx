@@ -326,14 +326,47 @@ function AuthPage() {
               placeholder={t("auth.emailPlaceholder")}
             />
           </div>
+          <div className="space-y-2">
+            <Label htmlFor="reset-code">{t("auth.recoveryCode")}</Label>
+            <Input
+              id="reset-code"
+              value={resetCode}
+              onChange={(event) => setResetCode(event.target.value)}
+              placeholder={t("auth.recoveryCodePlaceholder")}
+              className="font-mono tracking-widest"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="reset-new-password">{t("auth.newPassword")}</Label>
+            <Input
+              id="reset-new-password"
+              type="password"
+              minLength={8}
+              value={resetPassword}
+              onChange={(event) => setResetPassword(event.target.value)}
+              placeholder={t("auth.passwordPlaceholder")}
+            />
+          </div>
+          <p className="text-xs text-muted-foreground">{t("auth.lostCode")}</p>
           <DialogFooter>
             <Button variant="outline" onClick={() => setForgotOpen(false)}>
               {t("common.cancel")}
             </Button>
-            <Button onClick={handleReset}>{t("auth.sendResetLink")}</Button>
+            <Button onClick={handleReset} disabled={busy}>
+              {busy ? <Loader2 className="size-4 animate-spin" /> : null}
+              {t("auth.resetSubmit")}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <RecoveryCodeDialog
+        code={issuedCode}
+        onClose={() => {
+          setIssuedCode(null);
+          setPendingRedirect(false);
+        }}
+      />
     </main>
   );
 }
