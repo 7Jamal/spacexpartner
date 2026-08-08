@@ -246,6 +246,38 @@
   box-shadow: var(--shadow-soft);
 }
 
+@utility glass-panel {
+  position: relative;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--glass-border);
+  background-color: var(--glass-fill);
+  background-image: var(--glass-highlight);
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  overflow: hidden;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      120% 90% at 12% -10%,
+      oklch(1 0 0 / 0.35) 0%,
+      transparent 55%
+    );
+    opacity: 0.7;
+  }
+}
+
+@utility glass-inset {
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--glass-border);
+  background-color: var(--glass-fill-soft);
+  background-image: var(--glass-highlight);
+  backdrop-filter: blur(14px) saturate(160%);
+}
+
 @utility bg-gradient-brand {
   background-image: var(--gradient-brand);
 }
