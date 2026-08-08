@@ -58,7 +58,7 @@ export function AllDocumentsPanel({ employees }: { employees: EmployeeRecord[] }
   }
 
   return (
-    <section className="surface-card p-6">
+    <section className="glass-panel p-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <FileText className="size-4 text-accent" />
@@ -89,7 +89,7 @@ export function AllDocumentsPanel({ employees }: { employees: EmployeeRecord[] }
             return (
               <li
                 key={doc.id}
-                className="flex flex-wrap items-center gap-3 rounded-xl border bg-surface-muted p-3"
+                className="flex flex-wrap items-center gap-3 rounded-xl border glass-inset p-3"
               >
                 <DocumentThumb doc={doc} />
                 <div className="min-w-0 flex-1">

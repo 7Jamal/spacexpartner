@@ -21,7 +21,7 @@ export function PaymentCalendar({
 
   return (
     <div className="grid gap-4 lg:grid-cols-2">
-      <section className="surface-card p-6">
+      <section className="glass-panel p-6">
         <div className="flex items-center gap-2">
           <CalendarRange className="size-4 text-accent" />
           <h2 className="font-display text-base font-semibold">Payment calendar</h2>
@@ -35,7 +35,7 @@ export function PaymentCalendar({
             return (
               <li
                 key={toKey(date)}
-                className="flex items-center justify-between rounded-xl border bg-surface-muted px-4 py-3"
+                className="flex items-center justify-between rounded-xl border glass-inset px-4 py-3"
               >
                 <div>
                   <p className="text-sm font-semibold">{formatDate(date)}</p>
@@ -58,7 +58,7 @@ export function PaymentCalendar({
         </ul>
       </section>
 
-      <section className="surface-card p-6">
+      <section className="glass-panel p-6">
         <div className="flex items-center gap-2">
           <History className="size-4 text-accent" />
           <h2 className="font-display text-base font-semibold">Payment history</h2>

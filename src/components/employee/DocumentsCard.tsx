@@ -75,7 +75,7 @@ export function DocumentsCard({ userId }: { userId: string }) {
   });
 
   return (
-    <section className="surface-card p-6">
+    <section className="glass-panel p-6">
       <div className="flex items-center gap-2">
         <FileText className="size-4 text-accent" />
         <h2 className="font-display text-base font-semibold">Supporting documents</h2>
@@ -100,7 +100,7 @@ export function DocumentsCard({ userId }: { userId: string }) {
         }}
         className={cn(
           "mt-5 rounded-xl border-2 border-dashed p-8 text-center transition-colors",
-          dragging ? "border-accent bg-accent/5" : "border-border bg-surface-muted",
+          dragging ? "border-accent bg-accent/5" : "border-border glass-inset",
         )}
       >
         <UploadCloud className="mx-auto size-7 text-muted-foreground" />
@@ -140,7 +140,7 @@ export function DocumentsCard({ userId }: { userId: string }) {
           <li className="text-sm text-muted-foreground">No documents uploaded yet.</li>
         ) : (
           documents.map((doc) => (
-            <li key={doc.id} className="flex items-center gap-3 rounded-xl border bg-surface-muted p-3">
+            <li key={doc.id} className="flex items-center gap-3 rounded-xl border glass-inset p-3">
               <DocumentThumb doc={doc} />
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-semibold">{doc.file_name}</p>

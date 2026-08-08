@@ -43,7 +43,7 @@ export function ProfileCard({ profile }: { profile: Profile }) {
   });
 
   return (
-    <section className="surface-card p-6">
+    <section className="glass-panel p-6">
       <div className="flex items-center gap-2">
         <UserRound className="size-4 text-accent" />
         <h2 className="font-display text-base font-semibold">Profile settings</h2>

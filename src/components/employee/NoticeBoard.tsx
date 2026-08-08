@@ -6,7 +6,7 @@ import { categoryLabel, formatDateTime } from "@/lib/payroll";
 
 export function NoticeBoard({ announcements }: { announcements: Announcement[] }) {
   return (
-    <section className="surface-card flex h-full flex-col p-6">
+    <section className="glass-panel flex h-full flex-col p-6">
       <div className="flex items-center gap-2">
         <Megaphone className="size-4 text-accent" />
         <h2 className="font-display text-base font-semibold">Company notice board</h2>
@@ -23,7 +23,7 @@ export function NoticeBoard({ announcements }: { announcements: Announcement[] }
             {announcements.map((announcement) => (
               <li
                 key={announcement.id}
-                className="rounded-xl border bg-surface-muted p-4 animate-rise"
+                className="rounded-xl border glass-inset p-4 animate-rise"
               >
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="rounded-full border border-accent/40 bg-accent/10 px-2 py-0.5 text-[10px] font-semibold tracking-wide uppercase text-accent-foreground dark:text-accent">

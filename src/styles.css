@@ -121,6 +121,18 @@
   --shadow-soft: 0 1px 2px oklch(0.2 0.04 265 / 0.05), 0 8px 24px -12px oklch(0.2 0.04 265 / 0.16);
   --shadow-lift: 0 2px 4px oklch(0.2 0.04 265 / 0.06), 0 24px 48px -20px oklch(0.2 0.04 265 / 0.28);
 
+  --glass-fill: oklch(1 0 0 / 0.62);
+  --glass-fill-soft: oklch(1 0 0 / 0.42);
+  --glass-border: oklch(1 0 0 / 0.7);
+  --glass-highlight: linear-gradient(
+    145deg,
+    oklch(1 0 0 / 0.85) 0%,
+    oklch(1 0 0 / 0.28) 38%,
+    oklch(0.62 0.13 250 / 0.1) 100%
+  );
+  --glass-shadow: 0 1px 0 oklch(1 0 0 / 0.6) inset, 0 18px 44px -22px oklch(0.2 0.04 265 / 0.4);
+  --glass-blur: 22px;
+
   --font-display: "Sora", ui-sans-serif, system-ui, sans-serif;
   --font-body: "Manrope", ui-sans-serif, system-ui, sans-serif;
   --font-brand-x: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
@@ -182,6 +194,18 @@
   --shadow-soft: 0 1px 2px oklch(0 0 0 / 0.4), 0 10px 30px -14px oklch(0 0 0 / 0.6);
   --shadow-lift: 0 2px 6px oklch(0 0 0 / 0.45), 0 28px 56px -22px oklch(0 0 0 / 0.7);
 
+  --glass-fill: oklch(0.28 0.045 264 / 0.5);
+  --glass-fill-soft: oklch(0.3 0.045 264 / 0.32);
+  --glass-border: oklch(1 0 0 / 0.16);
+  --glass-highlight: linear-gradient(
+    145deg,
+    oklch(1 0 0 / 0.14) 0%,
+    oklch(1 0 0 / 0.04) 40%,
+    oklch(0.68 0.14 250 / 0.12) 100%
+  );
+  --glass-shadow: 0 1px 0 oklch(1 0 0 / 0.1) inset, 0 22px 52px -24px oklch(0 0 0 / 0.75);
+  --glass-blur: 24px;
+
   --chart-1: oklch(0.72 0.13 250);
   --chart-2: oklch(0.74 0.15 155);
   --chart-3: oklch(0.82 0.14 85);
@@ -220,6 +244,38 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-soft);
+}
+
+@utility glass-panel {
+  position: relative;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--glass-border);
+  background-color: var(--glass-fill);
+  background-image: var(--glass-highlight);
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  overflow: hidden;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      120% 90% at 12% -10%,
+      oklch(1 0 0 / 0.35) 0%,
+      transparent 55%
+    );
+    opacity: 0.7;
+  }
+}
+
+@utility glass-inset {
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--glass-border);
+  background-color: var(--glass-fill-soft);
+  background-image: var(--glass-highlight);
+  backdrop-filter: blur(14px) saturate(160%);
 }
 
 @utility bg-gradient-brand {

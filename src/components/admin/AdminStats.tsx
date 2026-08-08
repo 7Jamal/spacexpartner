@@ -67,7 +67,7 @@ export function AdminStats({
       {cards.map((card, index) => (
         <div
           key={card.label}
-          className="surface-card animate-rise p-5 transition hover:shadow-lift"
+          className="glass-panel animate-rise p-5 transition hover:shadow-lift"
           style={{ animationDelay: `${index * 40}ms` }}
         >
           <div className="flex items-start justify-between">

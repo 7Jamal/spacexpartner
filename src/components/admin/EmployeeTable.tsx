@@ -27,7 +27,7 @@ export function EmployeeTable({
   }, [employees, query]);
 
   return (
-    <section className="surface-card overflow-hidden">
+    <section className="glass-panel overflow-hidden">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b p-5">
         <div>
           <h2 className="font-display text-base font-semibold">Employees</h2>
@@ -52,7 +52,7 @@ export function EmployeeTable({
       ) : (
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead className="bg-surface-muted text-left text-[11px] tracking-wide uppercase text-muted-foreground">
+            <thead className="glass-inset text-left text-[11px] tracking-wide uppercase text-muted-foreground">
               <tr>
                 <th className="px-5 py-3 font-semibold">Employee</th>
                 <th className="px-5 py-3 font-semibold">Weekly salary</th>
@@ -66,7 +66,7 @@ export function EmployeeTable({
                 <tr
                   key={employee.id}
                   onClick={() => onSelect(employee)}
-                  className="cursor-pointer transition hover:bg-surface-muted"
+                  className="cursor-pointer transition hover:glass-inset"
                 >
                   <td className="px-5 py-4">
                     <p className="font-semibold">{employee.full_name}</p>

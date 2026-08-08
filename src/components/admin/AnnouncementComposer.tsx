@@ -74,7 +74,7 @@ export function AnnouncementComposer({
   });
 
   return (
-    <section className="surface-card p-6">
+    <section className="glass-panel p-6">
       <div className="flex items-center gap-2">
         <Megaphone className="size-4 text-accent" />
         <h2 className="font-display text-base font-semibold">Post an announcement</h2>
