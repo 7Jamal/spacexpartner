@@ -36,7 +36,7 @@ export function AllDocumentsPanel({ employees }: { employees: EmployeeRecord[] }
   const remove = useMutation({
     mutationFn: async (doc: { id: string; storage_path: string }) => {
       await supabase.storage.from(BUCKET).remove([doc.storage_path]);
-      const { error } = await supabase.from("partner_documents").delete().eq("id", doc.id);
+      const { error } = await supabase.from("employee_documents").delete().eq("id", doc.id);
       if (error) throw error;
     },
     onSuccess: () => {
