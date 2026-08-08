@@ -16,7 +16,7 @@ export function PaymentSummary({ profile }: { profile: Profile }) {
 
   return (
     <div className="grid gap-4 md:grid-cols-3">
-      <div className="relative overflow-hidden rounded-xl border border-white/15 bg-gradient-brand p-6 text-primary-foreground shadow-lift md:col-span-1">
+      <div className="relative overflow-hidden rounded-xl border border-[color:var(--glass-border)] bg-gradient-brand p-6 text-primary-foreground shadow-lift md:col-span-1">
         <div
           className="pointer-events-none absolute -top-16 -right-10 size-40 rounded-full opacity-25 blur-2xl"
           style={{ background: "var(--gradient-gold)" }}
