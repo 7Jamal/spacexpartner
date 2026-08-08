@@ -264,6 +264,52 @@
     background-size: cover;
   }
 
+  /* Slowly drifting light source so every glass surface refracts live light */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: -20%;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(38% 32% at 20% 24%, oklch(0.82 0.13 250 / 0.35) 0%, transparent 68%),
+      radial-gradient(32% 28% at 78% 68%, oklch(0.86 0.12 82 / 0.28) 0%, transparent 68%);
+    filter: blur(40px);
+    animation: aurora-drift 26s ease-in-out infinite alternate;
+  }
+
+  ::selection {
+    background-color: oklch(0.62 0.13 250 / 0.28);
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--glass-border) transparent;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    background-color: var(--glass-fill);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(8px);
+  }
+
+  :focus-visible {
+    outline: none;
+    box-shadow:
+      0 0 0 1px var(--glass-border),
+      0 0 0 4px color-mix(in oklab, var(--ring) 35%, transparent);
+  }
+
   input,
   textarea,
   select {
@@ -274,6 +320,30 @@
     font-family: var(--font-display);
     letter-spacing: -0.02em;
   }
+
+  button, a, [role="button"] {
+    transition:
+      transform 0.3s var(--ease-liquid),
+      background-color 0.3s var(--ease-liquid),
+      box-shadow 0.3s var(--ease-liquid),
+      color 0.3s var(--ease-liquid);
+  }
+
+  button:active, [role="button"]:active {
+    transform: scale(0.978);
+  }
+}
+
+@keyframes aurora-drift {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(3%, -2%, 0) scale(1.06); }
+  100% { transform: translate3d(-2%, 3%, 0) scale(1.02); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::before { animation: none; }
+
+  .glass-sheen::after { animation: none; opacity: 0; }
 }
 
 @utility surface-card {
