@@ -21,7 +21,7 @@ export function AppShell({
 
   return (
     <div className="min-h-screen">
-      <header className="sticky top-0 z-40 glass-bar border-b">
+      <header className="sticky top-0 z-40 glass-bar glass-refract glass-sheen border-b">
         <div className="mx-auto flex h-16 w-full max-w-7xl items-center gap-3 px-4 sm:px-6">
           <Link to={isAdmin ? "/admin" : "/dashboard"} className="shrink-0">
             <BrandMark />
@@ -73,7 +73,7 @@ export function AppShell({
         {children}
       </main>
 
-      <footer className="glass-bar mt-8 border-t py-6">
+      <footer className="glass-bar glass-refract mt-8 border-t py-6">
         <p className="mx-auto max-w-7xl px-4 text-xs text-muted-foreground sm:px-6">
           SpaceX Partnership Portal · Secure employee payment management
         </p>
@@ -95,7 +95,7 @@ function NavLink({
     <Link
       to={to}
       className={cn(
-        "inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors",
+        "liquid-press inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-medium",
         active ? "glass-field border text-foreground" : "text-muted-foreground hover:glass-field hover:border",
       )}
     >

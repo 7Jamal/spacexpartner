@@ -5,17 +5,20 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium cursor-pointer transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "relative isolate inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium cursor-pointer liquid-press focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:h-1/2 before:rounded-t-[inherit] before:bg-linear-to-b before:from-white/25 before:to-transparent",
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground shadow hover:bg-primary/90",
-        destructive: "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
+        default:
+          "bg-primary/85 text-primary-foreground shadow-lift backdrop-blur-md backdrop-saturate-150 hover:bg-primary/95",
+        destructive:
+          "bg-destructive/85 text-destructive-foreground shadow-sm backdrop-blur-md backdrop-saturate-150 hover:bg-destructive/95",
         outline:
-          "glass-field border hover:bg-accent/60 hover:text-accent-foreground",
-        secondary: "glass-field border text-secondary-foreground hover:bg-secondary/60",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
+          "glass-field glass-refract border hover:bg-accent/60 hover:text-accent-foreground",
+        secondary:
+          "glass-field glass-refract border text-secondary-foreground hover:bg-secondary/60",
+        ghost: "before:hidden hover:glass-field hover:border hover:text-accent-foreground",
+        link: "before:hidden text-primary underline-offset-4 hover:underline",
       },
       size: {
         default: "h-9 px-4 py-2",
