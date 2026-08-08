@@ -4,16 +4,16 @@ import { cn } from "@/lib/utils";
 
 const sizeClasses = {
   sm: "h-10 sm:h-12",
-  md: "h-12 sm:h-14",
-  lg: "h-14 sm:h-18",
-  xl: "h-18 sm:h-24",
+  md: "h-12 sm:h-16",
+  lg: "h-16 sm:h-20",
+  xl: "h-20 sm:h-28",
 };
 
 const logoFilter = {
   default:
-    "drop-shadow(0 1px 2px rgba(15,23,42,0.18)) drop-shadow(0 0 18px rgba(212,168,83,0.22))",
+    "drop-shadow(0 1px 3px rgba(15,23,42,0.2)) drop-shadow(0 0 24px rgba(212,168,83,0.35))",
   onDark:
-    "drop-shadow(0 1px 2px rgba(0,0,0,0.35)) drop-shadow(0 0 16px rgba(255,255,255,0.25))",
+    "drop-shadow(0 1px 3px rgba(0,0,0,0.5)) drop-shadow(0 0 24px rgba(255,255,255,0.45))",
 };
 
 export function BrandMark({
