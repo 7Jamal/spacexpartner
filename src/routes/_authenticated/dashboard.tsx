@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Loader2, Landmark } from "lucide-react";
 
 import { AppShell } from "@/components/AppShell";
+import { BrandMark } from "@/components/BrandMark";
 import { BankDetailsCard } from "@/components/employee/BankDetailsCard";
 import { DocumentsCard } from "@/components/employee/DocumentsCard";
 import { NoticeBoard } from "@/components/employee/NoticeBoard";
@@ -17,6 +18,7 @@ import {
   usePayments,
   useProfile,
 } from "@/hooks/useProfile";
+
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
