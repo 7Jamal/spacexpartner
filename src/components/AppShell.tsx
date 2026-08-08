@@ -7,7 +7,9 @@ import { NotificationCenter } from "@/components/notifications/NotificationCente
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
+import { useTheme } from "@/lib/theme";
 import { cn } from "@/lib/utils";
+
 
 export function AppShell({
   children,
