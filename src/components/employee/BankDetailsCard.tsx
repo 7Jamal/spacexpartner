@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import type { BankDetails } from "@/hooks/useProfile";
 import { supabase } from "@/integrations/supabase/client";
+import { useT } from "@/lib/i18n";
 
 type FormState = {
   account_name: string;
@@ -38,6 +39,7 @@ export function BankDetailsCard({
   bankDetails: BankDetails | null;
 }) {
   const queryClient = useQueryClient();
+  const t = useT();
   const [form, setForm] = useState<FormState>(EMPTY);
 
   useEffect(() => {
@@ -57,10 +59,10 @@ export function BankDetailsCard({
   const save = useMutation({
     mutationFn: async () => {
       if (!form.account_name.trim() || !form.bank_name.trim() || !form.account_number.trim()) {
-        throw new Error("Account name, bank name and account number are required.");
+        throw new Error(t("bank.errorRequired"));
       }
       if (!/^[0-9A-Za-z\s-]{4,34}$/.test(form.account_number.trim())) {
-        throw new Error("Enter a valid account number (4–34 letters or digits).");
+        throw new Error(t("bank.errorNumber"));
       }
       const { error } = await supabase.from("bank_details").upsert(
         {
@@ -90,7 +92,7 @@ export function BankDetailsCard({
       }
     },
     onSuccess: () => {
-      toast.success("Bank details saved securely.");
+      toast.success(t("bank.saved"));
       queryClient.invalidateQueries({ queryKey: ["bank-details", userId] });
       queryClient.invalidateQueries({ queryKey: ["profile", userId] });
     },
@@ -109,11 +111,11 @@ export function BankDetailsCard({
     <section className="glass-panel p-6">
       <div className="flex items-center gap-2">
         <Landmark className="size-4 text-accent" />
-        <h2 className="font-display text-base font-semibold">Bank details</h2>
+        <h2 className="font-display text-base font-semibold">{t("bank.title")}</h2>
       </div>
       <p className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
         <ShieldCheck className="size-3.5 text-status-successful" />
-        Visible only to you and the Super Administrator.
+        {t("bank.subtitle")}
       </p>
 
       <form
@@ -124,37 +126,37 @@ export function BankDetailsCard({
         }}
       >
         <div className="space-y-2">
-          <Label htmlFor="account_name">Account name</Label>
+          <Label htmlFor="account_name">{t("bank.accountName")}</Label>
           <Input id="account_name" required {...field("account_name")} />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="bank_name">Bank name</Label>
+          <Label htmlFor="bank_name">{t("bank.bankName")}</Label>
           <Input id="bank_name" required {...field("bank_name")} />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="account_number">Account number</Label>
+          <Label htmlFor="account_number">{t("bank.accountNumber")}</Label>
           <Input id="account_number" required {...field("account_number")} />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="swift_code">Swift code (optional)</Label>
+          <Label htmlFor="swift_code">{t("bank.swift")}</Label>
           <Input id="swift_code" {...field("swift_code")} />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="country">Country</Label>
+          <Label htmlFor="country">{t("bank.country")}</Label>
           <Input id="country" required {...field("country")} />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="currency">Currency</Label>
+          <Label htmlFor="currency">{t("bank.currency")}</Label>
           <Input id="currency" required maxLength={6} {...field("currency")} />
         </div>
         <div className="space-y-2 sm:col-span-2">
-          <Label htmlFor="instructions">Additional payment instructions (optional)</Label>
+          <Label htmlFor="instructions">{t("bank.instructions")}</Label>
           <Textarea id="instructions" rows={3} {...field("instructions")} />
         </div>
         <div className="sm:col-span-2">
           <Button type="submit" disabled={save.isPending}>
             {save.isPending ? <Loader2 className="size-4 animate-spin" /> : null}
-            Save bank details
+            {t("bank.save")}
           </Button>
         </div>
       </form>
