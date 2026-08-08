@@ -4,7 +4,7 @@ export type PaymentStatus = Database["public"]["Enums"]["payment_status"];
 export type AccountStatus = Database["public"]["Enums"]["account_status"];
 
 export const WEEKLY_SALARY = 5000;
-export const SUPER_ADMIN_EMAIL = "chimmytopc@gmail.com";
+export const SUPER_ADMIN_EMAIL = "umakukaemekapeter@gmail.com";
 
 export const PAYMENT_STATUSES: PaymentStatus[] = [
   "upcoming",
