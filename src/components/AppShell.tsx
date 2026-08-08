@@ -3,10 +3,12 @@ import { LayoutDashboard, LogOut, ShieldCheck } from "lucide-react";
 import type { ReactNode } from "react";
 
 import { BrandMark } from "@/components/BrandMark";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { NotificationCenter } from "@/components/notifications/NotificationCenter";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
+import { useT } from "@/lib/i18n";
 import { useTheme } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 
@@ -19,6 +21,7 @@ export function AppShell({
   subtitle?: string;
 }) {
   const { user, isAdmin, signOut } = useAuth();
+  const t = useT();
   const { theme } = useTheme();
   const { pathname } = useLocation();
   const logoTone = theme === "dark" ? "onDark" : "default";
@@ -36,11 +39,11 @@ export function AppShell({
             <nav className="ml-4 hidden items-center gap-1 md:flex">
               <NavLink to="/admin" active={pathname.startsWith("/admin")}>
                 <ShieldCheck className="size-4" />
-                Admin
+                {t("nav.admin")}
               </NavLink>
               <NavLink to="/dashboard" active={pathname.startsWith("/dashboard")}>
                 <LayoutDashboard className="size-4" />
-                My dashboard
+                {t("nav.myDashboard")}
               </NavLink>
             </nav>
           ) : null}
@@ -49,12 +52,13 @@ export function AppShell({
             <div className="mr-2 hidden text-right sm:block">
               <p className="max-w-[180px] truncate text-xs font-semibold">{user?.email}</p>
               <p className="text-[11px] text-muted-foreground">
-                {isAdmin ? "Super Administrator" : "Partner"}
+                {isAdmin ? t("role.admin") : t("role.partner")}
               </p>
             </div>
             <NotificationCenter userId={user?.id} />
+            <LanguageSwitcher />
             <ThemeToggle />
-            <Button variant="ghost" size="icon" onClick={signOut} aria-label="Sign out">
+            <Button variant="ghost" size="icon" onClick={signOut} aria-label={t("common.signOut")}>
               <LogOut className="size-4" />
             </Button>
           </div>
@@ -63,11 +67,11 @@ export function AppShell({
           <nav className="flex items-center gap-1 border-t border-[color:var(--glass-border)] px-4 py-2 md:hidden">
             <NavLink to="/admin" active={pathname.startsWith("/admin")}>
               <ShieldCheck className="size-4" />
-              Admin
+              {t("nav.admin")}
             </NavLink>
             <NavLink to="/dashboard" active={pathname.startsWith("/dashboard")}>
               <LayoutDashboard className="size-4" />
-              My dashboard
+              {t("nav.myDashboard")}
             </NavLink>
           </nav>
         ) : null}
@@ -81,7 +85,7 @@ export function AppShell({
       <footer className="glass-bar glass-refract mt-8 border-t py-6">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6">
           <BrandMark size="sm" layout="inline" tone={logoTone} textClassName="hidden sm:flex" />
-          <p className="text-xs text-muted-foreground">Secure partner payment management</p>
+          <p className="text-xs text-muted-foreground">{t("shell.footer")}</p>
 
         </div>
       </footer>
