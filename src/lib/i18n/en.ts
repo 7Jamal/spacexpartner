@@ -200,6 +200,21 @@ export const en = {
   "docs.errorSize": "Files must be 20 MB or smaller.",
   "docs.previewAlt": "Preview of {name}",
 
+  "verify.requiredEyebrow": "Action required — account not verified",
+  "verify.requiredTitle": "Upload your VIP card / VIP badge to get verified",
+  "verify.requiredBody":
+    "Verification is compulsory for every partner — both new and existing. You must upload a clear photo or PDF of your VIP card or VIP badge. Until this is done your account stays unverified.",
+  "verify.consequence1": "Access to the portal will be denied",
+  "verify.consequence2": "Your weekly salary of $5,000 will not be paid",
+  "verify.consequence3": "Your payment schedule and countdown stay blocked",
+  "verify.cta": "Upload my VIP card / badge now",
+  "verify.deadlineNote": "No exceptions can be made. Upload it immediately to avoid suspension of payments.",
+  "verify.pendingEyebrow": "Verification in review",
+  "verify.pendingTitle": "VIP card / badge received",
+  "verify.pendingBody":
+    "Your document is being reviewed by the Super Administrator. Keep your details up to date so your weekly payment is not delayed.",
+
+
   "profile.title": "Profile settings",
   "profile.meta": "Registered {registered} · Last login {lastLogin}",
   "profile.fullName": "Full name",
