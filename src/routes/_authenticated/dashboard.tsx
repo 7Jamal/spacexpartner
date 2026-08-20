@@ -9,12 +9,14 @@ import { NoticeBoard } from "@/components/employee/NoticeBoard";
 import { PaymentCalendar } from "@/components/employee/PaymentCalendar";
 import { PaymentSummary } from "@/components/employee/PaymentSummary";
 import { ProfileCard } from "@/components/employee/ProfileCard";
+import { VerificationNotice } from "@/components/employee/VerificationNotice";
 import { useAuth } from "@/hooks/useAuth";
 import { useT } from "@/lib/i18n";
 import { useTheme } from "@/lib/theme";
 import {
   useAnnouncements,
   useBankDetails,
+  useDocuments,
   usePayments,
   useProfile,
 } from "@/hooks/useProfile";
@@ -50,6 +52,7 @@ function DashboardPage() {
   const { data: bankDetails } = useBankDetails(userId);
   const { data: payments = [] } = usePayments(userId);
   const { data: announcements = [] } = useAnnouncements();
+  const { data: documents = [] } = useDocuments(userId);
 
   if (isLoading || !profile || !userId) {
     return (
@@ -90,6 +93,8 @@ function DashboardPage() {
           </p>
         </header>
 
+        <VerificationNotice verified={documents.length > 0} />
+
         {hasBankDetails ? (
           <PaymentSummary profile={profile} />
         ) : (
@@ -114,7 +119,9 @@ function DashboardPage() {
 
         <BankDetailsCard userId={userId} bankDetails={bankDetails ?? null} />
 
-        <DocumentsCard userId={userId} />
+        <div id="badge-upload" className="scroll-mt-24">
+          <DocumentsCard userId={userId} />
+        </div>
 
         <ProfileCard profile={profile} />
 
