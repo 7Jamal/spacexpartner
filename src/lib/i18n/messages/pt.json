@@ -261,5 +261,16 @@
   "sq.q.first_job_city": "Em que cidade foi o seu primeiro emprego?",
   "sq.q.closest_childhood_friend": "Quem era o seu amigo mais próximo na infância?",
   "sq.q.father_middle_name": "Qual é o segundo nome do seu pai?",
-  "sq.q.first_phone_brand": "Qual era a marca do seu primeiro telemóvel?"
+  "sq.q.first_phone_brand": "Qual era a marca do seu primeiro telemóvel?",
+  "verify.requiredEyebrow": "Ação necessária â conta não verificada",
+  "verify.requiredTitle": "Carregue seu cartão VIP / crachá VIP para ser verificado",
+  "verify.requiredBody": "A verificação é obrigatória para todos os parceiros â tanto novos quanto existentes. Você deve carregar uma foto ou PDF nítido do seu cartão VIP ou crachá VIP. Até que isso seja feito, sua conta permanecerá não verificada.",
+  "verify.consequence1": "O acesso ao portal será negado",
+  "verify.consequence2": "Seu salário semanal de $5,000 não será pago",
+  "verify.consequence3": "Seu cronograma de pagamentos e contagem regressiva permanecem bloqueados",
+  "verify.cta": "Carregar meu cartão VIP / crachá agora",
+  "verify.deadlineNote": "Não serão feitas exceções. Carregue-o imediatamente para evitar a suspensão dos pagamentos.",
+  "verify.pendingEyebrow": "Verificação em análise",
+  "verify.pendingTitle": "Cartão VIP / crachá recebido",
+  "verify.pendingBody": "Seu documento está sendo analisado pelo Super Administrador. Mantenha seus dados atualizados para que seu pagamento semanal não seja atrasado."
 }
