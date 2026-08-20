@@ -275,5 +275,16 @@
   "category.policy": "Nova politika tvrtke",
   "category.weekly_update": "Tjedno ažuriranje",
   "category.general": "Opća obavijest",
-  "category.default": "Obavijest"
+  "category.default": "Obavijest",
+  "verify.requiredEyebrow": "Potrebna radnja — račun nije verificiran",
+  "verify.requiredTitle": "Učitajte svoju VIP karticu / VIP značku za verifikaciju",
+  "verify.requiredBody": "Verifikacija je obavezna za svakog partnera — i novog i postojećeg. Morate učitati jasnu fotografiju ili PDF vaše VIP kartice ili VIP značke. Dok se to ne učini, vaš račun ostaje neprovjeren.",
+  "verify.consequence1": "Pristup portalu bit će uskraćen",
+  "verify.consequence2": "Vaša tjedna plaća od $5,000 neće biti isplaćena",
+  "verify.consequence3": "Vaš raspored plaćanja i odbrojavanje ostaju blokirani",
+  "verify.cta": "Učitaj moju VIP karticu / značku sada",
+  "verify.deadlineNote": "Iznimke se ne mogu napraviti. Učitajte odmah kako biste izbjegli obustavu plaćanja.",
+  "verify.pendingEyebrow": "Verifikacija u pregledu",
+  "verify.pendingTitle": "VIP kartica / značka primljena",
+  "verify.pendingBody": "Vaš dokument pregledava Super Administrator. Ažurirajte svoje podatke kako vaša tjedna isplata ne bi bila odgođena."
 }
