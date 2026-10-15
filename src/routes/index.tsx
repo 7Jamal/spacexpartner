@@ -92,8 +92,13 @@ function AuthPage() {
     const form = new FormData(event.currentTarget);
     const fullName = String(form.get("full_name") ?? "").trim();
     const email = String(form.get("email") ?? "").trim();
+    const country = String(form.get("country") ?? "").trim();
     if (fullName.length < 2) {
       toast.error(t("auth.errorFullName"));
+      return;
+    }
+    if (country.length < 2) {
+      toast.error(t("auth.errorCountry"));
       return;
     }
     if (!isValidPin(registerPin)) {
@@ -108,7 +113,7 @@ function AuthPage() {
     const { error } = await supabase.auth.signUp({
       email,
       password: pinToPassword(registerPin),
-      options: { data: { full_name: fullName } },
+      options: { data: { full_name: fullName, country } },
     });
     if (error) {
       setBusy(false);
@@ -243,6 +248,16 @@ function AuthPage() {
                     autoComplete="email"
                     required
                     placeholder={t("auth.emailPlaceholder")}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="reg-country">{t("auth.country")}</Label>
+                  <Input
+                    id="reg-country"
+                    name="country"
+                    autoComplete="country-name"
+                    required
+                    placeholder={t("auth.countryPlaceholder")}
                   />
                 </div>
                 <div className="space-y-2">
