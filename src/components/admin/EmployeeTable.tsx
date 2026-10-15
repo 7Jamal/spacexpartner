@@ -56,7 +56,7 @@ export function EmployeeTable({
               <tr>
                 <th className="px-5 py-3 font-semibold">{t("table.partner")}</th>
                 <th className="px-5 py-3 font-semibold">{t("table.weeklySalary")}</th>
-                <th className="px-5 py-3 font-semibold">{t("table.nextPayment")}</th>
+                <th className="px-5 py-3 font-semibold">{t("auth.country")}</th>
                 <th className="px-5 py-3 font-semibold">{t("table.status")}</th>
                 <th className="px-5 py-3 font-semibold">{t("table.account")}</th>
               </tr>
@@ -76,7 +76,7 @@ export function EmployeeTable({
                     {formatMoney(Number(employee.weekly_salary))}
                   </td>
                   <td className="px-5 py-4">
-                    {formatDate(parseDateOnly(employee.next_payment_date))}
+                    {employee.country || "—"}
                   </td>
                   <td className="px-5 py-4">
                     <StatusBadge size="sm" status={employee.payment_status} />
