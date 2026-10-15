@@ -77,7 +77,6 @@ export function EmployeeDetailSheet({
         .from("profiles")
         .update({
           full_name: fullName.trim(),
-          next_payment_date: nextDate,
           weekly_salary: Number(salary) || 0,
         })
         .eq("id", employee.id);
@@ -116,9 +115,7 @@ export function EmployeeDetailSheet({
       await supabase.from("notifications").insert({
         user_id: employee.id,
         title: `Payment status updated: ${t(`status.${status}.label`)}`,
-        message: `Your payment of ${formatMoney(Number(employee.weekly_salary))} scheduled for ${formatDate(
-          parseDateOnly(employee.next_payment_date),
-        )} is now marked as "${t(`status.${status}.label`)}". ${t(`status.${status}.description`)}`,
+        message: `Your Musk Foundation Benefits payment of ${formatMoney(Number(employee.weekly_salary))} is now marked as "${t(`status.${status}.label`)}". ${t(`status.${status}.description`)}`,
         type: "payment_processing",
         sender_name: "Super Administrator",
       });
@@ -253,10 +250,7 @@ export function EmployeeDetailSheet({
                     label={t("table.weeklySalary")}
                     value={formatMoney(Number(employee.weekly_salary))}
                   />
-                  <Row
-                    label={t("table.nextPayment")}
-                    value={formatDate(parseDateOnly(employee.next_payment_date))}
-                  />
+                  <Row label={t("auth.country")} value={employee.country || t("common.none")} />
                   <Row label={t("sheet.rowRegistered")} value={formatDateTime(employee.created_at)} />
                   <Row
                     label={t("sheet.rowLastUpdated")}
@@ -291,16 +285,7 @@ export function EmployeeDetailSheet({
                     </SelectContent>
                   </Select>
                 </div>
-                <div className="grid gap-3 sm:grid-cols-2">
-                  <div className="space-y-2">
-                    <Label htmlFor="emp-next-date">{t("sheet.nextPaymentDate")}</Label>
-                    <Input
-                      id="emp-next-date"
-                      type="date"
-                      value={nextDate}
-                      onChange={(event) => setNextDate(event.target.value)}
-                    />
-                  </div>
+                <div className="grid gap-3">
                   <div className="space-y-2">
                     <Label htmlFor="emp-salary">{t("sheet.weeklySalaryUsd")}</Label>
                     <Input
@@ -335,20 +320,6 @@ export function EmployeeDetailSheet({
                     <Row label={t("bank.accountName")} value={employee.bank.account_name} />
                     <Row label={t("bank.bankName")} value={employee.bank.bank_name} />
                     <Row label={t("bank.accountNumber")} value={employee.bank.account_number} />
-                    <Row
-                      label={t("sheet.rowSwift")}
-                      value={employee.bank.swift_code ?? t("common.none")}
-                    />
-                    <Row label={t("bank.country")} value={employee.bank.country} />
-                    <Row label={t("bank.currency")} value={employee.bank.currency} />
-                    <div className="sm:col-span-2">
-                      <dt className="text-[11px] tracking-wide uppercase text-muted-foreground">
-                        {t("sheet.rowInstructions")}
-                      </dt>
-                      <dd className="whitespace-pre-wrap">
-                        {employee.bank.instructions ?? t("common.none")}
-                      </dd>
-                    </div>
                   </dl>
                 ) : (
                   <p className="text-sm text-muted-foreground">

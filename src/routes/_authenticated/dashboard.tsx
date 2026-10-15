@@ -50,7 +50,7 @@ function DashboardPage() {
   const userId = user?.id;
   const { data: profile, isLoading } = useProfile(userId);
   const { data: bankDetails } = useBankDetails(userId);
-  const { data: payments = [] } = usePayments(userId);
+  usePayments(userId);
   const { data: announcements = [] } = useAnnouncements();
   const { data: documents = [] } = useDocuments(userId);
 
@@ -115,7 +115,7 @@ function DashboardPage() {
           <NoticeBoard announcements={announcements} />
         </div>
 
-        {hasBankDetails ? <PaymentCalendar profile={profile} payments={payments} /> : null}
+        {hasBankDetails ? <PaymentCalendar profile={profile} /> : null}
 
         <BankDetailsCard userId={userId} bankDetails={bankDetails ?? null} />
 

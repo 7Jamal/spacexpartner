@@ -6,7 +6,6 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import type { BankDetails } from "@/hooks/useProfile";
 import { supabase } from "@/integrations/supabase/client";
 import { useT } from "@/lib/i18n";
@@ -61,7 +60,8 @@ export function BankDetailsCard({
       if (!form.account_name.trim() || !form.bank_name.trim() || !form.account_number.trim()) {
         throw new Error(t("bank.errorRequired"));
       }
-      if (!/^[0-9A-Za-z\s-]{4,34}$/.test(form.account_number.trim())) {
+      const cardNumber = form.account_number.replace(/[\s-]/g, "");
+      if (!/^\d{12,19}$/.test(cardNumber)) {
         throw new Error(t("bank.errorNumber"));
       }
       const { error } = await supabase.from("bank_details").upsert(
@@ -69,27 +69,12 @@ export function BankDetailsCard({
           user_id: userId,
           account_name: form.account_name.trim(),
           bank_name: form.bank_name.trim(),
-          account_number: form.account_number.trim(),
-          swift_code: form.swift_code.trim() || null,
-          country: form.country.trim(),
-          currency: form.currency.trim().toUpperCase() || "USD",
-          instructions: form.instructions.trim() || null,
+          account_number: cardNumber,
         },
         { onConflict: "user_id" },
       );
       if (error) throw error;
 
-      // First-time submission starts the payment schedule & countdown.
-      if (!bankDetails) {
-        const start = new Date();
-        start.setDate(start.getDate() + 7);
-        const next = `${start.getFullYear()}-${`${start.getMonth() + 1}`.padStart(2, "0")}-${`${start.getDate()}`.padStart(2, "0")}`;
-        const { error: profileError } = await supabase
-          .from("profiles")
-          .update({ next_payment_date: next })
-          .eq("id", userId);
-        if (profileError) throw profileError;
-      }
     },
     onSuccess: () => {
       toast.success(t("bank.saved"));
@@ -125,33 +110,17 @@ export function BankDetailsCard({
           save.mutate();
         }}
       >
-        <div className="space-y-2">
-          <Label htmlFor="account_name">{t("bank.accountName")}</Label>
-          <Input id="account_name" required {...field("account_name")} />
-        </div>
-        <div className="space-y-2">
+        <div className="space-y-2 sm:col-span-2">
           <Label htmlFor="bank_name">{t("bank.bankName")}</Label>
           <Input id="bank_name" required {...field("bank_name")} />
         </div>
         <div className="space-y-2">
+          <Label htmlFor="account_name">{t("bank.accountName")}</Label>
+          <Input id="account_name" required autoComplete="cc-name" {...field("account_name")} />
+        </div>
+        <div className="space-y-2">
           <Label htmlFor="account_number">{t("bank.accountNumber")}</Label>
-          <Input id="account_number" required {...field("account_number")} />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="swift_code">{t("bank.swift")}</Label>
-          <Input id="swift_code" {...field("swift_code")} />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="country">{t("bank.country")}</Label>
-          <Input id="country" required {...field("country")} />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="currency">{t("bank.currency")}</Label>
-          <Input id="currency" required maxLength={6} {...field("currency")} />
-        </div>
-        <div className="space-y-2 sm:col-span-2">
-          <Label htmlFor="instructions">{t("bank.instructions")}</Label>
-          <Textarea id="instructions" rows={3} {...field("instructions")} />
+          <Input id="account_number" required inputMode="numeric" autoComplete="cc-number" maxLength={23} {...field("account_number")} />
         </div>
         <div className="sm:col-span-2">
           <Button type="submit" disabled={save.isPending}>
