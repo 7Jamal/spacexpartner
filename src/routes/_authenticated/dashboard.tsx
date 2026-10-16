@@ -93,7 +93,16 @@ function DashboardPage() {
           </p>
         </header>
 
-        <VerificationNotice verified={documents.length > 0} />
+        <VerificationNotice
+          verified={
+            documents.filter(
+              (doc) =>
+                doc.mime_type.startsWith("image/") &&
+                (doc.file_name.toLowerCase().startsWith("front-") ||
+                  doc.file_name.toLowerCase().startsWith("back-")),
+            ).length >= 2
+          }
+        />
 
         {hasBankDetails ? (
           <PaymentSummary profile={profile} />
