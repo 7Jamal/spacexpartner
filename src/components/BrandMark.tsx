@@ -4,17 +4,17 @@ import { useBackdropContrast } from "@/hooks/useBackdropContrast";
 import { cn } from "@/lib/utils";
 
 const sizeStyles = {
-  sm: { height: "clamp(1.85rem, 6.5vw, 2.5rem)" },
-  md: { height: "clamp(2.25rem, 8vw, 3.25rem)" },
-  lg: { height: "clamp(2.75rem, 11vw, 4.5rem)" },
-  xl: { height: "clamp(3.25rem, 14vw, 6rem)" },
+  sm: { height: "clamp(2.4rem, 8.5vw, 3.25rem)" },
+  md: { height: "clamp(3rem, 10.5vw, 4.25rem)" },
+  lg: { height: "clamp(3.6rem, 14vw, 5.75rem)" },
+  xl: { height: "clamp(4.25rem, 18vw, 7.75rem)" },
 } as const;
 
 const wordmarkSize = {
-  sm: "text-[0.62rem] sm:text-[0.7rem]",
-  md: "text-[0.7rem] sm:text-[0.8rem]",
-  lg: "text-xs sm:text-sm",
-  xl: "text-sm sm:text-base",
+  sm: "text-[0.72rem] sm:text-[0.8rem]",
+  md: "text-[0.8rem] sm:text-[0.92rem]",
+  lg: "text-sm sm:text-base",
+  xl: "text-base sm:text-lg",
 } as const;
 
 const logoFilter = {
