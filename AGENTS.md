@@ -8,3 +8,5 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Admin document attribution resolves uploader IDs against a narrow profile query independently of the partner/payment list, so unrelated bank queries or role filtering cannot hide document owners.

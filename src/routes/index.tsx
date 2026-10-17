@@ -28,6 +28,8 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Sign in | SpaceX Partnership Portal" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       {
         name: "description",
         content:
