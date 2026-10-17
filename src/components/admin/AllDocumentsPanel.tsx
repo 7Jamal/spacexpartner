@@ -1,3 +1,4 @@
+import { openStoredDocument } from "@/lib/open-document";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Download, Eye, FileText, Search, Trash2 } from "lucide-react";
 import { useMemo, useState } from "react";
@@ -48,15 +49,12 @@ export function AllDocumentsPanel({ employees }: { employees: EmployeeRecord[] }
     onError: (error: Error) => toast.error(error.message),
   });
 
-  async function openDocument(path: string, download = false) {
-    const { data, error } = await supabase.storage
-      .from(BUCKET)
-      .createSignedUrl(path, 3600, download ? { download: true } : undefined);
-    if (error || !data) {
-      toast.error(error?.message ?? t("allDocs.openError"));
-      return;
+  async function openDocument(path: string, download = false, fileName = "document") {
+    try {
+      await openStoredDocument(path, fileName, download);
+    } catch (error) {
+      toast.error((error as Error)?.message ?? t("allDocs.openError"));
     }
-    window.open(data.signedUrl, "_blank", "noopener,noreferrer");
   }
 
   return (
@@ -112,7 +110,7 @@ export function AllDocumentsPanel({ employees }: { employees: EmployeeRecord[] }
                     type="button"
                     size="sm"
                     variant="outline"
-                    onClick={() => openDocument(doc.storage_path)}
+                    onClick={() => openDocument(doc.storage_path, false, doc.file_name)}
                   >
                     <Eye className="size-4" />
                     {t("common.view")}
@@ -123,7 +121,7 @@ export function AllDocumentsPanel({ employees }: { employees: EmployeeRecord[] }
                     variant="outline"
                     aria-label={t("common.download")}
                     title={t("common.download")}
-                    onClick={() => openDocument(doc.storage_path, true)}
+                    onClick={() => openDocument(doc.storage_path, true, doc.file_name)}
                   >
                     <Download className="size-4" />
                   </Button>
