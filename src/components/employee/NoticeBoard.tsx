@@ -55,7 +55,7 @@ export function NoticeBoard({ announcements }: { announcements: Announcement[] }
                 <p className="mt-1 text-sm/relaxed whitespace-pre-wrap break-words text-muted-foreground">
                   {texts[index * 2 + 1] ?? announcement.message}
                 </p>
-                <p className="mt-2 text-[11px] text-muted-foreground/80">
+                <p className="mt-2 text-[11px] text-muted-foreground">
                   — {announcement.sender_name}
                 </p>
               </li>

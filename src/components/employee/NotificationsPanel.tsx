@@ -64,7 +64,7 @@ export function NotificationsPanel({
                     <p className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">
                       {notification.message}
                     </p>
-                    <p className="mt-1 text-[11px] text-muted-foreground/80">
+                    <p className="mt-1 text-[11px] text-muted-foreground">
                       {formatDateTime(notification.created_at)} · {notification.sender_name}
                     </p>
                   </div>
