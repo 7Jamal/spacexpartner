@@ -1,4 +1,5 @@
-import { expect, test } from "bun:test";
+import assert from "node:assert/strict";
+import { test } from "node:test";
 import { attachDocumentOwners } from "./document-owners";
 
 test("each document is attributed to its uploader, not profile order", () => {
@@ -9,8 +10,8 @@ test("each document is attributed to its uploader, not profile order", () => {
       { id: "partner-b", full_name: "Partner B", email: "b@example.test" },
     ],
   );
-  expect(result[0]?.owner).toEqual({ id: "partner-b", full_name: "Partner B", email: "b@example.test" });
-  expect(result[1]?.owner?.id).toBe("partner-a");
+  assert.deepEqual(result[0]?.owner, { id: "partner-b", full_name: "Partner B", email: "b@example.test" });
+  assert.equal(result[1]?.owner?.id, "partner-a");
 });
 
 test("missing profiles never attribute a document to another partner", () => {
@@ -18,5 +19,5 @@ test("missing profiles never attribute a document to another partner", () => {
     [{ user_id: "missing" }],
     [{ id: "other", full_name: "Other partner", email: "other@example.test" }],
   );
-  expect(result[0]?.owner).toBeNull();
+  assert.equal(result[0]?.owner, null);
 });
