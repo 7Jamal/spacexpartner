@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import { supabase } from "@/integrations/supabase/client";
 import type { BankDetails, EmployeeDocument, Payment, Profile } from "@/hooks/useProfile";
+import { attachDocumentOwners } from "@/lib/document-owners";
 
 export type EmployeeRecord = Profile & { bank: BankDetails | null };
 
@@ -68,12 +69,13 @@ export function useAllDocuments() {
   return useQuery({
     queryKey: ["admin", "documents", "all"],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("employee_documents")
-        .select("*")
-        .order("created_at", { ascending: false });
-      if (error) throw error;
-      return (data ?? []) as EmployeeDocument[];
+      const [documents, profiles] = await Promise.all([
+        supabase.from("employee_documents").select("*").order("created_at", { ascending: false }),
+        supabase.from("profiles").select("id, full_name, email"),
+      ]);
+      if (documents.error) throw documents.error;
+      if (profiles.error) throw profiles.error;
+      return attachDocumentOwners(documents.data ?? [], profiles.data ?? []);
     },
   });
 }

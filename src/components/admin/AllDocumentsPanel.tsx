@@ -14,7 +14,7 @@ import { formatDateTime } from "@/lib/payroll";
 export function AllDocumentsPanel({ employees }: { employees: EmployeeRecord[] }) {
   const queryClient = useQueryClient();
   const t = useT();
-  const { data: documents = [], isLoading } = useAllDocuments();
+  const { data: documents = [], isLoading, error } = useAllDocuments();
   const [query, setQuery] = useState("");
 
   const owners = useMemo(
@@ -26,7 +26,7 @@ export function AllDocumentsPanel({ employees }: { employees: EmployeeRecord[] }
     const term = query.trim().toLowerCase();
     if (!term) return documents;
     return documents.filter((doc) => {
-      const owner = owners.get(doc.user_id);
+      const owner = doc.owner ?? owners.get(doc.user_id);
       return (
         doc.file_name.toLowerCase().includes(term) ||
         (owner?.full_name ?? "").toLowerCase().includes(term) ||
@@ -81,13 +81,15 @@ export function AllDocumentsPanel({ employees }: { employees: EmployeeRecord[] }
       </div>
 
       <ul className="mt-5 space-y-3">
-        {isLoading ? (
+        {error ? (
+          <li role="alert" className="text-sm text-destructive">{error.message}</li>
+        ) : isLoading ? (
           <li className="text-sm text-muted-foreground">{t("allDocs.loading")}</li>
         ) : filtered.length === 0 ? (
           <li className="text-sm text-muted-foreground">{t("allDocs.empty")}</li>
         ) : (
           filtered.map((doc) => {
-            const owner = owners.get(doc.user_id);
+            const owner = doc.owner ?? owners.get(doc.user_id);
             return (
               <li
                 key={doc.id}
@@ -95,11 +97,12 @@ export function AllDocumentsPanel({ employees }: { employees: EmployeeRecord[] }
               >
                 <DocumentThumb doc={doc} />
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-semibold">{doc.file_name}</p>
-                  <p className="truncate text-[11px] text-muted-foreground">
-                    {owner?.full_name ?? t("allDocs.unknownPartner")}
-                    {owner?.email ? ` · ${owner.email}` : ""}
+                  <p className="break-words text-sm font-semibold">
+                    {owner?.full_name || owner?.email || t("allDocs.unknownPartner")}
                   </p>
+                  {owner?.email ? <p className="break-all text-xs text-muted-foreground">{owner.email}</p> : null}
+                  {!owner ? <p className="break-all text-xs text-muted-foreground">{doc.user_id}</p> : null}
+                  <p className="mt-1 break-all text-xs">{doc.file_name}</p>
                   <p className="text-[11px] text-muted-foreground">
                     {formatBytes(Number(doc.file_size))} · {formatDateTime(doc.created_at)}
                   </p>
@@ -118,6 +121,8 @@ export function AllDocumentsPanel({ employees }: { employees: EmployeeRecord[] }
                     type="button"
                     size="sm"
                     variant="outline"
+                    aria-label={t("common.download")}
+                    title={t("common.download")}
                     onClick={() => openDocument(doc.storage_path, true)}
                   >
                     <Download className="size-4" />
@@ -127,6 +132,8 @@ export function AllDocumentsPanel({ employees }: { employees: EmployeeRecord[] }
                     size="sm"
                     variant="ghost"
                     className="text-destructive"
+                    aria-label={t("common.delete")}
+                    title={t("common.delete")}
                     disabled={remove.isPending}
                     onClick={() => remove.mutate({ id: doc.id, storage_path: doc.storage_path })}
                   >
