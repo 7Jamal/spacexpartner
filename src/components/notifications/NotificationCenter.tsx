@@ -145,7 +145,7 @@ export function NotificationCenter({ userId }: { userId: string | undefined }) {
                           <p className="mt-0.5 line-clamp-2 text-xs text-muted-foreground">
                             {notification.message || t("notif.openToRead")}
                           </p>
-                          <p className="mt-1 text-[11px] text-muted-foreground/80">
+                          <p className="mt-1 text-[11px] text-muted-foreground">
                             {formatDateTime(notification.created_at)}
                           </p>
                         </div>
