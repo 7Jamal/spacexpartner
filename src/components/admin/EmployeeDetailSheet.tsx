@@ -1,3 +1,4 @@
+import { openStoredDocument } from "@/lib/open-document";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { Download, Loader2, Trash2 } from "lucide-react";
@@ -180,15 +181,12 @@ export function EmployeeDetailSheet({
     onError: (error: Error) => toast.error(error.message),
   });
 
-  async function openDocument(path: string, download = false) {
-    const { data, error } = await supabase.storage
-      .from(BUCKET)
-      .createSignedUrl(path, 3600, download ? { download: true } : undefined);
-    if (error || !data) {
-      toast.error(error?.message ?? t("allDocs.openError"));
-      return;
+  async function openDocument(path: string, download = false, fileName = "document") {
+    try {
+      await openStoredDocument(path, fileName, download);
+    } catch (error) {
+      toast.error((error as Error)?.message ?? t("allDocs.openError"));
     }
-    window.open(data.signedUrl, "_blank", "noopener,noreferrer");
   }
 
   const employeePayments = employee ? payments.filter((p) => p.user_id === employee.id) : [];
@@ -345,7 +343,7 @@ export function EmployeeDetailSheet({
                         <div className="min-w-0 flex-1">
                           <button
                             type="button"
-                            onClick={() => openDocument(doc.storage_path)}
+                            onClick={() => openDocument(doc.storage_path, false, doc.file_name)}
                             className="block max-w-full truncate text-left text-sm font-semibold hover:underline"
                           >
                             {doc.file_name}
@@ -358,7 +356,7 @@ export function EmployeeDetailSheet({
                           variant="outline"
                           size="icon"
                           aria-label={t("common.download")}
-                          onClick={() => openDocument(doc.storage_path, true)}
+                          onClick={() => openDocument(doc.storage_path, true, doc.file_name)}
                         >
                           <Download className="size-4" />
                         </Button>
